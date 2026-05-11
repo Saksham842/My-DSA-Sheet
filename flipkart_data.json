@@ -1,0 +1,779 @@
+[
+  {
+    "id": 3576,
+    "title": "Transform Array to All Equal Elements",
+    "acceptance": "31.8%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 210,
+    "title": "Course Schedule II",
+    "acceptance": "53.5%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 907,
+    "title": "Sum of Subarray Minimums",
+    "acceptance": "37.7%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 1011,
+    "title": "Capacity To Ship Packages Within D Days",
+    "acceptance": "72.2%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 875,
+    "title": "Koko Eating Bananas",
+    "acceptance": "49.1%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 134,
+    "title": "Gas Station",
+    "acceptance": "46.4%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 1,
+    "title": "Two Sum",
+    "acceptance": "55.8%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 72,
+    "title": "Edit Distance",
+    "acceptance": "58.8%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 632,
+    "title": "Smallest Range Covering Elements from K Lists",
+    "acceptance": "69.8%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 934,
+    "title": "Shortest Bridge",
+    "acceptance": "58.7%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 42,
+    "title": "Trapping Rain Water",
+    "acceptance": "65.2%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 2750,
+    "title": "Ways to Split Array Into Good Subarrays",
+    "acceptance": "33.9%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 16,
+    "title": "3Sum Closest",
+    "acceptance": "46.9%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 1552,
+    "title": "Magnetic Force Between Two Balls",
+    "acceptance": "71.4%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 11,
+    "title": "Container With Most Water",
+    "acceptance": "57.8%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 2499,
+    "title": "Minimum Total Cost to Make Arrays Unequal",
+    "acceptance": "40.5%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 1423,
+    "title": "Maximum Points You Can Obtain from Cards",
+    "acceptance": "55.7%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 3,
+    "title": "Longest Substring Without Repeating Characters",
+    "acceptance": "37.0%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 735,
+    "title": "Asteroid Collision",
+    "acceptance": "45.6%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 124,
+    "title": "Binary Tree Maximum Path Sum",
+    "acceptance": "41.3%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 1703,
+    "title": "Minimum Adjacent Swaps for K Consecutive Ones",
+    "acceptance": "41.9%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 1463,
+    "title": "Cherry Pickup II",
+    "acceptance": "72.0%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 238,
+    "title": "Product of Array Except Self",
+    "acceptance": "67.8%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 321,
+    "title": "Create Maximum Number",
+    "acceptance": "32.6%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 420,
+    "title": "Strong Password Checker",
+    "acceptance": "14.6%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 200,
+    "title": "Number of Islands",
+    "acceptance": "62.4%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 207,
+    "title": "Course Schedule",
+    "acceptance": "49.3%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 1235,
+    "title": "Maximum Profit in Job Scheduling",
+    "acceptance": "54.4%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 994,
+    "title": "Rotting Oranges",
+    "acceptance": "56.7%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 2952,
+    "title": "Minimum Number of Coins to be Added",
+    "acceptance": "56.8%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 174,
+    "title": "Dungeon Game",
+    "acceptance": "39.5%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 719,
+    "title": "Find K-th Smallest Pair Distance",
+    "acceptance": "45.8%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 560,
+    "title": "Subarray Sum Equals K",
+    "acceptance": "45.5%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 21,
+    "title": "Merge Two Sorted Lists",
+    "acceptance": "66.9%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 675,
+    "title": "Cut Off Trees for Golf Event",
+    "acceptance": "35.3%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 91,
+    "title": "Decode Ways",
+    "acceptance": "36.6%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 103,
+    "title": "Binary Tree Zigzag Level Order Traversal",
+    "acceptance": "61.7%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 662,
+    "title": "Maximum Width of Binary Tree",
+    "acceptance": "44.2%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 85,
+    "title": "Maximal Rectangle",
+    "acceptance": "53.8%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 84,
+    "title": "Largest Rectangle in Histogram",
+    "acceptance": "47.5%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 4,
+    "title": "Median of Two Sorted Arrays",
+    "acceptance": "43.9%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 236,
+    "title": "Lowest Common Ancestor of a Binary Tree",
+    "acceptance": "66.9%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 416,
+    "title": "Partition Equal Subset Sum",
+    "acceptance": "48.5%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 2385,
+    "title": "Amount of Time for Binary Tree to Be Infected",
+    "acceptance": "63.8%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 56,
+    "title": "Merge Intervals",
+    "acceptance": "49.4%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 1700,
+    "title": "Number of Students Unable to Eat Lunch",
+    "acceptance": "78.7%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 752,
+    "title": "Open the Lock",
+    "acceptance": "60.7%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 1383,
+    "title": "Maximum Performance of a Team",
+    "acceptance": "47.5%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 741,
+    "title": "Cherry Pickup",
+    "acceptance": "37.9%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 33,
+    "title": "Search in Rotated Sorted Array",
+    "acceptance": "42.9%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 139,
+    "title": "Word Break",
+    "acceptance": "48.3%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 15,
+    "title": "3Sum",
+    "acceptance": "37.1%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 41,
+    "title": "First Missing Positive",
+    "acceptance": "41.1%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 496,
+    "title": "Next Greater Element I",
+    "acceptance": "74.6%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 542,
+    "title": "01 Matrix",
+    "acceptance": "51.6%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 75,
+    "title": "Sort Colors",
+    "acceptance": "67.6%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 486,
+    "title": "Predict the Winner",
+    "acceptance": "55.8%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 135,
+    "title": "Candy",
+    "acceptance": "46.8%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 1366,
+    "title": "Rank Teams by Votes",
+    "acceptance": "59.4%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 198,
+    "title": "House Robber",
+    "acceptance": "52.3%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 26,
+    "title": "Remove Duplicates from Sorted Array",
+    "acceptance": "60.4%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 312,
+    "title": "Burst Balloons",
+    "acceptance": "61.4%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 2093,
+    "title": "Minimum Cost to Reach City With Discounts",
+    "acceptance": "59.9%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 982,
+    "title": "Triples with Bitwise AND Equal To Zero",
+    "acceptance": "59.4%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 2019,
+    "title": "The Score of Students Solving Math Expression",
+    "acceptance": "33.2%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 1912,
+    "title": "Design Movie Rental System",
+    "acceptance": "35.6%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 967,
+    "title": "Numbers With Same Consecutive Differences",
+    "acceptance": "58.8%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 1760,
+    "title": "Minimum Limit of Balls in a Bag",
+    "acceptance": "67.3%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 138,
+    "title": "Copy List with Random Pointer",
+    "acceptance": "60.6%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 162,
+    "title": "Find Peak Element",
+    "acceptance": "46.5%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 55,
+    "title": "Jump Game",
+    "acceptance": "39.5%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 1190,
+    "title": "Reverse Substrings Between Each Pair of Parentheses",
+    "acceptance": "71.7%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 437,
+    "title": "Path Sum III",
+    "acceptance": "46.1%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 330,
+    "title": "Patching Array",
+    "acceptance": "53.5%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 1048,
+    "title": "Longest String Chain",
+    "acceptance": "62.1%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 169,
+    "title": "Majority Element",
+    "acceptance": "65.8%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 424,
+    "title": "Longest Repeating Character Replacement",
+    "acceptance": "57.3%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 983,
+    "title": "Minimum Cost For Tickets",
+    "acceptance": "67.4%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 1105,
+    "title": "Filling Bookcase Shelves",
+    "acceptance": "68.7%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 128,
+    "title": "Longest Consecutive Sequence",
+    "acceptance": "47.0%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 918,
+    "title": "Maximum Sum Circular Subarray",
+    "acceptance": "47.7%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 1326,
+    "title": "Minimum Number of Taps to Open to Water a Garden",
+    "acceptance": "50.7%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 452,
+    "title": "Minimum Number of Arrows to Burst Balloons",
+    "acceptance": "60.4%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 480,
+    "title": "Sliding Window Median",
+    "acceptance": "38.7%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 239,
+    "title": "Sliding Window Maximum",
+    "acceptance": "47.6%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 199,
+    "title": "Binary Tree Right Side View",
+    "acceptance": "67.1%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 189,
+    "title": "Rotate Array",
+    "acceptance": "43.1%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 630,
+    "title": "Course Schedule III",
+    "acceptance": "40.7%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 2551,
+    "title": "Put Marbles in Bags",
+    "acceptance": "72.4%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 121,
+    "title": "Best Time to Buy and Sell Stock",
+    "acceptance": "55.3%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 116,
+    "title": "Populating Next Right Pointers in Each Node",
+    "acceptance": "65.5%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 100,
+    "title": "Same Tree",
+    "acceptance": "65.2%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 130,
+    "title": "Surrounded Regions",
+    "acceptance": "43.0%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 939,
+    "title": "Minimum Area Rectangle",
+    "acceptance": "55.0%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 871,
+    "title": "Minimum Number of Refueling Stops",
+    "acceptance": "40.6%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 2141,
+    "title": "Maximum Running Time of N Computers",
+    "acceptance": "49.8%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 215,
+    "title": "Kth Largest Element in an Array",
+    "acceptance": "68.0%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 1046,
+    "title": "Last Stone Weight",
+    "acceptance": "66.0%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 1598,
+    "title": "Crawler Log Folder",
+    "acceptance": "71.6%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 45,
+    "title": "Jump Game II",
+    "acceptance": "41.5%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 1642,
+    "title": "Furthest Building You Can Reach",
+    "acceptance": "50.4%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 1094,
+    "title": "Car Pooling",
+    "acceptance": "56.1%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 241,
+    "title": "Different Ways to Add Parentheses",
+    "acceptance": "72.4%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 48,
+    "title": "Rotate Image",
+    "acceptance": "78.0%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 1482,
+    "title": "Minimum Number of Days to Make m Bouquets",
+    "acceptance": "55.5%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 295,
+    "title": "Find Median from Data Stream",
+    "acceptance": "53.3%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 332,
+    "title": "Reconstruct Itinerary",
+    "acceptance": "43.6%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 63,
+    "title": "Unique Paths II",
+    "acceptance": "43.2%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 113,
+    "title": "Path Sum II",
+    "acceptance": "60.5%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 863,
+    "title": "All Nodes Distance K in Binary Tree",
+    "acceptance": "66.5%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 739,
+    "title": "Daily Temperatures",
+    "acceptance": "67.4%",
+    "difficulty": "Med.",
+    "bars": 5
+  }
+]

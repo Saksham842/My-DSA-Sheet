@@ -1,0 +1,1115 @@
+[
+  {
+    "id": 42,
+    "title": "Trapping Rain Water",
+    "acceptance": "65.2%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 166,
+    "title": "Fraction to Recurring Decimal",
+    "acceptance": "26.2%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 1086,
+    "title": "High Five",
+    "acceptance": "74.3%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 387,
+    "title": "First Unique Character in a String",
+    "acceptance": "63.7%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 4,
+    "title": "Median of Two Sorted Arrays",
+    "acceptance": "43.9%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 64,
+    "title": "Minimum Path Sum",
+    "acceptance": "66.5%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 200,
+    "title": "Number of Islands",
+    "acceptance": "62.4%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 3,
+    "title": "Longest Substring Without Repeating Characters",
+    "acceptance": "37.0%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 11,
+    "title": "Container With Most Water",
+    "acceptance": "57.8%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 1094,
+    "title": "Car Pooling",
+    "acceptance": "56.1%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 657,
+    "title": "Robot Return to Origin",
+    "acceptance": "76.2%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 1343,
+    "title": "Number of Sub-arrays of Size K and Average Greater than or Equal to Threshold",
+    "acceptance": "70.3%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 33,
+    "title": "Search in Rotated Sorted Array",
+    "acceptance": "42.9%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 146,
+    "title": "LRU Cache",
+    "acceptance": "45.3%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 3494,
+    "title": "Find the Minimum Amount of Time to Brew Potions",
+    "acceptance": "35.3%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 153,
+    "title": "Find Minimum in Rotated Sorted Array",
+    "acceptance": "52.7%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 91,
+    "title": "Decode Ways",
+    "acceptance": "36.6%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 1823,
+    "title": "Find the Winner of the Circular Game",
+    "acceptance": "82.1%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 49,
+    "title": "Group Anagrams",
+    "acceptance": "71.0%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 1,
+    "title": "Two Sum",
+    "acceptance": "55.8%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 8,
+    "title": "String to Integer (atoi)",
+    "acceptance": "19.3%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 215,
+    "title": "Kth Largest Element in an Array",
+    "acceptance": "68.0%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 1446,
+    "title": "Consecutive Characters",
+    "acceptance": "60.2%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 53,
+    "title": "Maximum Subarray",
+    "acceptance": "52.1%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 1832,
+    "title": "Check if the Sentence Is Pangram",
+    "acceptance": "83.9%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 688,
+    "title": "Knight Probability in Chessboard",
+    "acceptance": "56.6%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 69,
+    "title": "Sqrt(x)",
+    "acceptance": "40.4%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 735,
+    "title": "Asteroid Collision",
+    "acceptance": "45.6%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 968,
+    "title": "Binary Tree Cameras",
+    "acceptance": "47.2%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 641,
+    "title": "Design Circular Deque",
+    "acceptance": "64.4%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 443,
+    "title": "String Compression",
+    "acceptance": "58.1%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 273,
+    "title": "Integer to English Words",
+    "acceptance": "34.4%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 435,
+    "title": "Non-overlapping Intervals",
+    "acceptance": "55.6%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 68,
+    "title": "Text Justification",
+    "acceptance": "48.2%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 312,
+    "title": "Burst Balloons",
+    "acceptance": "61.4%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 1041,
+    "title": "Robot Bounded In Circle",
+    "acceptance": "56.2%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 2375,
+    "title": "Construct Smallest Number From DI String",
+    "acceptance": "85.8%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 121,
+    "title": "Best Time to Buy and Sell Stock",
+    "acceptance": "55.3%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 56,
+    "title": "Merge Intervals",
+    "acceptance": "49.4%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 20,
+    "title": "Valid Parentheses",
+    "acceptance": "42.4%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 122,
+    "title": "Best Time to Buy and Sell Stock II",
+    "acceptance": "69.6%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 238,
+    "title": "Product of Array Except Self",
+    "acceptance": "67.8%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 326,
+    "title": "Power of Three",
+    "acceptance": "48.1%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 74,
+    "title": "Search a 2D Matrix",
+    "acceptance": "52.3%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 79,
+    "title": "Word Search",
+    "acceptance": "45.3%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 198,
+    "title": "House Robber",
+    "acceptance": "52.3%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 118,
+    "title": "Pascal's Triangle",
+    "acceptance": "77.1%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 3437,
+    "title": "Permutations III",
+    "acceptance": "85.7%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 706,
+    "title": "Design HashMap",
+    "acceptance": "65.9%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 162,
+    "title": "Find Peak Element",
+    "acceptance": "46.5%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 268,
+    "title": "Missing Number",
+    "acceptance": "70.1%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 141,
+    "title": "Linked List Cycle",
+    "acceptance": "52.6%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 347,
+    "title": "Top K Frequent Elements",
+    "acceptance": "64.6%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 188,
+    "title": "Best Time to Buy and Sell Stock IV",
+    "acceptance": "47.2%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 3371,
+    "title": "Identify the Largest Outlier in an Array",
+    "acceptance": "35.7%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 465,
+    "title": "Optimal Account Balancing",
+    "acceptance": "50.0%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 424,
+    "title": "Longest Repeating Character Replacement",
+    "acceptance": "57.3%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 322,
+    "title": "Coin Change",
+    "acceptance": "46.6%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 560,
+    "title": "Subarray Sum Equals K",
+    "acceptance": "45.5%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 1235,
+    "title": "Maximum Profit in Job Scheduling",
+    "acceptance": "54.4%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 59,
+    "title": "Spiral Matrix II",
+    "acceptance": "73.5%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 452,
+    "title": "Minimum Number of Arrows to Burst Balloons",
+    "acceptance": "60.4%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 21,
+    "title": "Merge Two Sorted Lists",
+    "acceptance": "66.9%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 218,
+    "title": "The Skyline Problem",
+    "acceptance": "44.0%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 2513,
+    "title": "Minimize the Maximum of Two Arrays",
+    "acceptance": "31.3%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 300,
+    "title": "Longest Increasing Subsequence",
+    "acceptance": "57.9%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 239,
+    "title": "Sliding Window Maximum",
+    "acceptance": "47.6%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 780,
+    "title": "Reaching Points",
+    "acceptance": "33.7%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 5,
+    "title": "Longest Palindromic Substring",
+    "acceptance": "35.9%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 55,
+    "title": "Jump Game",
+    "acceptance": "39.5%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 1395,
+    "title": "Count Number of Teams",
+    "acceptance": "70.1%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 2734,
+    "title": "Lexicographically Smallest String After Substring Operation",
+    "acceptance": "32.4%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 336,
+    "title": "Palindrome Pairs",
+    "acceptance": "36.3%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 695,
+    "title": "Max Area of Island",
+    "acceptance": "73.2%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 210,
+    "title": "Course Schedule II",
+    "acceptance": "53.5%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 225,
+    "title": "Implement Stack using Queues",
+    "acceptance": "67.4%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 414,
+    "title": "Third Maximum Number",
+    "acceptance": "37.3%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 283,
+    "title": "Move Zeroes",
+    "acceptance": "62.8%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 1910,
+    "title": "Remove All Occurrences of a Substring",
+    "acceptance": "78.1%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 112,
+    "title": "Path Sum",
+    "acceptance": "53.1%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 653,
+    "title": "Two Sum IV - Input is a BST",
+    "acceptance": "62.3%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 128,
+    "title": "Longest Consecutive Sequence",
+    "acceptance": "47.0%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 779,
+    "title": "K-th Symbol in Grammar",
+    "acceptance": "47.4%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 844,
+    "title": "Backspace String Compare",
+    "acceptance": "49.5%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 647,
+    "title": "Palindromic Substrings",
+    "acceptance": "71.7%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 1507,
+    "title": "Reformat Date",
+    "acceptance": "67.4%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 50,
+    "title": "Pow(x, n)",
+    "acceptance": "37.1%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 70,
+    "title": "Climbing Stairs",
+    "acceptance": "53.6%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 31,
+    "title": "Next Permutation",
+    "acceptance": "43.1%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 380,
+    "title": "Insert Delete GetRandom O(1)",
+    "acceptance": "55.0%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 209,
+    "title": "Minimum Size Subarray Sum",
+    "acceptance": "49.5%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 2097,
+    "title": "Valid Arrangement of Pairs",
+    "acceptance": "66.3%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 873,
+    "title": "Length of Longest Fibonacci Subsequence",
+    "acceptance": "57.6%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 767,
+    "title": "Reorganize String",
+    "acceptance": "56.2%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 135,
+    "title": "Candy",
+    "acceptance": "46.8%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 2933,
+    "title": "High-Access Employees",
+    "acceptance": "46.2%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 1010,
+    "title": "Pairs of Songs With Total Durations Divisible by 60",
+    "acceptance": "53.3%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 119,
+    "title": "Pascal's Triangle II",
+    "acceptance": "66.0%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 2006,
+    "title": "Count Number of Pairs With Absolute Difference K",
+    "acceptance": "84.9%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 134,
+    "title": "Gas Station",
+    "acceptance": "46.4%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 51,
+    "title": "N-Queens",
+    "acceptance": "72.9%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 221,
+    "title": "Maximal Square",
+    "acceptance": "48.8%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 41,
+    "title": "First Missing Positive",
+    "acceptance": "41.1%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 48,
+    "title": "Rotate Image",
+    "acceptance": "78.0%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 17,
+    "title": "Letter Combinations of a Phone Number",
+    "acceptance": "63.9%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 46,
+    "title": "Permutations",
+    "acceptance": "80.7%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 54,
+    "title": "Spiral Matrix",
+    "acceptance": "54.0%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 189,
+    "title": "Rotate Array",
+    "acceptance": "43.1%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 394,
+    "title": "Decode String",
+    "acceptance": "61.2%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 179,
+    "title": "Largest Number",
+    "acceptance": "41.3%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 295,
+    "title": "Find Median from Data Stream",
+    "acceptance": "53.3%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 556,
+    "title": "Next Greater Element III",
+    "acceptance": "34.6%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 592,
+    "title": "Fraction Addition and Subtraction",
+    "acceptance": "66.2%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 2484,
+    "title": "Count Palindromic Subsequences",
+    "acceptance": "39.4%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 496,
+    "title": "Next Greater Element I",
+    "acceptance": "74.6%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 2385,
+    "title": "Amount of Time for Binary Tree to Be Infected",
+    "acceptance": "63.8%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 15,
+    "title": "3Sum",
+    "acceptance": "37.1%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 287,
+    "title": "Find the Duplicate Number",
+    "acceptance": "62.9%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 994,
+    "title": "Rotting Oranges",
+    "acceptance": "56.7%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 1356,
+    "title": "Sort Integers by The Number of 1 Bits",
+    "acceptance": "78.7%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 1306,
+    "title": "Jump Game III",
+    "acceptance": "66.1%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 62,
+    "title": "Unique Paths",
+    "acceptance": "65.8%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 160,
+    "title": "Intersection of Two Linked Lists",
+    "acceptance": "61.2%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 219,
+    "title": "Contains Duplicate II",
+    "acceptance": "49.1%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 242,
+    "title": "Valid Anagram",
+    "acceptance": "66.7%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 36,
+    "title": "Valid Sudoku",
+    "acceptance": "62.3%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 45,
+    "title": "Jump Game II",
+    "acceptance": "41.5%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 316,
+    "title": "Remove Duplicate Letters",
+    "acceptance": "51.4%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 344,
+    "title": "Reverse String",
+    "acceptance": "79.8%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 2343,
+    "title": "Query Kth Smallest Trimmed Number",
+    "acceptance": "45.6%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 1396,
+    "title": "Design Underground System",
+    "acceptance": "74.0%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 1209,
+    "title": "Remove All Adjacent Duplicates in String II",
+    "acceptance": "59.6%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 887,
+    "title": "Super Egg Drop",
+    "acceptance": "28.8%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 876,
+    "title": "Middle of the Linked List",
+    "acceptance": "80.6%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 739,
+    "title": "Daily Temperatures",
+    "acceptance": "67.4%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 1190,
+    "title": "Reverse Substrings Between Each Pair of Parentheses",
+    "acceptance": "71.7%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 1047,
+    "title": "Remove All Adjacent Duplicates In String",
+    "acceptance": "71.7%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 1143,
+    "title": "Longest Common Subsequence",
+    "acceptance": "58.3%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 714,
+    "title": "Best Time to Buy and Sell Stock with Transaction Fee",
+    "acceptance": "70.6%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 519,
+    "title": "Random Flip Matrix",
+    "acceptance": "43.6%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 2438,
+    "title": "Range Product Queries of Powers",
+    "acceptance": "41.9%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 2087,
+    "title": "Minimum Cost Homecoming of a Robot in a Grid",
+    "acceptance": "51.1%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 2446,
+    "title": "Determine if Two Events Have Conflict",
+    "acceptance": "52.4%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 2420,
+    "title": "Find All Good Indices",
+    "acceptance": "39.9%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 2300,
+    "title": "Successful Pairs of Spells and Potions",
+    "acceptance": "45.5%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 2154,
+    "title": "Keep Multiplying Found Values by Two",
+    "acceptance": "71.3%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 2266,
+    "title": "Count Number of Texts",
+    "acceptance": "48.9%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 152,
+    "title": "Maximum Product Subarray",
+    "acceptance": "35.0%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 421,
+    "title": "Maximum XOR of Two Numbers in an Array",
+    "acceptance": "53.3%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 13,
+    "title": "Roman to Integer",
+    "acceptance": "64.9%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 2,
+    "title": "Add Two Numbers",
+    "acceptance": "46.3%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 73,
+    "title": "Set Matrix Zeroes",
+    "acceptance": "60.8%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 567,
+    "title": "Permutation in String",
+    "acceptance": "47.3%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 340,
+    "title": "Longest Substring with At Most K Distinct Characters",
+    "acceptance": "49.5%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 12,
+    "title": "Integer to Roman",
+    "acceptance": "68.7%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 143,
+    "title": "Reorder List",
+    "acceptance": "62.6%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 88,
+    "title": "Merge Sorted Array",
+    "acceptance": "53.0%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 97,
+    "title": "Interleaving String",
+    "acceptance": "42.2%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 6,
+    "title": "Zigzag Conversion",
+    "acceptance": "51.7%",
+    "difficulty": "Med.",
+    "bars": 5
+  }
+]

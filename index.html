@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MY DSA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+
+
+<!-- PAGE 1: COMPANIES LIST -->
+<main id="homePage" class="main-container">
+  <div class="brand-header" style="margin-bottom: 24px;">
+    <span class="brand-text" style="font-size: 24px; font-weight: 800; background: linear-gradient(90deg, #00a8ff, #ff375f, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">My DSA Sheet</span>
+  </div>
+  
+  <header class="home-header" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px;">
+    <div class="header-tabs" style="display: flex; gap: 12px;">
+      <button class="daily-tab active" id="tabAllSheets">All Sheets</button>
+      <button class="daily-tab" id="tabRevision">Revision</button>
+      <button class="daily-tab add-btn" id="btnAddProblem" style="border: 1px dashed var(--border-color); cursor: pointer;">+ Add Problem</button>
+    </div>
+    <div class="search-container home-search" style="margin-bottom: 0; width: 350px;">
+      <input type="text" id="companySearchInput" class="search-input" placeholder="Search any question..." autocomplete="off">
+    </div>
+  </header>
+
+  <!-- Practice Dashboard -->
+  <section class="daily-progress-dashboard" style="margin-bottom: 40px;">
+    <div class="progress-circle-container">
+      <svg class="progress-circle" viewBox="0 0 100 100">
+        <circle class="bg" cx="50" cy="50" r="40" />
+        <circle class="fill" id="daily-progress-circle" cx="50" cy="50" r="40" />
+      </svg>
+      <div class="progress-text">
+        <span id="daily-percentage">0%</span>
+      </div>
+    </div>
+    <div class="progress-info">
+      <h2>Overall Practice Progress</h2>
+      <div class="progress-stats">
+        <span id="daily-fraction">0 / 0</span>
+      </div>
+    </div>
+    <div class="difficulty-stats" style="margin-left: auto; display: flex; gap: 24px;">
+      <div class="stat"><span class="dot easy"></span> Easy: <span id="daily-easy-count">0</span></div>
+      <div class="stat"><span class="dot medium"></span> Medium: <span id="daily-medium-count">0</span></div>
+      <div class="stat"><span class="dot hard"></span> Hard: <span id="daily-hard-count">0</span></div>
+    </div>
+  </section>
+
+  <div class="companies-grid" id="companiesGrid">
+    <!-- Company cards injected here -->
+  </div>
+
+  <!-- Global Question Search Results -->
+  <div id="globalSearchResults" class="questions-list" style="display: none; margin-top: 24px;">
+    <!-- Search results injected here -->
+  </div>
+</main>
+
+<!-- PAGE 2: COMPANY SHEET -->
+<main id="sheetPage" class="main-container" style="display: none;">
+  
+  <!-- Company Header Card -->
+  <div class="company-header-card">
+    <div class="header-top">
+      <button class="back-btn" id="backBtn">
+        <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+        All Sheets
+      </button>
+      <div class="header-actions">
+        <button class="icon-btn"><svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg></button>
+        <button class="icon-btn"><svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg></button>
+      </div>
+    </div>
+
+    <div class="company-info-row">
+      <div class="c-logo-large" id="sheetCompanyLogo">Ap</div>
+      <div class="c-details">
+        <h2 id="sheetCompanyName">Apple</h2>
+        <p id="sheetCompanyProblems">171 Problems</p>
+      </div>
+    </div>
+
+    <div class="sheet-progress-bar">
+      <div class="progress-info">
+        <span>Progress</span>
+        <span id="progressStats">0/171 (0.0%)</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="reset-wrapper">
+    <button class="reset-btn" id="resetBtn">
+      <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+      Reset
+    </button>
+  </div>
+
+  <div class="filters-panel">
+    <div class="filters-left">
+      <select id="sortSelect" class="dropdown sort-select">
+        <option value="frequency">Sort by: Frequency</option>
+        <option value="difficulty">Sort by: Difficulty</option>
+        <option value="id">Sort by: Question Number</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="search-container">
+    <input type="text" id="questionSearchInput" class="search-input" placeholder="Search questions..." autocomplete="off">
+  </div>
+
+  <div class="questions-list" id="questionsList">
+    <!-- Questions will be injected here -->
+  </div>
+
+</main>
+
+<!-- Add Problem Modal -->
+<div id="add-problem-modal" class="modal">
+  <div class="modal-content">
+    <h3>Add Custom Problem</h3>
+    <div class="form-group">
+      <label>Problem Number (Optional)</label>
+      <input type="text" id="custom-problem-number" placeholder="E.g. 101">
+    </div>
+    <div class="form-group">
+      <label>Problem Name</label>
+      <input type="text" id="custom-problem-name" placeholder="E.g. Two Sum">
+    </div>
+    <div class="form-group">
+      <label>Direct Link (Optional)</label>
+      <input type="text" id="custom-problem-link" placeholder="https://leetcode.com/problems/...">
+    </div>
+    <div class="form-group">
+      <label>Add to Section</label>
+      <select id="custom-problem-step" class="modal-select">
+        <option value="none">Practice</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Difficulty</label>
+      <div class="difficulty-options">
+        <button class="diff-opt easy selected" data-diff="Easy">Easy</button>
+        <button class="diff-opt medium" data-diff="Medium">Medium</button>
+        <button class="diff-opt hard" data-diff="Hard">Hard</button>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" id="btnCancelModal">Cancel</button>
+      <button class="btn-save" id="btnSaveProblem">Add to List</button>
+    </div>
+  </div>
+</div>
+
+<button class="feature-request-btn">
+  <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+  Feature Request
+</button>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
