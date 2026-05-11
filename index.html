@@ -14,8 +14,13 @@
 
 <!-- PAGE 1: COMPANIES LIST -->
 <main id="homePage" class="main-container">
-  <div class="brand-header" style="margin-bottom: 24px;">
+  <div class="brand-header" style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center;">
     <span class="brand-text" style="font-size: 24px; font-weight: 800; background: linear-gradient(90deg, #00a8ff, #ff375f, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">My DSA Sheet</span>
+    <div class="data-actions" style="display: flex; gap: 8px;">
+      <button id="btnExportData" class="daily-tab" style="padding: 4px 12px; font-size: 12px; height: auto;">Export Data</button>
+      <button id="btnImportData" class="daily-tab" style="padding: 4px 12px; font-size: 12px; height: auto;">Import Data</button>
+      <input type="file" id="importFileInput" accept=".json" style="display: none;">
+    </div>
   </div>
   
   <header class="home-header" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px;">

@@ -24,6 +24,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const customProblemName   = document.getElementById('custom-problem-name');
   const customProblemLink   = document.getElementById('custom-problem-link');
 
+  // Export/Import refs
+  const btnExportData     = document.getElementById('btnExportData');
+  const btnImportData     = document.getElementById('btnImportData');
+  const importFileInput   = document.getElementById('importFileInput');
+
   // Progress dashboard refs
   const dailyProgressCircle = document.getElementById('daily-progress-circle');
   const dailyPercentage   = document.getElementById('daily-percentage');
@@ -534,6 +539,46 @@ document.addEventListener('DOMContentLoaded', () => {
     renderCompanies();
     updatePracticeProgress();
   });
+
+  // ── Export / Import ───────────────────────────────────────
+  if (btnExportData) {
+    btnExportData.addEventListener('click', () => {
+      const data = {
+        nl_solved_global: getSolved(),
+        nl_solve_count: getSolveCount(),
+        nl_practice_qs: getPracticeQs()
+      };
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `my_dsa_sheet_backup_${new Date().toISOString().slice(0,10)}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+  }
+
+  if (btnImportData && importFileInput) {
+    btnImportData.addEventListener('click', () => importFileInput.click());
+    importFileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        try {
+          const data = JSON.parse(event.target.result);
+          if (data.nl_solved_global) saveSolved(data.nl_solved_global);
+          if (data.nl_solve_count) saveSolveCount(data.nl_solve_count);
+          if (data.nl_practice_qs) savePracticeQs(data.nl_practice_qs);
+          alert('Data imported successfully!');
+          window.location.reload();
+        } catch (err) {
+          alert('Invalid backup file.');
+        }
+      };
+      reader.readAsText(file);
+    });
+  }
 
   // ── Init ──────────────────────────────────────────────────
   goHome();
