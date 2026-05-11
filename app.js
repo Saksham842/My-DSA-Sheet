@@ -1,75 +1,90 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const homePage = document.getElementById('homePage');
-  const sheetPage = document.getElementById('sheetPage');
-  const navHome = document.getElementById('navHome');
-  const navCompanySheet = document.getElementById('navCompanySheet');
-  const companiesGrid = document.getElementById('companiesGrid');
+  // ── DOM refs ──────────────────────────────────────────────
+  const homePage          = document.getElementById('homePage');
+  const sheetPage         = document.getElementById('sheetPage');
+  const companiesGrid     = document.getElementById('companiesGrid');
   const companySearchInput = document.getElementById('companySearchInput');
-  const backBtn = document.getElementById('backBtn');
-  const sheetCompanyName = document.getElementById('sheetCompanyName');
+  const backBtn           = document.getElementById('backBtn');
+  const sheetCompanyName  = document.getElementById('sheetCompanyName');
   const sheetCompanyProblems = document.getElementById('sheetCompanyProblems');
-  const sheetCompanyLogo = document.getElementById('sheetCompanyLogo');
-  const questionsListEl = document.getElementById('questionsList');
+  const sheetCompanyLogo  = document.getElementById('sheetCompanyLogo');
+  const questionsListEl   = document.getElementById('questionsList');
   const questionSearchInput = document.getElementById('questionSearchInput');
-  const progressStats = document.getElementById('progressStats');
-  const progressFill = document.getElementById('progressFill');
-  const resetBtn = document.getElementById('resetBtn');
+  const progressStats     = document.getElementById('progressStats');
+  const progressFill      = document.getElementById('progressFill');
+  const resetBtn          = document.getElementById('resetBtn');
 
-  let currentCompanyId = null;
-  let questionSearchQuery = '';
-  let currentSort = 'frequency';
-
-  // Practice DOM Elements
-  const btnAddProblem = document.getElementById('btnAddProblem');
-  const addProblemModal = document.getElementById('add-problem-modal');
-  const btnCancelModal = document.getElementById('btnCancelModal');
-  const btnSaveProblem = document.getElementById('btnSaveProblem');
-  const diffOpts = document.querySelectorAll('.diff-opt');
+  // Practice modal refs
+  const btnAddProblem     = document.getElementById('btnAddProblem');
+  const addProblemModal   = document.getElementById('add-problem-modal');
+  const btnCancelModal    = document.getElementById('btnCancelModal');
+  const btnSaveProblem    = document.getElementById('btnSaveProblem');
+  const diffOpts          = document.querySelectorAll('.diff-opt');
   const customProblemNumber = document.getElementById('custom-problem-number');
-  const customProblemName = document.getElementById('custom-problem-name');
-  const customProblemLink = document.getElementById('custom-problem-link');
-  
-  // Progress DOM
+  const customProblemName   = document.getElementById('custom-problem-name');
+  const customProblemLink   = document.getElementById('custom-problem-link');
+
+  // Progress dashboard refs
   const dailyProgressCircle = document.getElementById('daily-progress-circle');
-  const dailyPercentage = document.getElementById('daily-percentage');
-  const dailyFraction = document.getElementById('daily-fraction');
-  const dailyEasyCount = document.getElementById('daily-easy-count');
-  const dailyMediumCount = document.getElementById('daily-medium-count');
-  const dailyHardCount = document.getElementById('daily-hard-count');
+  const dailyPercentage   = document.getElementById('daily-percentage');
+  const dailyFraction     = document.getElementById('daily-fraction');
+  const dailyEasyCount    = document.getElementById('daily-easy-count');
+  const dailyMediumCount  = document.getElementById('daily-medium-count');
+  const dailyHardCount    = document.getElementById('daily-hard-count');
 
-  // Global solved state based on question ID
-  function getSolved(companyId) {
-    return JSON.parse(localStorage.getItem('nl_solved_global') || '[]');
-  }
-  function saveSolved(companyId, arr) {
-    localStorage.setItem('nl_solved_global', JSON.stringify(arr));
+  // ── State ─────────────────────────────────────────────────
+  let currentCompanyId    = null;
+  let questionSearchQuery = '';
+  let currentSort         = 'frequency';
+  let currentPracticeDiff = 'Easy';
+
+  // ── Storage helpers ───────────────────────────────────────
+  const getSolved     = () => JSON.parse(localStorage.getItem('nl_solved_global') || '[]');
+  const saveSolved    = (arr) => localStorage.setItem('nl_solved_global', JSON.stringify(arr));
+  const getSolveCount = () => JSON.parse(localStorage.getItem('nl_solve_count') || '{}');
+  const saveSolveCount= (obj) => localStorage.setItem('nl_solve_count', JSON.stringify(obj));
+  const getPracticeQs = () => JSON.parse(localStorage.getItem('nl_practice_qs') || '[]');
+  const savePracticeQs= (arr) => localStorage.setItem('nl_practice_qs', JSON.stringify(arr));
+
+  function incrementCount(qId) {
+    const countMap = getSolveCount();
+    countMap[qId] = (countMap[qId] || 0) + 1;
+    saveSolveCount(countMap);
+    return countMap[qId];
   }
 
-  // Get questions array for a given company id
   function getQuestions(companyId) {
-    if (companyId === 'practice') {
-      return JSON.parse(localStorage.getItem('nl_practice_qs') || '[]');
-    }
-    return questionsData[companyId] || [];
+    if (companyId === 'practice') return getPracticeQs();
+    return (typeof questionsData !== 'undefined' && questionsData[companyId]) || [];
   }
 
-  // Build LeetCode URL using question id (most reliable)
   function getLeetCodeUrl(q) {
-    if (q.link) return q.link;
-    const slug = q.title.toLowerCase()
-      .replace(/[^a-z0-9\s]/g, '')
-      .trim()
-      .replace(/\s+/g, '-');
+    if (q.link && q.link !== '#') return q.link;
+    const slug = q.title.toLowerCase().replace(/[^a-z0-9\s]/g, '').trim().replace(/\s+/g, '-');
     return `https://leetcode.com/problems/${slug}/`;
   }
 
-  // --- ROUTING ---
+  function getCompanyDomain(name) {
+    const map = {
+      'JP Morgan':     'jpmorgan.com',
+      'DE Shaw':       'deshaw.com',
+      'Goldman Sachs': 'goldmansachs.com',
+      'Morgan Stanley':'morganstanley.com'
+    };
+    return map[name] || name.toLowerCase().replace(/\s+/g, '') + '.com';
+  }
+
+  // ── Routing ───────────────────────────────────────────────
   function goHome() {
     homePage.style.display = 'block';
     sheetPage.style.display = 'none';
     currentCompanyId = null;
     questionSearchInput.value = '';
     questionSearchQuery = '';
+    companiesGrid.style.display = 'grid';
+    const sr = document.getElementById('globalSearchResults');
+    if (sr) sr.style.display = 'none';
+    companySearchInput.value = '';
     renderCompanies();
     updatePracticeProgress();
   }
@@ -79,35 +94,24 @@ document.addEventListener('DOMContentLoaded', () => {
     sheetPage.style.display = 'block';
     currentCompanyId = companyId;
 
-    const company = companiesData.find(c => c.id === companyId);
+    const company   = companiesData.find(c => c.id === companyId);
     const questions = getQuestions(companyId);
 
     if (company) {
       sheetCompanyName.textContent = company.name;
-      const getDomain = (name) => {
-        const map = {
-          'JP Morgan': 'jpmorgan.com',
-          'DE Shaw': 'deshaw.com',
-          'Goldman Sachs': 'goldmansachs.com',
-          'Morgan Stanley': 'morganstanley.com'
-        };
-        return map[name] || name.toLowerCase().replace(/\s+/g, '') + '.com';
-      };
-      const domain = getDomain(company.name);
+      const domain = getCompanyDomain(company.name);
       sheetCompanyLogo.style.background = '#fff';
-      sheetCompanyLogo.style.border = '1px solid #eee';
-      sheetCompanyLogo.innerHTML = `<img src="https://www.google.com/s2/favicons?domain=${domain}&sz=128" onerror="this.outerHTML='<div class=fallback-icon>${company.icon}</div>'" style="width:100%;height:100%;object-fit:contain;border-radius:12px;padding:2px;">`;
+      sheetCompanyLogo.style.border     = '1px solid #eee';
+      sheetCompanyLogo.innerHTML = `<img src="https://www.google.com/s2/favicons?domain=${domain}&sz=128"
+        onerror="this.outerHTML='<div class=fallback-icon>${company.icon}</div>'"
+        style="width:100%;height:100%;object-fit:contain;border-radius:12px;padding:2px;">`;
       sheetCompanyProblems.textContent = `${questions.length} Problems`;
     }
 
     questionSearchInput.value = '';
     questionSearchQuery = '';
-    
     const sortSelect = document.getElementById('sortSelect');
-    if (sortSelect) {
-      sortSelect.value = 'frequency';
-      currentSort = 'frequency';
-    }
+    if (sortSelect) { sortSelect.value = 'frequency'; currentSort = 'frequency'; }
 
     updateProgress();
     renderQuestions();
@@ -115,10 +119,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   backBtn.addEventListener('click', goHome);
 
-  // Home Page Tabs
+  // ── Home tabs ─────────────────────────────────────────────
   const tabAllSheets = document.getElementById('tabAllSheets');
-  const tabRevision = document.getElementById('tabRevision');
-
+  const tabRevision  = document.getElementById('tabRevision');
   if (tabAllSheets) {
     tabAllSheets.addEventListener('click', () => {
       tabAllSheets.classList.add('active');
@@ -130,70 +133,56 @@ document.addEventListener('DOMContentLoaded', () => {
     tabRevision.addEventListener('click', () => {
       tabRevision.classList.add('active');
       tabAllSheets.classList.remove('active');
-      renderCompanies(true); // Filter for revision (solved > 0)
+      renderCompanies(true);
     });
   }
 
   const sortSelectEl = document.getElementById('sortSelect');
   if (sortSelectEl) {
-    sortSelectEl.addEventListener('change', (e) => {
-      currentSort = e.target.value;
-      renderQuestions();
-    });
+    sortSelectEl.addEventListener('change', (e) => { currentSort = e.target.value; renderQuestions(); });
   }
 
-  // --- HOME PAGE ---
+  // ── Company progress ──────────────────────────────────────
   function getCompanyProgress(companyId) {
-    const globalSolved = getSolved(companyId);
-    const questions = getQuestions(companyId);
-    const solvedInCompany = globalSolved.filter(id => questions.some(q => q.id === id));
-    return { solved: solvedInCompany.length, total: questions.length };
+    const globalSolved = getSolved();
+    const questions    = getQuestions(companyId);
+    const solvedCount  = globalSolved.filter(id => questions.some(q => q.id === id)).length;
+    return { solved: solvedCount, total: questions.length };
   }
 
+  // ── Render companies grid ─────────────────────────────────
   function renderCompanies(onlyRevision = false) {
     companiesGrid.innerHTML = '';
-    const searchVal = (companySearchInput.value || '').toLowerCase();
-    
-    // Map data to include progress
+
     let mapped = companiesData.map(c => {
       const { solved, total } = getCompanyProgress(c.id);
       return { ...c, solved, total };
     });
 
-    let filtered = mapped.filter(c => c.name.toLowerCase().includes(searchVal));
-
     if (onlyRevision) {
-      filtered = filtered.filter(c => c.solved > 0);
+      mapped = mapped.filter(c => c.solved > 0);
     }
 
-    // Sort so companies with questions are on top, ordered by total problems
-    filtered.sort((a, b) => {
+    mapped.sort((a, b) => {
+      if (a.id === 'practice') return -1;
+      if (b.id === 'practice') return 1;
       if (a.total > 0 && b.total === 0) return -1;
       if (b.total > 0 && a.total === 0) return 1;
       return b.total - a.total;
     });
 
-    const getDomain = (name) => {
-      const map = {
-        'JP Morgan': 'jpmorgan.com',
-        'DE Shaw': 'deshaw.com',
-        'Goldman Sachs': 'goldmansachs.com',
-        'Morgan Stanley': 'morganstanley.com',
-        'NextLeet': 'nextleet.com'
-      };
-      return map[name] || name.toLowerCase().replace(/\s+/g, '') + '.com';
-    };
-
-    filtered.forEach(c => {
+    mapped.forEach(c => {
       const { solved, total } = c;
-      const pct = total > 0 ? Math.round((solved / total) * 100) : 0;
+      const pct  = total > 0 ? Math.round((solved / total) * 100) : 0;
       const card = document.createElement('div');
       card.className = 'company-card';
-      
-      const domain = getDomain(c.name);
-      const logoHtml = c.id === 'practice' 
-        ? `<div class="fallback-icon">${c.icon}</div>` 
-        : `<img src="https://www.google.com/s2/favicons?domain=${domain}&sz=64" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" style="width:100%;height:100%;object-fit:contain;border-radius:8px;padding:2px;">
+
+      const domain  = getCompanyDomain(c.name);
+      const logoHtml = c.id === 'practice'
+        ? `<div class="fallback-icon">${c.icon}</div>`
+        : `<img src="https://www.google.com/s2/favicons?domain=${domain}&sz=64"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+             style="width:100%;height:100%;object-fit:contain;border-radius:8px;padding:2px;">
            <div class="fallback-icon" style="display:none;">${c.icon}</div>`;
 
       card.innerHTML = `
@@ -204,21 +193,24 @@ document.addEventListener('DOMContentLoaded', () => {
             <p>${total} Problems${total > 0 ? ` &bull; ${solved} solved` : ''}</p>
           </div>
         </div>
-        ${total > 0 ? `<div class="card-progress-ring" title="${pct}% done">
-          <svg width="36" height="36" viewBox="0 0 36 36">
-            <circle cx="18" cy="18" r="15" fill="none" stroke="var(--border-color)" stroke-width="3"/>
-            <circle cx="18" cy="18" r="15" fill="none" stroke="var(--accent)" stroke-width="3"
-              stroke-dasharray="${Math.round(pct * 0.942)} 100"
-              stroke-dashoffset="25" stroke-linecap="round" transform="rotate(-90 18 18)"/>
-          </svg>
-          <span class="ring-pct">${pct}%</span>
-        </div>` : '<svg class="star-icon" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>'}
+        ${total > 0
+          ? `<div class="card-progress-ring" title="${pct}% done">
+               <svg width="36" height="36" viewBox="0 0 36 36">
+                 <circle cx="18" cy="18" r="15" fill="none" stroke="var(--border-color)" stroke-width="3"/>
+                 <circle cx="18" cy="18" r="15" fill="none" stroke="var(--accent)" stroke-width="3"
+                   stroke-dasharray="${Math.round(pct * 0.942)} 100"
+                   stroke-dashoffset="25" stroke-linecap="round" transform="rotate(-90 18 18)"/>
+               </svg>
+               <span class="ring-pct">${pct}%</span>
+             </div>`
+          : '<svg class="star-icon" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>'}
       `;
       card.addEventListener('click', () => goSheet(c.id));
       companiesGrid.appendChild(card);
     });
   }
 
+  // ── Global question search ────────────────────────────────
   function renderGlobalSearch(query) {
     const lq = query.toLowerCase();
     companiesGrid.style.display = 'none';
@@ -226,29 +218,27 @@ document.addEventListener('DOMContentLoaded', () => {
     resultsEl.style.display = 'flex';
     resultsEl.innerHTML = '';
 
+    const seen = new Set();
     const allQs = [];
-    const globalSolved = getSolved();
-
-    // Collect all questions
     companiesData.forEach(c => {
-      const qs = getQuestions(c.id);
-      qs.forEach(q => {
-        if (!allQs.some(existing => existing.id === q.id)) {
+      getQuestions(c.id).forEach(q => {
+        if (!seen.has(q.id)) {
+          seen.add(q.id);
           allQs.push({ ...q, companyName: c.name });
         }
       });
     });
 
-    const filtered = allQs.filter(q => 
-      q.title.toLowerCase().includes(lq) || 
-      q.id.toString().includes(lq)
-    ).slice(0, 50); // Limit to 50 results for performance
+    const filtered = allQs
+      .filter(q => q.title.toLowerCase().includes(lq) || q.id.toString().includes(lq))
+      .slice(0, 50);
 
     if (filtered.length === 0) {
-      resultsEl.innerHTML = '<div style="padding:40px;text-align:center;color:var(--text-muted)">No questions found matching your search.</div>';
+      resultsEl.innerHTML = '<div style="padding:40px;text-align:center;color:var(--text-muted)">No questions found.</div>';
       return;
     }
 
+    const globalSolved = getSolved();
     filtered.forEach(q => {
       const isSolved = globalSolved.includes(q.id);
       const row = document.createElement('div');
@@ -257,7 +247,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="q-left">
           <a href="${getLeetCodeUrl(q)}" target="_blank" rel="noopener" class="q-title">
             <span class="q-num">${q.id}.</span> ${q.title}
-            <span style="font-size:10px; color:var(--text-muted); margin-left:8px; opacity:0.7;">(${q.companyName})</span>
+            <span style="font-size:10px;color:var(--text-muted);margin-left:8px;">(${q.companyName})</span>
           </a>
         </div>
         <div class="q-right">
@@ -266,12 +256,11 @@ document.addEventListener('DOMContentLoaded', () => {
             <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
             <polyline points="22 4 12 14.01 9 11.01"/>
           </svg>
-        </div>
-      `;
-      row.querySelector('.q-status').addEventListener('click', (e) => {
+        </div>`;
+      row.querySelector('.q-status').addEventListener('click', e => {
         e.preventDefault();
-        toggleSolve(q.id);
-        renderGlobalSearch(query); // re-render to update status
+        toggleSolveGlobal(q.id);
+        renderGlobalSearch(query);
       });
       resultsEl.appendChild(row);
     });
@@ -283,112 +272,117 @@ document.addEventListener('DOMContentLoaded', () => {
       renderGlobalSearch(val);
     } else {
       companiesGrid.style.display = 'grid';
-      document.getElementById('globalSearchResults').style.display = 'none';
+      const sr = document.getElementById('globalSearchResults');
+      if (sr) sr.style.display = 'none';
       renderCompanies();
     }
   });
 
-  // --- PRACTICE PROGRESS DASHBOARD ---
+  // ── Overall progress dashboard ────────────────────────────
   function updatePracticeProgress() {
-    const practiceQs = getQuestions('practice');
     const globalSolved = getSolved();
-    
-    // Use a Map to track unique questions by ID
     const uniqueQs = new Map();
 
-    // Collect all unique questions from companies
     companiesData.forEach(c => {
-      if (c.id === 'practice') return;
-      const qs = questionsData[c.id] || [];
-      qs.forEach(q => {
-        if (!uniqueQs.has(q.id)) {
-          uniqueQs.set(q.id, q);
-        }
+      getQuestions(c.id).forEach(q => {
+        if (!uniqueQs.has(q.id)) uniqueQs.set(q.id, q);
       });
     });
 
-    // Collect unique questions from practice
-    practiceQs.forEach(q => {
-      if (!uniqueQs.has(q.id)) {
-        uniqueQs.set(q.id, q);
-      }
-    });
-
-    let totalSolvedCount = 0;
-    let easySolved = 0, easyTotal = 0;
-    let medSolved = 0, medTotal = 0;
-    let hardSolved = 0, hardTotal = 0;
+    let totalSolved = 0, easySolved = 0, easyTotal = 0;
+    let medSolved = 0, medTotal = 0, hardSolved = 0, hardTotal = 0;
 
     uniqueQs.forEach((q, id) => {
       const isSolved = globalSolved.includes(id);
-      if (isSolved) totalSolvedCount++;
-
+      if (isSolved) totalSolved++;
       const diff = q.difficulty || 'Easy';
-      if (diff === 'Easy') {
-        easyTotal++;
-        if (isSolved) easySolved++;
-      } else if (diff.includes('Med')) {
-        medTotal++;
-        if (isSolved) medSolved++;
-      } else {
-        hardTotal++;
-        if (isSolved) hardSolved++;
-      }
+      if (diff === 'Easy')          { easyTotal++;  if (isSolved) easySolved++; }
+      else if (diff.includes('Med')){ medTotal++;   if (isSolved) medSolved++;  }
+      else                          { hardTotal++;  if (isSolved) hardSolved++; }
     });
 
-    const totalQuestions = uniqueQs.size;
-    dailyFraction.textContent = `${totalSolvedCount} / ${totalQuestions}`;
-    dailyEasyCount.textContent = `${easySolved} / ${easyTotal}`;
-    dailyMediumCount.textContent = `${medSolved} / ${medTotal}`;
-    dailyHardCount.textContent = `${hardSolved} / ${hardTotal}`;
+    const total = uniqueQs.size;
+    dailyFraction.textContent     = `${totalSolved} / ${total}`;
+    dailyEasyCount.textContent    = `${easySolved} / ${easyTotal}`;
+    dailyMediumCount.textContent  = `${medSolved} / ${medTotal}`;
+    dailyHardCount.textContent    = `${hardSolved} / ${hardTotal}`;
 
-    const pct = totalQuestions > 0 ? Math.round((totalSolvedCount / totalQuestions) * 100) : 0;
-    dailyPercentage.textContent = pct + '%';
-    
-    const C = 251.2;
-    const offset = C - (pct / 100) * C;
-    dailyProgressCircle.style.strokeDashoffset = offset;
+    const pct    = total > 0 ? Math.round((totalSolved / total) * 100) : 0;
+    dailyPercentage.textContent   = pct + '%';
+    const C      = 251.2;
+    dailyProgressCircle.style.strokeDashoffset = C - (pct / 100) * C;
   }
 
-  // --- SHEET PAGE ---
+  // ── Sheet page progress bar ───────────────────────────────
   function updateProgress() {
-    const questions = getQuestions(currentCompanyId);
-    const solved = getSolved(currentCompanyId);
-    const total = questions.length;
-    const solvedCount = solved.filter(id => questions.some(q => q.id === id)).length;
-    const pct = total === 0 ? 0 : ((solvedCount / total) * 100).toFixed(1);
+    const questions   = getQuestions(currentCompanyId);
+    const globalSolved= getSolved();
+    const total       = questions.length;
+    const solvedCount = globalSolved.filter(id => questions.some(q => q.id === id)).length;
+    const pct         = total === 0 ? 0 : ((solvedCount / total) * 100).toFixed(1);
     progressStats.textContent = `${solvedCount}/${total} (${pct}%)`;
-    progressFill.style.width = `${pct}%`;
+    progressFill.style.width  = `${pct}%`;
   }
 
+  // ── Toggle solved ─────────────────────────────────────────
   function toggleSolve(qId) {
-    let solved = getSolved(currentCompanyId);
+    let solved   = getSolved();
+    const countMap = getSolveCount();
     if (solved.includes(qId)) {
       solved = solved.filter(id => id !== qId);
     } else {
       solved.push(qId);
+      countMap[qId] = (countMap[qId] || 0) + 1;
+      saveSolveCount(countMap);
     }
-    saveSolved(currentCompanyId, solved);
+    saveSolved(solved);
     updateProgress();
     updatePracticeProgress();
-    // Just update the clicked row visually without full re-render
+
+    // Update row in place
     const icon = questionsListEl.querySelector(`.q-status[data-id="${qId}"]`);
     if (icon) icon.classList.toggle('solved', solved.includes(qId));
     const row = icon && icon.closest('.question-row');
-    if (row) row.classList.toggle('solved-row', solved.includes(qId));
+    if (row) {
+      row.classList.toggle('solved-row', solved.includes(qId));
+      const badge = row.querySelector('.q-solve-count');
+      if (badge) { badge.textContent = `×${countMap[qId] || 0}`; badge.style.opacity = countMap[qId] > 0 ? '1' : '0'; }
+    }
+  }
+
+  // For global search where currentCompanyId is null
+  function toggleSolveGlobal(qId) {
+    let solved   = getSolved();
+    const countMap = getSolveCount();
+    if (solved.includes(qId)) {
+      solved = solved.filter(id => id !== qId);
+    } else {
+      solved.push(qId);
+      countMap[qId] = (countMap[qId] || 0) + 1;
+      saveSolveCount(countMap);
+    }
+    saveSolved(solved);
+    updatePracticeProgress();
   }
 
   resetBtn.addEventListener('click', () => {
-    if (confirm('Reset progress for this company?')) {
-      saveSolved(currentCompanyId, []);
-      updateProgress();
-      renderQuestions();
-    }
+    if (!confirm('Reset all solved marks and counts for this company?')) return;
+    const questions  = getQuestions(currentCompanyId);
+    const companyIds = new Set(questions.map(q => q.id));
+    // Reset solved state
+    saveSolved(getSolved().filter(id => !companyIds.has(id)));
+    // Reset counts to 0
+    const countMap = getSolveCount();
+    companyIds.forEach(id => { delete countMap[id]; });
+    saveSolveCount(countMap);
+    updateProgress();
+    updatePracticeProgress();
+    renderQuestions();
   });
 
+  // ── Render question list ──────────────────────────────────
   function renderQuestions() {
     const allQuestions = getQuestions(currentCompanyId);
-    const solved = getSolved(currentCompanyId);
     const lq = questionSearchQuery.toLowerCase();
 
     let filtered = lq
@@ -398,8 +392,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (currentSort === 'id') {
       filtered.sort((a, b) => a.id - b.id);
     } else if (currentSort === 'difficulty') {
-      const diffRank = { 'Easy': 1, 'Med.': 2, 'Hard': 3, 'Med': 2 };
-      filtered.sort((a, b) => (diffRank[a.difficulty] || 0) - (diffRank[b.difficulty] || 0));
+      const dr = { 'Easy': 1, 'Med.': 2, 'Med': 2, 'Medium': 2, 'Hard': 3 };
+      filtered.sort((a, b) => (dr[a.difficulty] || 0) - (dr[b.difficulty] || 0));
     }
 
     questionsListEl.innerHTML = '';
@@ -409,16 +403,30 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    const diffClass = { 'Easy': 'easy', 'Med.': 'Med', 'Hard': 'Hard' };
+    const globalSolved = getSolved();
+    const countMap     = getSolveCount();
+    const isPractice   = currentCompanyId === 'practice';
+    const diffClass    = { 'Easy': 'easy', 'Med.': 'Med', 'Med': 'Med', 'Medium': 'Med', 'Hard': 'Hard' };
 
     filtered.forEach(q => {
-      const isSolved = solved.includes(q.id);
+      const isSolved = globalSolved.includes(q.id);
+      const count    = countMap[q.id] || 0;
+      const bars     = q.bars || 5;
+      const dc       = diffClass[q.difficulty] || 'Med';
+      const barColor = q.difficulty === 'Easy' ? '' : q.difficulty === 'Hard' ? 'hard' : 'med';
+
       const row = document.createElement('div');
       row.className = 'question-row' + (isSolved ? ' solved-row' : '');
 
-      const bars = q.bars || 5;
-      const dc = diffClass[q.difficulty] || 'Med';
-      const barColor = q.difficulty === 'Easy' ? '' : q.difficulty === 'Hard' ? 'hard' : 'med';
+      const deleteBtn = isPractice
+        ? `<svg class="q-trash" data-id="${q.id}" viewBox="0 0 24 24" width="16" height="16"
+             stroke="var(--color-hard)" stroke-width="2" fill="none" title="Delete"
+             style="cursor:pointer;opacity:0.6;flex-shrink:0;">
+             <polyline points="3 6 5 6 21 6"/>
+             <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+             <path d="M10 11v6M14 11v6"/>
+           </svg>`
+        : '';
 
       row.innerHTML = `
         <div class="q-left">
@@ -427,9 +435,11 @@ document.addEventListener('DOMContentLoaded', () => {
           </a>
         </div>
         <div class="q-right">
-          <span class="q-acc">${q.acceptance}</span>
+          <span class="q-acc">${q.acceptance || ''}</span>
+          <button class="q-count-btn" data-id="${q.id}" title="Times practiced — click to increment">${count}</button>
           <span class="q-diff diff-${dc}">${q.difficulty}</span>
-          <svg class="q-status ${isSolved ? 'solved' : ''}" data-id="${q.id}" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" title="${isSolved ? 'Mark unsolved' : 'Mark solved'}">
+          <svg class="q-status ${isSolved ? 'solved' : ''}" data-id="${q.id}" viewBox="0 0 24 24" width="18" height="18"
+            stroke="currentColor" stroke-width="2.5" fill="none" title="${isSolved ? 'Mark unsolved' : 'Mark solved'}">
             <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
             <polyline points="22 4 12 14.01 9 11.01"/>
           </svg>
@@ -442,15 +452,36 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="q-freq">
             ${[1,2,3,4,5,6].map(i => `<div class="f-bar ${i <= bars ? 'filled ' + barColor : ''}"></div>`).join('')}
           </div>
-        </div>
-      `;
+          ${deleteBtn}
+        </div>`;
       questionsListEl.appendChild(row);
     });
 
     questionsListEl.querySelectorAll('.q-status').forEach(icon => {
-      icon.addEventListener('click', e => {
-        e.preventDefault();
-        toggleSolve(parseInt(e.currentTarget.dataset.id));
+      icon.addEventListener('click', e => { e.preventDefault(); toggleSolve(parseInt(e.currentTarget.dataset.id)); });
+    });
+
+    questionsListEl.querySelectorAll('.q-count-btn').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        const qId = parseInt(e.currentTarget.dataset.id);
+        const newCount = incrementCount(qId);
+        e.currentTarget.textContent = newCount;
+        e.currentTarget.classList.add('bumped');
+        setTimeout(() => e.currentTarget.classList.remove('bumped'), 300);
+      });
+    });
+
+    questionsListEl.querySelectorAll('.q-trash').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        const id = parseInt(e.currentTarget.dataset.id);
+        if (!confirm('Remove this question from Practice?')) return;
+        savePracticeQs(getPracticeQs().filter(q => q.id !== id));
+        renderQuestions();
+        updateProgress();
+        updatePracticeProgress();
+        renderCompanies();
       });
     });
   }
@@ -460,21 +491,13 @@ document.addEventListener('DOMContentLoaded', () => {
     renderQuestions();
   });
 
-  // --- MODAL LOGIC ---
-  let currentPracticeDiff = 'Easy';
-
-  btnAddProblem.addEventListener('click', () => {
-    addProblemModal.style.display = 'flex';
-  });
-  btnCancelModal.addEventListener('click', () => {
-    addProblemModal.style.display = 'none';
-  });
-  window.addEventListener('click', (e) => {
-    if (e.target === addProblemModal) addProblemModal.style.display = 'none';
-  });
+  // ── Add Problem Modal ─────────────────────────────────────
+  btnAddProblem.addEventListener('click', () => { addProblemModal.style.display = 'flex'; });
+  btnCancelModal.addEventListener('click', () => { addProblemModal.style.display = 'none'; });
+  window.addEventListener('click', e => { if (e.target === addProblemModal) addProblemModal.style.display = 'none'; });
 
   diffOpts.forEach(btn => {
-    btn.addEventListener('click', (e) => {
+    btn.addEventListener('click', e => {
       diffOpts.forEach(b => b.classList.remove('selected'));
       e.target.classList.add('selected');
       currentPracticeDiff = e.target.dataset.diff;
@@ -484,39 +507,34 @@ document.addEventListener('DOMContentLoaded', () => {
   btnSaveProblem.addEventListener('click', () => {
     const name = customProblemName.value.trim();
     if (!name) return alert('Problem Name is required');
-    
-    let practiceQs = JSON.parse(localStorage.getItem('nl_practice_qs') || '[]');
-    
-    // Do not add repeated questions
+
+    const practiceQs = getPracticeQs();
     if (practiceQs.some(q => q.title.toLowerCase() === name.toLowerCase())) {
       return alert('This problem is already in your Practice list.');
     }
 
-    const num = customProblemNumber.value.trim() || (practiceQs.length + 1).toString();
+    const num  = customProblemNumber.value.trim();
     const link = customProblemLink.value.trim() || '#';
-
     const newQ = {
-      id: parseInt(num) || Date.now(),
-      num: num,
-      title: name,
-      link: link,
+      id:         num ? (parseInt(num) || Date.now()) : Date.now(),
+      num:        num || (practiceQs.length + 1).toString(),
+      title:      name,
+      link:       link,
       difficulty: currentPracticeDiff,
-      acceptance: '100%',
-      bars: 6
+      acceptance: '—',
+      bars:       6
     };
 
-    practiceQs.push(newQ);
-    localStorage.setItem('nl_practice_qs', JSON.stringify(practiceQs));
-    
+    savePracticeQs([...practiceQs, newQ]);
     customProblemName.value = '';
     customProblemNumber.value = '';
     customProblemLink.value = '';
     addProblemModal.style.display = 'none';
-    
+
     renderCompanies();
     updatePracticeProgress();
   });
 
-  // Init
+  // ── Init ──────────────────────────────────────────────────
   goHome();
 });
