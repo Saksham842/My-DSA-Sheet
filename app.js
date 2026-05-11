@@ -144,9 +144,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- HOME PAGE ---
   function getCompanyProgress(companyId) {
-    const solved = getSolved(companyId);
-    const total = getQuestions(companyId).length;
-    return { solved: solved.length, total };
+    const globalSolved = getSolved(companyId);
+    const questions = getQuestions(companyId);
+    const solvedInCompany = globalSolved.filter(id => questions.some(q => q.id === id));
+    return { solved: solvedInCompany.length, total: questions.length };
   }
 
   function renderCompanies(onlyRevision = false) {
