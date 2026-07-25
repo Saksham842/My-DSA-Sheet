@@ -1,0 +1,793 @@
+[
+  {
+    "id": 692,
+    "title": "Top K Frequent Words",
+    "acceptance": "59.3%",
+    "difficulty": "Med.",
+    "bars": 6
+  },
+  {
+    "id": 347,
+    "title": "Top K Frequent Elements",
+    "acceptance": "64.6%",
+    "difficulty": "Med.",
+    "bars": 6
+  },
+  {
+    "id": 152,
+    "title": "Maximum Product Subarray",
+    "acceptance": "35.0%",
+    "difficulty": "Med.",
+    "bars": 6
+  },
+  {
+    "id": 329,
+    "title": "Longest Increasing Path in a Matrix",
+    "acceptance": "55.4%",
+    "difficulty": "Hard",
+    "bars": 6
+  },
+  {
+    "id": 146,
+    "title": "LRU Cache",
+    "acceptance": "45.3%",
+    "difficulty": "Med.",
+    "bars": 6
+  },
+  {
+    "id": 424,
+    "title": "Longest Repeating Character Replacement",
+    "acceptance": "57.3%",
+    "difficulty": "Med.",
+    "bars": 6
+  },
+  {
+    "id": 3046,
+    "title": "Split the Array",
+    "acceptance": "59.3%",
+    "difficulty": "Easy",
+    "bars": 6
+  },
+  {
+    "id": 12,
+    "title": "Integer to Roman",
+    "acceptance": "68.7%",
+    "difficulty": "Med.",
+    "bars": 6
+  },
+  {
+    "id": 76,
+    "title": "Minimum Window Substring",
+    "acceptance": "45.4%",
+    "difficulty": "Hard",
+    "bars": 6
+  },
+  {
+    "id": 91,
+    "title": "Decode Ways",
+    "acceptance": "36.6%",
+    "difficulty": "Med.",
+    "bars": 6
+  },
+  {
+    "id": 238,
+    "title": "Product of Array Except Self",
+    "acceptance": "67.8%",
+    "difficulty": "Med.",
+    "bars": 6
+  },
+  {
+    "id": 121,
+    "title": "Best Time to Buy and Sell Stock",
+    "acceptance": "55.3%",
+    "difficulty": "Easy",
+    "bars": 6
+  },
+  {
+    "id": 127,
+    "title": "Word Ladder",
+    "acceptance": "42.9%",
+    "difficulty": "Hard",
+    "bars": 6
+  },
+  {
+    "id": 994,
+    "title": "Rotting Oranges",
+    "acceptance": "56.7%",
+    "difficulty": "Med.",
+    "bars": 6
+  },
+  {
+    "id": 169,
+    "title": "Majority Element",
+    "acceptance": "65.8%",
+    "difficulty": "Easy",
+    "bars": 6
+  },
+  {
+    "id": 1,
+    "title": "Two Sum",
+    "acceptance": "55.8%",
+    "difficulty": "Easy",
+    "bars": 6
+  },
+  {
+    "id": 14,
+    "title": "Longest Common Prefix",
+    "acceptance": "45.5%",
+    "difficulty": "Easy",
+    "bars": 6
+  },
+  {
+    "id": 15,
+    "title": "3Sum",
+    "acceptance": "37.1%",
+    "difficulty": "Med.",
+    "bars": 6
+  },
+  {
+    "id": 4,
+    "title": "Median of Two Sorted Arrays",
+    "acceptance": "43.9%",
+    "difficulty": "Hard",
+    "bars": 6
+  },
+  {
+    "id": 3,
+    "title": "Longest Substring Without Repeating Characters",
+    "acceptance": "37.0%",
+    "difficulty": "Med.",
+    "bars": 6
+  },
+  {
+    "id": 7,
+    "title": "Reverse Integer",
+    "acceptance": "30.3%",
+    "difficulty": "Med.",
+    "bars": 6
+  },
+  {
+    "id": 88,
+    "title": "Merge Sorted Array",
+    "acceptance": "53.0%",
+    "difficulty": "Easy",
+    "bars": 6
+  },
+  {
+    "id": 42,
+    "title": "Trapping Rain Water",
+    "acceptance": "65.2%",
+    "difficulty": "Hard",
+    "bars": 6
+  },
+  {
+    "id": 49,
+    "title": "Group Anagrams",
+    "acceptance": "71.0%",
+    "difficulty": "Med.",
+    "bars": 6
+  },
+  {
+    "id": 9,
+    "title": "Palindrome Number",
+    "acceptance": "59.3%",
+    "difficulty": "Easy",
+    "bars": 6
+  },
+  {
+    "id": 2,
+    "title": "Add Two Numbers",
+    "acceptance": "46.3%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 20,
+    "title": "Valid Parentheses",
+    "acceptance": "42.4%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 5,
+    "title": "Longest Palindromic Substring",
+    "acceptance": "35.9%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 31,
+    "title": "Next Permutation",
+    "acceptance": "43.1%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 27,
+    "title": "Remove Element",
+    "acceptance": "60.1%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 70,
+    "title": "Climbing Stairs",
+    "acceptance": "53.6%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 13,
+    "title": "Roman to Integer",
+    "acceptance": "64.9%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 11,
+    "title": "Container With Most Water",
+    "acceptance": "57.8%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 26,
+    "title": "Remove Duplicates from Sorted Array",
+    "acceptance": "60.4%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 54,
+    "title": "Spiral Matrix",
+    "acceptance": "54.0%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 73,
+    "title": "Set Matrix Zeroes",
+    "acceptance": "60.8%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 21,
+    "title": "Merge Two Sorted Lists",
+    "acceptance": "66.9%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 22,
+    "title": "Generate Parentheses",
+    "acceptance": "77.2%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 55,
+    "title": "Jump Game",
+    "acceptance": "39.5%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 66,
+    "title": "Plus One",
+    "acceptance": "47.6%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 17,
+    "title": "Letter Combinations of a Phone Number",
+    "acceptance": "63.9%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 48,
+    "title": "Rotate Image",
+    "acceptance": "78.0%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 34,
+    "title": "Find First and Last Position of Element in Sorted Array",
+    "acceptance": "46.9%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 56,
+    "title": "Merge Intervals",
+    "acceptance": "49.4%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 46,
+    "title": "Permutations",
+    "acceptance": "80.7%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 69,
+    "title": "Sqrt(x)",
+    "acceptance": "40.4%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 80,
+    "title": "Remove Duplicates from Sorted Array II",
+    "acceptance": "63.0%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 75,
+    "title": "Sort Colors",
+    "acceptance": "67.6%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 53,
+    "title": "Maximum Subarray",
+    "acceptance": "52.1%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 23,
+    "title": "Merge k Sorted Lists",
+    "acceptance": "56.9%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 62,
+    "title": "Unique Paths",
+    "acceptance": "65.8%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 45,
+    "title": "Jump Game II",
+    "acceptance": "41.5%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 36,
+    "title": "Valid Sudoku",
+    "acceptance": "62.3%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 105,
+    "title": "Construct Binary Tree from Preorder and Inorder Traversal",
+    "acceptance": "66.9%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 29,
+    "title": "Divide Two Integers",
+    "acceptance": "18.4%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 33,
+    "title": "Search in Rotated Sorted Array",
+    "acceptance": "42.9%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 41,
+    "title": "First Missing Positive",
+    "acceptance": "41.1%",
+    "difficulty": "Hard",
+    "bars": 5
+  },
+  {
+    "id": 40,
+    "title": "Combination Sum II",
+    "acceptance": "57.7%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 35,
+    "title": "Search Insert Position",
+    "acceptance": "49.1%",
+    "difficulty": "Easy",
+    "bars": 5
+  },
+  {
+    "id": 50,
+    "title": "Pow(x, n)",
+    "acceptance": "37.1%",
+    "difficulty": "Med.",
+    "bars": 5
+  },
+  {
+    "id": 78,
+    "title": "Subsets",
+    "acceptance": "80.9%",
+    "difficulty": "Med.",
+    "bars": 4
+  },
+  {
+    "id": 28,
+    "title": "Find the Index of the First Occurrence in a String",
+    "acceptance": "45.0%",
+    "difficulty": "Easy",
+    "bars": 4
+  },
+  {
+    "id": 8,
+    "title": "String to Integer (atoi)",
+    "acceptance": "19.3%",
+    "difficulty": "Med.",
+    "bars": 4
+  },
+  {
+    "id": 25,
+    "title": "Reverse Nodes in k-Group",
+    "acceptance": "63.1%",
+    "difficulty": "Hard",
+    "bars": 4
+  },
+  {
+    "id": 58,
+    "title": "Length of Last Word",
+    "acceptance": "56.4%",
+    "difficulty": "Easy",
+    "bars": 4
+  },
+  {
+    "id": 84,
+    "title": "Largest Rectangle in Histogram",
+    "acceptance": "47.5%",
+    "difficulty": "Hard",
+    "bars": 4
+  },
+  {
+    "id": 103,
+    "title": "Binary Tree Zigzag Level Order Traversal",
+    "acceptance": "61.7%",
+    "difficulty": "Med.",
+    "bars": 4
+  },
+  {
+    "id": 94,
+    "title": "Binary Tree Inorder Traversal",
+    "acceptance": "78.6%",
+    "difficulty": "Easy",
+    "bars": 4
+  },
+  {
+    "id": 24,
+    "title": "Swap Nodes in Pairs",
+    "acceptance": "67.3%",
+    "difficulty": "Med.",
+    "bars": 4
+  },
+  {
+    "id": 92,
+    "title": "Reverse Linked List II",
+    "acceptance": "49.6%",
+    "difficulty": "Med.",
+    "bars": 4
+  },
+  {
+    "id": 44,
+    "title": "Wildcard Matching",
+    "acceptance": "30.0%",
+    "difficulty": "Hard",
+    "bars": 4
+  },
+  {
+    "id": 18,
+    "title": "4Sum",
+    "acceptance": "38.3%",
+    "difficulty": "Med.",
+    "bars": 4
+  },
+  {
+    "id": 6,
+    "title": "Zigzag Conversion",
+    "acceptance": "51.7%",
+    "difficulty": "Med.",
+    "bars": 4
+  },
+  {
+    "id": 37,
+    "title": "Sudoku Solver",
+    "acceptance": "64.0%",
+    "difficulty": "Hard",
+    "bars": 4
+  },
+  {
+    "id": 16,
+    "title": "3Sum Closest",
+    "acceptance": "46.9%",
+    "difficulty": "Med.",
+    "bars": 4
+  },
+  {
+    "id": 19,
+    "title": "Remove Nth Node From End of List",
+    "acceptance": "49.0%",
+    "difficulty": "Med.",
+    "bars": 4
+  },
+  {
+    "id": 86,
+    "title": "Partition List",
+    "acceptance": "59.0%",
+    "difficulty": "Med.",
+    "bars": 4
+  },
+  {
+    "id": 57,
+    "title": "Insert Interval",
+    "acceptance": "43.5%",
+    "difficulty": "Med.",
+    "bars": 4
+  },
+  {
+    "id": 101,
+    "title": "Symmetric Tree",
+    "acceptance": "59.3%",
+    "difficulty": "Easy",
+    "bars": 4
+  },
+  {
+    "id": 79,
+    "title": "Word Search",
+    "acceptance": "45.3%",
+    "difficulty": "Med.",
+    "bars": 4
+  },
+  {
+    "id": 60,
+    "title": "Permutation Sequence",
+    "acceptance": "50.0%",
+    "difficulty": "Hard",
+    "bars": 4
+  },
+  {
+    "id": 68,
+    "title": "Text Justification",
+    "acceptance": "48.2%",
+    "difficulty": "Hard",
+    "bars": 4
+  },
+  {
+    "id": 67,
+    "title": "Add Binary",
+    "acceptance": "55.7%",
+    "difficulty": "Easy",
+    "bars": 4
+  },
+  {
+    "id": 100,
+    "title": "Same Tree",
+    "acceptance": "65.2%",
+    "difficulty": "Easy",
+    "bars": 4
+  },
+  {
+    "id": 74,
+    "title": "Search a 2D Matrix",
+    "acceptance": "52.3%",
+    "difficulty": "Med.",
+    "bars": 4
+  },
+  {
+    "id": 77,
+    "title": "Combinations",
+    "acceptance": "73.0%",
+    "difficulty": "Med.",
+    "bars": 4
+  },
+  {
+    "id": 32,
+    "title": "Longest Valid Parentheses",
+    "acceptance": "36.4%",
+    "difficulty": "Hard",
+    "bars": 4
+  },
+  {
+    "id": 104,
+    "title": "Maximum Depth of Binary Tree",
+    "acceptance": "77.2%",
+    "difficulty": "Easy",
+    "bars": 4
+  },
+  {
+    "id": 110,
+    "title": "Balanced Binary Tree",
+    "acceptance": "55.4%",
+    "difficulty": "Easy",
+    "bars": 4
+  },
+  {
+    "id": 59,
+    "title": "Spiral Matrix II",
+    "acceptance": "73.5%",
+    "difficulty": "Med.",
+    "bars": 4
+  },
+  {
+    "id": 98,
+    "title": "Validate Binary Search Tree",
+    "acceptance": "34.4%",
+    "difficulty": "Med.",
+    "bars": 4
+  },
+  {
+    "id": 72,
+    "title": "Edit Distance",
+    "acceptance": "58.8%",
+    "difficulty": "Med.",
+    "bars": 4
+  },
+  {
+    "id": 83,
+    "title": "Remove Duplicates from Sorted List",
+    "acceptance": "54.9%",
+    "difficulty": "Easy",
+    "bars": 4
+  },
+  {
+    "id": 81,
+    "title": "Search in Rotated Sorted Array II",
+    "acceptance": "38.9%",
+    "difficulty": "Med.",
+    "bars": 4
+  },
+  {
+    "id": 63,
+    "title": "Unique Paths II",
+    "acceptance": "43.2%",
+    "difficulty": "Med.",
+    "bars": 4
+  },
+  {
+    "id": 61,
+    "title": "Rotate List",
+    "acceptance": "40.0%",
+    "difficulty": "Med.",
+    "bars": 3
+  },
+  {
+    "id": 30,
+    "title": "Substring with Concatenation of All Words",
+    "acceptance": "33.0%",
+    "difficulty": "Hard",
+    "bars": 3
+  },
+  {
+    "id": 51,
+    "title": "N-Queens",
+    "acceptance": "72.9%",
+    "difficulty": "Hard",
+    "bars": 3
+  },
+  {
+    "id": 38,
+    "title": "Count and Say",
+    "acceptance": "60.6%",
+    "difficulty": "Med.",
+    "bars": 3
+  },
+  {
+    "id": 71,
+    "title": "Simplify Path",
+    "acceptance": "47.9%",
+    "difficulty": "Med.",
+    "bars": 3
+  },
+  {
+    "id": 47,
+    "title": "Permutations II",
+    "acceptance": "61.6%",
+    "difficulty": "Med.",
+    "bars": 3
+  },
+  {
+    "id": 93,
+    "title": "Restore IP Addresses",
+    "acceptance": "53.2%",
+    "difficulty": "Med.",
+    "bars": 3
+  },
+  {
+    "id": 82,
+    "title": "Remove Duplicates from Sorted List II",
+    "acceptance": "49.9%",
+    "difficulty": "Med.",
+    "bars": 3
+  },
+  {
+    "id": 90,
+    "title": "Subsets II",
+    "acceptance": "59.6%",
+    "difficulty": "Med.",
+    "bars": 3
+  },
+  {
+    "id": 85,
+    "title": "Maximal Rectangle",
+    "acceptance": "53.8%",
+    "difficulty": "Hard",
+    "bars": 3
+  },
+  {
+    "id": 43,
+    "title": "Multiply Strings",
+    "acceptance": "42.3%",
+    "difficulty": "Med.",
+    "bars": 3
+  },
+  {
+    "id": 39,
+    "title": "Combination Sum",
+    "acceptance": "74.7%",
+    "difficulty": "Med.",
+    "bars": 3
+  },
+  {
+    "id": 108,
+    "title": "Convert Sorted Array to Binary Search Tree",
+    "acceptance": "74.1%",
+    "difficulty": "Easy",
+    "bars": 3
+  },
+  {
+    "id": 106,
+    "title": "Construct Binary Tree from Inorder and Postorder Traversal",
+    "acceptance": "66.2%",
+    "difficulty": "Med.",
+    "bars": 3
+  },
+  {
+    "id": 96,
+    "title": "Unique Binary Search Trees",
+    "acceptance": "62.5%",
+    "difficulty": "Med.",
+    "bars": 3
+  },
+  {
+    "id": 111,
+    "title": "Minimum Depth of Binary Tree",
+    "acceptance": "50.7%",
+    "difficulty": "Easy",
+    "bars": 3
+  },
+  {
+    "id": 112,
+    "title": "Path Sum",
+    "acceptance": "53.1%",
+    "difficulty": "Easy",
+    "bars": 3
+  },
+  {
+    "id": 102,
+    "title": "Binary Tree Level Order Traversal",
+    "acceptance": "70.7%",
+    "difficulty": "Med.",
+    "bars": 3
+  }
+]
