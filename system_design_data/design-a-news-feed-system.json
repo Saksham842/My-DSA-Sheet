@@ -1,0 +1,61 @@
+{
+  "_id": "68a36acd169e3f7abce77c7e",
+  "title": "Design a News Feed System",
+  "chapterNo": 11,
+  "slug": "design-a-news-feed-system",
+  "sections": [
+    {
+      "heading": "Overview",
+      "slug": "overview",
+      "content": "<section id='overview'><h1 id='overview-heading'>Design a News Feed System</h1><p id='overview-p1'>A news feed is a constantly updating list of stories presented on a user's home page. It can include status updates, photos, videos, links, and other media.</p><p id='overview-p2'>This problem appears in many interview forms: design Facebook News Feed, Twitter timeline, Instagram feed, etc. The core challenge is how to deliver relevant, up-to-date posts to many users with low latency and high availability.</p></section>"
+    },
+    {
+      "heading": "Step 1 - Understand the problem and establish design scope",
+      "slug": "step-1-understand-problem",
+      "content": "<section id='step-1'><h2 id='step-1-heading'>Step 1 - Understand the problem and establish design scope</h2><p id='step-1-intro'>Clarify the exact requirements before designing. Example Q&A from the interviewer:</p><ul id='step-1-qa'><li id='q-a-1'><strong>Q:</strong> Mobile, web app?</li><li id='q-a-1a'><strong>A:</strong> Both.</li><li id='q-a-2'><strong>Q:</strong> Important features?</li><li id='q-a-2a'><strong>A:</strong> Users can publish posts and see friends' posts on their feed.</li><li id='q-a-3'><strong>Q:</strong> Sorting: reverse-chronological or ranked?</li><li id='q-a-3a'><strong>A:</strong> For simplicity, assume reverse chronological order.</li><li id='q-a-4'><strong>Q:</strong> Max number of friends per user?</li><li id='q-a-4a'><strong>A:</strong> 5000.</li><li id='q-a-5'><strong>Q:</strong> Traffic volume?</li><li id='q-a-5a'><strong>A:</strong> 10 million daily active users (DAU).</li><li id='q-a-6'><strong>Q:</strong> Can feeds contain media?</li><li id='q-a-6a'><strong>A:</strong> Yes; images and video are allowed.</li></ul><p id='step-1-goals'>Non-functional goals: low latency retrieval, high throughput for reads and writes, scalability, and fault tolerance.</p></section>"
+    },
+    {
+      "heading": "Step 2 - High-level design and get buy-in",
+      "slug": "step-2-high-level-design",
+      "content": "<section id='step-2'><h2 id='step-2-heading'>Step 2 - High-level design and get buy-in</h2><p id='step-2-intro'>There are two main pieces to design:</p><ul id='two-pieces'><li id='piece-1'><strong>Feed publishing</strong> - persist a user's post and populate friends' feeds.</li><li id='piece-2'><strong>Newsfeed building</strong> - aggregate a user's friends' posts into a feed for display.</li></ul><h3 id='api-heading'>Newsfeed API</h3><p id='api-desc'>Main endpoints:</p><ul id='api-list'><li id='api-post'><code>POST /v1/me/feed</code> - publish a post; payload includes content and an auth token.</li><li id='api-get'><code>GET /v1/me/feed</code> - retrieve the user's news feed; payload includes auth token and pagination.</li></ul><h3 id='highlevel-diagrams-heading'>High-level flows</h3><p id='feed-publishing-img'><img loading='lazy' src='images/feed-publishing.png' alt='feed publishing' id='img-feed-publishing' /></p><p id='feed-publishing-desc'>Feed publishing: client → load balancer → web servers → post service (persist to DB + cache) → fanout service (populate friends' feeds) → notification service.</p><p id='newsfeed-building-img'><img loading='lazy' src='images/newsfeed-building.png' alt='newsfeed building' id='img-newsfeed-building' /></p><p id='newsfeed-building-desc'>Newsfeed building: client requests feed → load balancer → web servers → newsfeed service → read precomputed feed from cache (or compute on-the-fly) → hydrate posts and return JSON.</p></section>"
+    },
+    {
+      "heading": "Step 3 - Design deep dive",
+      "slug": "step-3-design-deep-dive",
+      "content": "<section id='step-3'><h2 id='step-3-heading'>Step 3 - Design deep dive</h2><p id='deep-intro'>We dive into the publishing and retrieval flows, caching, and trade-offs of different fanout strategies.</p></section>"
+    },
+    {
+      "heading": "Feed publishing deep dive",
+      "slug": "feed-publishing-deep-dive",
+      "content": "<section id='feed-publishing-deep-dive'><h3 id='feed-publishing-heading'>Feed publishing deep dive</h3><p id='web-servers-desc'>Web servers authenticate requests, enforce rate limits (to prevent spam), and forward valid posts to the post service.</p><p id='post-service-desc'>The post service persists the post to durable storage and updates caches for quick reads.</p><h4 id='fanout-intro'>Fanout service</h4><p id='fanout-desc'>Fanout delivers a new post to followers' feeds. There are three main approaches: push (fanout on write), pull (fanout on read), and hybrid:</p><ul id='fanout-types'><li id='fanout-push'><strong>Fanout on write (push)</strong>: when a user posts, the system pushes the post to every follower's feed cache. Pros: reads are fast. Cons: expensive for users with many followers (hotkey/celebrity problem), and wasted work for inactive followers.</li><li id='fanout-pull'><strong>Fanout on read (pull)</strong>: at read time, fetch the latest posts from friends. Pros: cheaper for write-heavy workloads and inactive followers. Cons: read latency increases.</li><li id='fanout-hybrid'><strong>Hybrid</strong>: precompute feeds for regular users (push) and compute on read for celebrities/very popular accounts (pull).</li></ul><p id='fanout-service-img'><img loading='lazy' src='images/fanout-service.png' alt='fanout service' id='img-fanout-service' /></p><p id='fanout-workflow'>Typical fanout workflow: fetch follower IDs from the social graph DB, filter (muted/blocked), and enqueue fanout jobs. Fanout workers consume jobs and write <code>&lt;user_id, post_id&gt;</code> entries into the feed store (cache) for each follower.</p><p id='book-error-note'>Note: the example in some references shows storing a <code>&lt;post_id, user_id&gt;</code> mapping in cache; that is likely an error. Storing <code>&lt;user_id, post_id&gt;</code> (e.g., a list or sorted set of post IDs keyed by user) allows quick retrieval of a user's feed.</p><p id='publishing-img'><img loading='lazy' src='images/feed-publishing-deep-dive.png' alt='feed publishing deep dive' id='img-feed-publishing-deep-dive' /></p></section>"
+    },
+    {
+      "heading": "News feed retrieval deep dive",
+      "slug": "news-feed-retrieval-deep-dive",
+      "content": "<section id='newsfeed-retrieval'><h3 id='newsfeed-retrieval-heading'>News feed retrieval deep dive</h3><p id='retrieval-flow'>When a user requests their feed:</p><ol id='retrieval-steps'><li id='r-step-1'>Load balancer directs the request to a web server.</li><li id='r-step-2'>Web server calls the newsfeed service (authenticated).</li><li id='r-step-3'>Newsfeed service reads a list of <code>post_id</code>s from the newsfeed cache (if precomputed) or composes the list by querying friend feeds (pull).</li><li id='r-step-4'>Hydrate each <code>post_id</code>: fetch post content, user metadata (username, avatar), action states (liked, commented), and media references.</li><li id='r-step-5'>Return the fully-hydrated feed JSON to the client; media files are referenced via CDN URLs.</li></ol><p id='hydration-note'>Hydration can be parallelized and backed by several caches: content cache (post body), user cache (profiles), and action counters. If items are not in cache, read from the DB.</p><p id='retrieval-img'><img loading='lazy' src='images/news-feed-retrieval-deep-dive.png' alt='news feed retrieval deep dive' id='img-news-feed-retrieval-deep-dive' /></p></section>"
+    },
+    {
+      "heading": "Cache architecture",
+      "slug": "cache-architecture",
+      "content": "<section id='cache-architecture'><h3 id='cache-architecture-heading'>Cache architecture</h3><p id='cache-intro'>Caching is critical in a news feed system to achieve low-latency responses. We typically use multiple cache layers:</p><ol id='cache-layers-list'><li id='layer-feed'><strong>Newsfeed cache</strong> - stores lists of post IDs for a user (precomputed feed).</li><li id='layer-content'><strong>Content cache</strong> - stores full post data; hot posts live in memory.</li><li id='layer-social'><strong>Social graph cache</strong> - caches friend/follower lists to speed fanout and pull operations.</li><li id='layer-action'><strong>Action cache</strong> - stores user actions on posts (likes, replies) for fast hydration.</li><li id='layer-counters'><strong>Counters cache</strong> - counters for likes, comments, followers, etc.</li></ol><p id='cache-img'><img loading='lazy' src='images/cache-layer.png' alt='cache layers' id='img-cache-layer' /></p><p id='cache-notes'>Use LRU or LFU eviction policies and warm caches for popular users. A combination of Redis (in-memory) and CDN for media is common.</p></section>"
+    },
+    {
+      "heading": "Scaling considerations and hotkeys",
+      "slug": "scaling-hotkeys",
+      "content": "<section id='scaling-hotkeys'><h3 id='scaling-hotkeys-heading'>Scaling considerations and hotkeys</h3><p id='hotkey-intro'>Key challenges and mitigation strategies:</p><ul id='scaling-list'><li id='sh-1'><strong>Celebrity accounts (hotkeys):</strong> accounts with millions of followers create massive fanout work. Use pull for these accounts, or special sharding strategies and fanout scheduling.</li><li id='sh-2'><strong>Sharding:</strong> shard users and their feeds by user-id hash or consistent hashing to distribute load.</li><li id='sh-3'><strong>Asynchronous processing:</strong> push expensive work (fanout, notifications) to background workers and queues.</li><li id='sh-4'><strong>Rate limiting:</strong> limit posting rate to protect the system from abuse.</li><li id='sh-5'><strong>Media handling:</strong> store images and videos in object storage and serve via CDN to avoid hitting the feed service with large payloads.</li></ul></section>"
+    },
+    {
+      "heading": "Operational concerns",
+      "slug": "operational-concerns",
+      "content": "<section id='ops'><h3 id='ops-heading'>Operational concerns</h3><p id='ops-monitoring'>Monitor key metrics: read/write QPS, feed retrieval latency, cache hit ratios, fanout job queue depth, and error rates.</p><p id='ops-deploy'>Automated deployments and canary rollouts are important to prevent breaking the feed generation pipeline. Have circuit breakers for downstream services (DB, cache, CDN).</p><p id='ops-data-centers'>Multi-datacenter support: route users to nearest datacenter and replicate or cross-populate feeds as required. Decide on consistency model: relaxed eventual consistency is commonly acceptable for feeds.</p></section>"
+    },
+    {
+      "heading": "Step 4 - Wrap up",
+      "slug": "step-4-wrap-up",
+      "content": "<section id='wrap-up'><h2 id='wrap-up-heading'>Step 4 - Wrap up</h2><p id='wrap-up-summary'>We designed a news feed system that covers feed publishing (post persistence and fanout) and feed retrieval (precomputed and on-the-fly strategies). Major takeaways:</p><ul id='wrap-up-list'><li id='wrap-1'>Use a hybrid fanout model: push for typical users, pull for celebrities.</li><li id='wrap-2'>Cache aggressively across multiple layers: feed lists, post content, social graph, actions, and counters.</li><li id='wrap-3'>Decouple work via message queues and background workers for fanout and notifications.</li><li id='wrap-4'>Mitigate hotkeys with special treatment (pull model, sharding, rate limiting).</li><li id='wrap-5'>Store media in object storage and serve via CDN.</li></ul><p id='wrap-up-additional'>Related topics to discuss: vertical vs. horizontal DB scaling, SQL vs. NoSQL trade-offs, master-slave replication, read replicas, sharding strategies, consistency models, multiple data centers, and monitoring. Always state your assumptions and justify trade-offs when describing the design in an interview.</p><p id='final-note'>Key metrics to monitor: QPS and latency for both feed reads and writes, cache hit rates, and queue depths for fanout workers.</p></section>"
+    }
+  ],
+  "createdAt": "2025-08-18T18:02:53.600Z",
+  "updatedAt": "2025-08-18T18:02:53.600Z",
+  "__v": 0
+}

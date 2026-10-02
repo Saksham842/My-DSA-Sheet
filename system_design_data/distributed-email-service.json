@@ -1,0 +1,86 @@
+{
+  "_id": "68a37768169e3f7abce77cba",
+  "title": "Distributed Email Service",
+  "chapterNo": 23,
+  "slug": "distributed-email-service",
+  "sections": [
+    {
+      "heading": "Overview",
+      "slug": "overview",
+      "content": "<section id='overview'><h1 id='overview-heading'>Distributed Email Service</h1><p id='overview-p1'>We'll design a distributed email service, similar to Gmail, in this chapter.</p><p id='overview-p2'>In 2020, Gmail had 1.8 billion active users, while Outlook had 400 million users worldwide.</p></section>"
+    },
+    {
+      "heading": "Step 1 - Understand the Problem and Establish Design Scope",
+      "slug": "step-1-understand-problem",
+      "content": "<section id='step-1'><h2 id='step-1-heading'>Step 1 - Understand the Problem and Establish Design Scope</h2><ul id='qna-list'><li id='qna-1'><strong>C:</strong> How many users use the system?</li><li id='qna-2'><strong>I:</strong> 1 billion users.</li><li id='qna-3'><strong>C:</strong> I think the following features are important - auth, send/receive email, fetch email, filter emails, search email, anti-spam protection.</li><li id='qna-4'><strong>I:</strong> Good list. Don't worry about auth for now.</li><li id='qna-5'><strong>C:</strong> How do users connect with email servers?</li><li id='qna-6'><strong>I:</strong> Typically, email clients connect via SMTP, POP, IMAP, but we'll use HTTP for this problem.</li><li id='qna-7'><strong>C:</strong> Can emails have attachments?</li><li id='qna-8'><strong>I:</strong> Yes.</li></ul></section>"
+    },
+    {
+      "heading": "Non-functional requirements and Back-of-the-envelope estimation",
+      "slug": "non-functional-and-estimation",
+      "content": "<section id='nfr-estimation'><h3 id='nfr-heading'>Non-functional requirements</h3><ul id='nfr-list'><li id='nfr-1'>Reliability - we shouldn't lose data.</li><li id='nfr-2'>Availability - Use replication to prevent single points of failure and tolerate partial system failures.</li><li id='nfr-3'>Scalability - The system should handle growth in the userbase.</li><li id='nfr-4'>Flexibility and extensibility - The system should be easy to extend; we chose HTTP for web clients.</li></ul><h3 id='estimation-heading'>Back-of-the-envelope estimation</h3><ul id='estimate-list'><li id='estimate-1'>1 billion users.</li><li id='estimate-2'>Assume one person sends 10 emails per day -> ~100k emails per second.</li><li id='estimate-3'>Assume one person receives 40 emails per day and each email has ~50KB metadata -> ~730 PB storage per year.</li><li id='estimate-4'>Assume 20% of emails have attachments avg 500KB -> ~1,460 PB per year.</li></ul></section>"
+    },
+    {
+      "heading": "Step 2 - Propose High-Level Design and Get Buy-In",
+      "slug": "step-2-propose-high-level-design",
+      "content": "<section id='step-2'><h2 id='step-2-heading'>Step 2 - Propose High-Level Design and Get Buy-In</h2><p id='step-2-intro'>We'll cover email basics, traditional vs distributed mail servers, high-level architecture, and send/receive flows.</p></section>"
+    },
+    {
+      "heading": "Email knowledge 101",
+      "slug": "email-knowledge-101",
+      "content": "<section id='email-101'><h3 id='email-101-heading'>Email knowledge 101</h3><p id='protocols-intro'>Common protocols:</p><ul id='protocols-list'><li>SMTP - sending between servers.</li><li>POP - download + remove from server.</li><li>IMAP - server-side mail access/sync.</li><li>HTTPS - used by webmail clients (not a mail protocol but common for web UI).</li></ul><p id='mx-intro'>DNS MX records route mail between domains:</p><p id='dns-img'><img loading='lazy' src='images/dns-lookup.png' alt='dns-lookup' id='img-dns-lookup' /></p><p id='attachments-note'>Attachments are base64-encoded in emails and commonly limited (e.g., 25MB). Limits are configurable and differ between providers.</p></section>"
+    },
+    {
+      "heading": "Traditional mail servers",
+      "slug": "traditional-mail-servers",
+      "content": "<section id='traditional-mail'><h3 id='traditional-heading'>Traditional mail servers</h3><p id='traditional-intro'>Traditional mail servers work well for smaller deployments and rely on SMTP/IMAP/POP. Emails were often stored as files on local disks.</p><p id='traditional-img'><img loading='lazy' src='images/traditional-mail-server.png' alt='traditional-mail-server' id='img-traditional-mail-server' /></p><p id='local-dir-img'><img loading='lazy' src='images/local-dir-storage.png' alt='local-dir-storage' id='img-local-dir-storage' /></p><p id='traditional-issues'>As scale grows, local-disk per-mail becomes a bottleneck for IOPS and availability; disks fail and single servers become insufficient.</p></section>"
+    },
+    {
+      "heading": "Distributed mail servers",
+      "slug": "distributed-mail-servers",
+      "content": "<section id='distributed-mail'><h3 id='distributed-heading'>Distributed mail servers</h3><p id='distributed-intro'>A distributed architecture supports high availability, reliability, and scale. It still supports SMTP/IMAP/POP for traditional clients but offers HTTP APIs for web clients.</p><p id='api-examples'>Example REST APIs:</p><ul id='api-list'><li>POST /v1/messages - send a message to recipients (To/Cc/Bcc).</li><li>GET /v1/folders - list folders for an account.</li><li>GET /v1/folders/{:folder_id}/messages - list messages in a folder with pagination.</li><li>GET /v1/messages/{:message_id} - get a specific message.</li></ul><p id='folder-example'>Example folders response:</p><pre id='folders-response'><code>[{id: string, name: string, user_id: string}]</code></pre><p id='message-example'>Example message response:</p><pre id='message-response'><code>{\n  user_id: string,\n  from: {name: string, email: string},\n  to: [{name: string, email: string}],\n  subject: string,\n  body: string,\n  is_read: boolean\n}</code></pre><p id='highlevel-img'><img loading='lazy' src='images/high-level-architecture.png' alt='high-level-architecture' id='img-high-level-architecture' /></p><ul id='highlevel-components'><li>Webmail - browser-based UI.</li><li>Web servers - public request/response endpoints.</li><li>Real-time servers - push notifications via WebSockets (fallback to long-polling).</li><li>Metadata DB - stores email metadata (headers, small bodies).</li><li>Attachment store - object store (e.g., S3) for large attachments.</li><li>Distributed cache - Redis/others for recent emails.</li><li>Search store - full-text search (Elasticsearch or similar).</li></ul></section>"
+    },
+    {
+      "heading": "Email sending flow",
+      "slug": "email-sending-flow",
+      "content": "<section id='sending-flow'><h3 id='sending-flow-heading'>Email sending flow</h3><p id='send-flow-img'><img loading='lazy' src='images/email-sending-flow.png' alt='email-sending-flow' id='img-email-sending-flow' /></p><ol id='send-steps'><li>User presses send; a request goes to the load balancer.</li><li>The load balancer rate limits and routes to the web server.</li><li>The web server validates (size, recipients) and optionally short-circuits for same-domain delivery, but runs spam checks first.</li><li>Valid messages are placed on a message queue; attachment references point to the object store.</li><li>Invalid messages go to an error queue.</li><li>SMTP outgoing workers consume the queue, run spam/virus checks, and attempt delivery to destination servers (with retries, backoff).</li><li>Store a copy in the sender's Sent folder.</li></ol><p id='send-monitoring'>Monitor outgoing queue size - growth indicates destination server issues or insufficient consumers.</p></section>"
+    },
+    {
+      "heading": "Email receiving flow",
+      "slug": "email-receiving-flow",
+      "content": "<section id='receiving-flow'><h3 id='receiving-flow-heading'>Email receiving flow</h3><p id='receiving-flow-img'><img loading='lazy' src='images/email-receiving-flkow.png' alt='email-receiving-flow' id='img-email-receiving-flow' /></p><ol id='receive-steps'><li>Incoming SMTP load balancer distributes inbound mail to SMTP servers.</li><li>SMTP servers enforce acceptance policy (spam checks, invalid addresses).</li><li>For large attachments, store data in the object store and keep a reference in metadata.</li><li>Mail processing workers perform checks then persist metadata, write attachments to the object store, update caches, and notify real-time servers.</li><li>Offline users get messages via the HTTP API when they reconnect.</li></ol></section>"
+    },
+    {
+      "heading": "Step 3 - Design Deep Dive",
+      "slug": "step-3-design-deep-dive",
+      "content": "<section id='deep-dive'><h2 id='deep-dive-heading'>Step 3 - Design Deep Dive</h2><p id='deep-dive-intro'>Deep dives into metadata DB, deliverability, search, and scalability.</p></section>"
+    },
+    {
+      "heading": "Metadata database",
+      "slug": "metadata-database",
+      "content": "<section id='metadata-db'><h3 id='metadata-db-heading'>Metadata database</h3><p id='metadata-char'>Characteristics:</p><ul id='metadata-char-list'><li>Headers are small and frequently accessed.</li><li>Body size varies; typically read once.</li><li>Most operations are per-user isolated (fetch, mark-read, search).</li><li>Recency matters: recent emails are accessed more.</li><li>High reliability: data loss is unacceptable.</li></ul><p id='db-options'>Options and trade-offs:</p><ul id='db-options-list'><li>Relational DB - indexes good for headers/body but not optimized for huge single-row blobs.</li><li>Distributed object store - good for attachments/backups but poor for indexing/queries.</li><li>NoSQL / wide-column stores (e.g., BigTable/Cassandra) - used at large scale for throughput and locality; Google BigTable powers Gmail internally.</li></ul><p id='partitioning'>Partition by <code>user_id</code> so one user's data resides on the same shard - this simplifies per-user queries.</p><p id='tables-intro'>Suggested tables (logical):</p><ul id='tables-list'><li>folders - list folders per user.</li><li>emails - primary store for email metadata (email_id as timeuuid for time-sorted queries).</li><li>attachments - references to the object store.</li></ul><p id='denormalization-note'>Because filtering on non-partition keys is expensive in certain distributed stores, denormalize for read patterns (e.g., maintain read/unread tables or inverted indices scoped per user).</p><p id='consistency-note'>Favor consistency over availability (CP) for email metadata: in case of failover, updates may be briefly unavailable.</p></section>"
+    },
+    {
+      "heading": "Email deliverability",
+      "slug": "email-deliverability",
+      "content": "<section id='deliverability'><h3 id='deliverability-heading'>Email deliverability</h3><p id='deliverability-intro'>Getting mail into recipients' inboxes (not spam) requires reputation and operational effort.</p><ul id='deliverability-list'><li>Dedicated IPs - separate IPs for different sending categories.</li><li>Classify emails - separate marketing vs. transactional to protect reputation.</li><li>IP warm-up - gradually increase send volume over weeks to build reputation.</li><li>Ban spammers quickly.</li><li>Feedback loops - receive ISP complaints and act.</li><li>Email authentication - SPF, DKIM, DMARC to prevent phishing and improve trust.</li></ul><p id='deliverability-note'>These are operational practices - crucial, but domain-specific.</p></section>"
+    },
+    {
+      "heading": "Search",
+      "slug": "search",
+      "content": "<section id='search'><h3 id='search-heading'>Search</h3><p id='search-intro'>Email search is user-scoped full-text search with filters. Indexing is write-heavy because operations mutate the index, but read/queries can be less frequent.</p><p id='search-options'>Options:</p><ul id='search-options-list'><li>Use Elasticsearch (or similar) with <code>user_id</code> as partitioning to localize user data.</li><li>Mutations are processed asynchronously (via Kafka) to decouple reindexing from metadata writes.</li><li>Search queries execute synchronously against the search cluster.</li></ul><p id='lsm-note'>To build write-optimized indexes consider LSM-tree techniques (as in RocksDB/Cassandra) to favor sequential writes and merge compactions.</p><p id='tradeoffs'>Trade-offs:</p><ul id='search-tradeoffs'><li>Elasticsearch: off-the-shelf, scales reasonably, a separate service to maintain.</li><li>Custom engine: tailored to email workload, potentially more efficient at extreme scale, but a large engineering cost.</li></ul></section>"
+    },
+    {
+      "heading": "Scalability and availability",
+      "slug": "scalability-and-availability",
+      "content": "<section id='scalability-availability'><h3 id='scalability-availability-heading'>Scalability and availability</h3><p id='scalability-intro'>Most user operations are independent, so services can scale horizontally. Key availability techniques:</p><ul id='sa-list'><li>Stateless frontends behind LB - scale by replication.</li><li>Stateful stores replicated across regions.</li><li>Multi-DC deployment with leader-follower failover.</li><li>Use message queues (Kafka) to buffer spikes and decouple components.</li></ul><p id='multi-dc-img'><img loading='lazy' src='images/multi-dc-example.png' alt='multi-dc-example' id='img-multi-dc-example' /></p><p id='storage-scale-note'>For attachment storage, use object storage with lifecycle policies (hot/cold tiers) and deduplication to save space.</p></section>"
+    },
+    {
+      "heading": "Step 4 - Wrap up",
+      "slug": "step-4-wrap-up",
+      "content": "<section id='wrap-up'><h2 id='wrap-up-heading'>Step 4 - Wrap up</h2><p id='wrap-up-summary'>Designing a distributed email service touches on many hard problems: storage at petabyte+ scale, delivery reliability, spam and reputation management, full-text search, and operational practices.</p><p id='wrap-up-additional'>Additional talking points you can mention:</p><ul id='wrap-up-list'><li>Fault tolerance - handling node failures and retries in queues/workers.</li><li>Compliance - PII handling and GDPR requirements.</li><li>Security - encryption at rest/in transit, phishing protection.</li><li>Optimizations - deduplication of attachments, CDN for static assets, caching of recent messages.</li></ul></section>"
+    }
+  ],
+  "createdAt": "2025-08-19T00:11:45.620Z",
+  "updatedAt": "2025-08-19T00:11:45.620Z",
+  "__v": 0
+}

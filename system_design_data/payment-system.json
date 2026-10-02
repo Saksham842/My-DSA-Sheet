@@ -1,0 +1,111 @@
+{
+  "_id": "68a377ae169e3f7abce77cbe",
+  "title": "Payment System",
+  "chapterNo": 26,
+  "slug": "payment-system",
+  "sections": [
+    {
+      "heading": "Overview",
+      "slug": "overview",
+      "content": "<section id='overview'><h1 id='overview-heading'>Payment System</h1><p id='overview-p1'>We'll design a payment system in this chapter, which underpins all of modern e-commerce. A payment system is used to settle financial transactions, transferring monetary value.</p></section>"
+    },
+    {
+      "heading": "Step 1 - Understand the Problem and Establish Design Scope",
+      "slug": "step-1-understand-problem",
+      "content": "<section id='step-1'><h2 id='step-1-heading'>Step 1 - Understand the Problem and Establish Design Scope</h2><ul id='qna-list'><li id='q1'><strong>C:</strong> What kind of payment system are we building?</li><li id='a1'><strong>I:</strong> A payment backend for an e-commerce system, similar to Amazon.com. It handles everything related to money movement.</li><li id='q2'><strong>C:</strong> What payment options are supported?</li><li id='a2'><strong>I:</strong> The system should support many options; for the interview we focus on credit card payments.</li><li id='q3'><strong>C:</strong> Do we handle credit card processing ourselves?</li><li id='a3'><strong>I:</strong> No - due to compliance we rely on PSPs / tokenization.</li><li id='q4'><strong>C:</strong> Do we store credit card data?</li><li id='a4'><strong>I:</strong> No - due to compliance we rely on PSPs / tokenization.</li><li id='q5'><strong>C:</strong> Is the application global / multi-currency?</li><li id='a5'><strong>I:</strong> Global, but assume a single currency for interview simplicity.</li><li id='q6'><strong>C:</strong> How many transactions/day?</li><li id='a6'><strong>I:</strong> 1 million transactions per day.</li><li id='q7'><strong>C:</strong> Do we support payouts?</li><li id='a7'><strong>I:</strong> Yes - we need pay-out flows for sellers.</li><li id='note'>We must support reconciliations to fix inconsistencies between internal and external systems.</li></ul></section>"
+    },
+    {
+      "heading": "Requirements and Estimation",
+      "slug": "requirements-estimation",
+      "content": "<section id='requirements'><h3 id='functional-heading'>Functional requirements</h3><ul id='functional-list'><li>Pay-in flow - accept money from customers on behalf of merchants.</li><li>Pay-out flow - send money to sellers (payouts).</li></ul><h3 id='non-functional-heading'>Non-functional requirements</h3><ul id='non-functional-list'><li>Reliability and fault tolerance - failed payments must be handled carefully.</li><li>Reconciliation - nightly/periodic reconciliation with PSPs and the ledger.</li></ul><h3 id='estimation-heading'>Back-of-the-envelope estimation</h3><p id='estimation'>1M transactions/day -> ~10 TPS average; strong consistency and correctness are more important than raw throughput.</p></section>"
+    },
+    {
+      "heading": "Step 2 - High-Level Design",
+      "slug": "step-2-high-level-design",
+      "content": "<section id='step-2'><h2 id='step-2-heading'>Step 2 - Propose High-Level Design and Get Buy-In</h2><p id='hld-intro'>At a high level there are three actors participating in money movement: a buyer, the payment service (ours), and an external PSP / banks.</p><p id='hld-img'><img loading='lazy' src='images/high-level-flow.png' alt='high-level-flow' id='img-high-level-flow' /></p></section>"
+    },
+    {
+      "heading": "Pay-in Flow (Overview)",
+      "slug": "payin-flow-overview",
+      "content": "<section id='payin-overview'><h3 id='payin-heading'>Pay-in Flow</h3><p id='payin-intro'>High-level components: payment service, payment executor, PSP (Payment Service Provider), card schemes, ledger, wallet.</p><p id='payin-img'><img loading='lazy' src='images/payin-flow-high-level.png' alt='pay-in-flow-high-level' id='img-payin-flow-high-level' /></p><ol id='payin-steps'><li>A user places an order; a payment event is sent to the payment service.</li><li>The payment service persists the event and validates (fraud/risk checks).</li><li>The payment executor processes payment orders (idempotent), and calls the PSP API.</li><li>The PSP communicates with card schemes / banks to capture funds.</li><li>On success, the payment service updates wallet balances and records entries in the ledger.</li></ol></section>"
+    },
+    {
+      "heading": "Payment APIs",
+      "slug": "payment-apis",
+      "content": "<section id='apis'><h3 id='apis-heading'>APIs for Payment Service</h3><p id='post-payment-desc'>Create payment (Pay-in):</p><pre id='post-payment'><code>POST /v1/payments\n{\n  \"buyer_info\": { ... },\n  \"checkout_id\": \"some_id\",\n  \"credit_card_info\": { ... },\n  \"payment_orders\": [{ ... }, { ... }]\n}</code></pre><p id='payment-order-example'>Example payment_order:</p><pre id='payment-order'><code>{\n  \"seller_account\": \"SELLER_IBAN\",\n  \"amount\": \"3.15\",\n  \"currency\": \"USD\",\n  \"payment_order_id\": \"globally_unique_payment_id\"\n}</code></pre><p id='caveats'>Notes: <code>payment_order_id</code> is forwarded to PSP as an idempotency key; amounts are strings (avoid floating point).</p><p id='get-payment-desc'>Fetch payment status:</p><pre id='get-payment'><code>GET /v1/payments/{:id}\n// Returns execution status by payment_order_id</code></pre></section>"
+    },
+    {
+      "heading": "Data Model (Payment Service)",
+      "slug": "data-model-payment",
+      "content": "<section id='data-model'><h3 id='data-model-heading'>Payment service data model</h3><p id='model-intro'>We maintain <code>payment_events</code> and <code>payment_orders</code>. Strong consistency is required - prefer a relational DB with ACID guarantees.</p><p id='payment-events-desc'><code>payment_events</code> table (example fields): <code>checkout_id</code> (PK), <code>buyer_info</code> (FK/string), <code>seller_info</code>, <code>credit_card_info/token</code>, <code>is_payment_done</code> (boolean), <code>created_at</code>.</p><p id='payment-orders-desc'><code>payment_orders</code> table (example fields): <code>payment_order_id</code> (PK), <code>buyer_account</code>, <code>amount</code> (string), <code>currency</code>, <code>checkout_id</code> (FK), <code>payment_order_status</code> ENUM (NOT_STARTED, EXECUTING, SUCCESS, FAILED), <code>ledger_updated</code> (bool), <code>wallet_updated</code> (bool), <code>created_at</code>.</p><p id='notes'>Payment transitions are managed by background jobs monitoring in-flight payments and alerting if stuck.</p></section>"
+    },
+    {
+      "heading": "Double-entry Ledger & Wallet",
+      "slug": "double-entry-ledger",
+      "content": "<section id='ledger'><h3 id='ledger-heading'>Double-entry Ledger & Wallet</h3><p id='ledger-intro'>Use double-entry accounting: every movement generates two entries (debit and credit). This guarantees traceability and that all entries sum to zero.</p><p id='ledger-table'>Example:</p><table id='ledger-example'><thead><tr><th>Account</th><th>Debit</th><th>Credit</th></tr></thead><tbody><tr><td>buyer</td><td>$1</td><td></td></tr><tr><td>seller</td><td></td><td>$1</td></tr></tbody></table><p id='wallet-desc'>The wallet keeps a merchant's balance; the ledger stores immutable transaction history. Ledger updates must be atomic with wallet balance updates.</p></section>"
+    },
+    {
+      "heading": "Hosted Payment Page & Tokenization",
+      "slug": "hosted-payment-page",
+      "content": "<section id='hosted-payment'><h3 id='hosted-payment-heading'>Hosted Payment Page & Tokenization</h3><p id='hosted-desc'>To avoid PCI compliance scope, prefer PSP-hosted payment pages or client-side tokenization where a PSP returns a token (card token) that our backend uses for charges.</p><p id='hosted-img'><img loading='lazy' src='images/hosted-payment-page.png' alt='hosted-payment-page' id='img-hosted-payment-page' /></p></section>"
+    },
+    {
+      "heading": "Pay-out Flow",
+      "slug": "payout-flow",
+      "content": "<section id='payout'><h3 id='payout-heading'>Pay-out Flow</h3><p id='payout-desc'>Pay-outs move money from our platform bank account to merchant bank accounts. We may use third-party payout providers (Tipalti, Stripe Connect Payouts) to handle KYC, compliance, and rails.</p><p id='payout-caveats'>Pay-outs involve significant bookkeeping, regulatory checks, and settlement windows.</p></section>"
+    },
+    {
+      "heading": "Step 3 - Deep Dive: Robustness, Performance, Security",
+      "slug": "step-3-deep-dive",
+      "content": "<section id='deep-dive'><h2 id='deep-dive-heading'>Step 3 - Design Deep Dive</h2><p id='intro'>Focus: PSP integration, reconciliation, long-running payments, inter-service communication, failed payments, idempotency, and consistency.</p></section>"
+    },
+    {
+      "heading": "PSP Integration Patterns",
+      "slug": "psp-integration",
+      "content": "<section id='psp'><h3 id='psp-heading'>PSP Integration</h3><p id='psp-desc'>Integrate with PSPs either via direct API (we collect tokens and call PSP) or via hosted pages. PSPs provide idempotency, webhooks, and settlement reports. Large organizations sometimes integrate directly with banks/card schemes but usually rely on PSPs.</p><p id='hosted-workflow-img'><img loading='lazy' src='images/hosted-payment-page-workflow.png' alt='hosted-payment-page-workflow' id='img-hosted-payment-page-workflow' /></p></section>"
+    },
+    {
+      "heading": "Reconciliation",
+      "slug": "reconciliation",
+      "content": "<section id='reconciliation'><h3 id='reconciliation-heading'>Reconciliation</h3><p id='recon-desc'>Nightly/periodic reconciliation: a PSP sends settlement files; we compare the PSP settlement to our ledger and wallet balances. We then classify mismatches into: auto-fixable, semi-automatic (for the finance team), and manual investigations.</p><p id='settlement-img'><img loading='lazy' src='images/settlement-report.png' alt='settlement-report' id='img-settlement-report' /></p></section>"
+    },
+    {
+      "heading": "Handling Long-running & Pending Payments",
+      "slug": "long-running-payments",
+      "content": "<section id='pending'><h3 id='pending-heading'>Handling payment processing delays</h3><p id='pending-desc'>Some payments can be pending (fraud review, 3D Secure). Strategies: show a pending status to users, poll the PSP if there are no webhooks, provide user-facing status pages and email updates, and have background jobs to re-check.</p></section>"
+    },
+    {
+      "heading": "Inter-service Communication: Sync vs Async",
+      "slug": "communication-patterns",
+      "content": "<section id='comm'><h3 id='comm-heading'>Communication among internal services</h3><p id='sync-async'>Synchronous HTTP: simple but couples services and fails under downstream outages. Asynchronous (message queues) improves resilience and decoupling.</p><p id='async-models'>Use pub/sub patterns for multiple downstream consumers (ledger, notifications, analytics). Use single-consumer queues for operations requiring one consumer (payment executor).</p><p id='comm-img'><img loading='lazy' src='images/single-receiver.png' alt='single-receiver' id='img-single-receiver' /></p></section>"
+    },
+    {
+      "heading": "Failed Payments & Retry Strategies",
+      "slug": "failed-payments",
+      "content": "<section id='failed-payments'><h3 id='failed-payments-heading'>Handling failed payments</h3><p id='failed-desc'>Mechanisms: track payment state, push transient failures to a retry queue with exponential backoff, and send terminal failures to dead-letter queues for manual inspection.</p><p id='failed-img'><img loading='lazy' src='images/failed-payments.png' alt='failed-payments' id='img-failed-payments' /></p></section>"
+    },
+    {
+      "heading": "Exactly-once & Idempotency",
+      "slug": "idempotency-exactly-once",
+      "content": "<section id='exactly-once'><h3 id='exactly-once-heading'>Exactly-once processing & Idempotency</h3><p id='idempotency-desc'>Prevent double charges using idempotency keys (UUID / <code>payment_order_id</code>). Persist idempotency keys in a DB with uniqueness constraints so repeated requests return the original result. Combine with PSP-side idempotency (nonce) for robust deduplication.</p><p id='idempotency-img'><img loading='lazy' src='images/idempotency-example.png' alt='idempotency-example' id='img-idempotency-example' /></p></section>"
+    },
+    {
+      "heading": "Consistency & Replication Concerns",
+      "slug": "consistency-replication",
+      "content": "<section id='consistency'><h3 id='consistency-heading'>Consistency</h3><p id='consistency-desc'>Services involved: PSP, ledger, wallet, payment service. Use an ACID relational DB for critical state. Serve reads/writes from the primary to avoid replica lag anomalies. For cross-service coordination, consider distributed transactions only if necessary - otherwise use reliable asynchronous flows + reconciliation.</p><p id='consensus-note'>If strong distributed consistency is needed across regions, consider consensus-based databases (CockroachDB/YugabyteDB) or coordinate with strongly-consistent primitives.</p></section>"
+    },
+    {
+      "heading": "Payment Security",
+      "slug": "payment-security",
+      "content": "<section id='security'><h3 id='security-heading'>Payment security</h3><ul id='security-list'><li>Use TLS for all communications.</li><li>Encrypt sensitive fields and rely on PSP tokenization for card data.</li><li>Certificate pinning to mitigate MITM.</li><li>Rate limiting and WAF to mitigate DDoS.</li><li>PCI-DSS compliance when applicable - minimize scope via tokenization/hosted pages.</li><li>Fraud detection: AVS, CVV, behavioral analysis, risk-scoring.</li></ul></section>"
+    },
+    {
+      "heading": "Step 4 - Wrap Up",
+      "slug": "step-4-wrap-up",
+      "content": "<section id='wrap-up'><h2 id='wrap-up-heading'>Step 4 - Wrap Up</h2><p id='wrap-up-summary'>Summary: Payment systems prioritize correctness, auditability, and reliability over raw throughput. Use PSPs for card rails and tokenization; keep a strong ACID-backed ledger and wallet; implement idempotency, retries, and robust reconciliation pipelines.</p><p id='wrap-up-additional'>Additional talking points: monitoring & alerting, debugging tools for failed payments, multi-currency and FX considerations, regional payment methods, payout compliance/KYC, Google/Apple Pay integration.</p></section>"
+    }
+  ],
+  "createdAt": "2025-08-19T00:14:03.258Z",
+  "updatedAt": "2025-08-19T00:14:03.258Z",
+  "__v": 0
+}

@@ -2,6 +2,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // ── DOM refs ──────────────────────────────────────────────
   const homePage          = document.getElementById('homePage');
   const sheetPage         = document.getElementById('sheetPage');
+  const systemDesignPage  = document.getElementById('systemDesignPage');
+  const tabAllSheets      = document.getElementById('tabAllSheets');
+  const tabSystemDesign   = document.getElementById('tabSystemDesign');
+  const tabRevision       = document.getElementById('tabRevision');
+  const navBrandLogo      = document.getElementById('navBrandLogo');
   const companiesGrid     = document.getElementById('companiesGrid');
   const companySearchInput = document.getElementById('companySearchInput');
   const backBtn           = document.getElementById('backBtn');
@@ -80,9 +85,16 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ── Routing ───────────────────────────────────────────────
+  let sdInitialized = false;
+
   function goHome() {
     homePage.style.display = 'block';
     sheetPage.style.display = 'none';
+    if (systemDesignPage) systemDesignPage.style.display = 'none';
+    if (tabAllSheets) tabAllSheets.classList.add('active');
+    if (tabSystemDesign) tabSystemDesign.classList.remove('active');
+    if (tabRevision) tabRevision.classList.remove('active');
+
     currentCompanyId = null;
     questionSearchInput.value = '';
     questionSearchQuery = '';
@@ -97,6 +109,11 @@ document.addEventListener('DOMContentLoaded', () => {
   function goSheet(companyId) {
     homePage.style.display = 'none';
     sheetPage.style.display = 'block';
+    if (systemDesignPage) systemDesignPage.style.display = 'none';
+    if (tabAllSheets) tabAllSheets.classList.remove('active');
+    if (tabSystemDesign) tabSystemDesign.classList.remove('active');
+    if (tabRevision) tabRevision.classList.remove('active');
+
     currentCompanyId = companyId;
 
     const company   = companiesData.find(c => c.id === companyId);
@@ -122,23 +139,61 @@ document.addEventListener('DOMContentLoaded', () => {
     renderQuestions();
   }
 
-  backBtn.addEventListener('click', goHome);
+  function goSystemDesign(chapterSlug, sectionSlug) {
+    homePage.style.display = 'none';
+    sheetPage.style.display = 'none';
+    if (systemDesignPage) systemDesignPage.style.display = 'flex';
+    if (tabAllSheets) tabAllSheets.classList.remove('active');
+    if (tabRevision) tabRevision.classList.remove('active');
+    if (tabSystemDesign) tabSystemDesign.classList.add('active');
 
-  // ── Home tabs ─────────────────────────────────────────────
-  const tabAllSheets = document.getElementById('tabAllSheets');
-  const tabRevision  = document.getElementById('tabRevision');
+    if (window.systemDesignApp) {
+      if (!sdInitialized) {
+        window.systemDesignApp.init();
+        sdInitialized = true;
+      }
+      if (chapterSlug) {
+        window.systemDesignApp.renderChapter(chapterSlug, sectionSlug);
+      }
+    }
+  }
+
+  // Expose goHome globally
+  window.goHome = goHome;
+  window.goSystemDesign = goSystemDesign;
+
+  backBtn.addEventListener('click', () => {
+    window.location.hash = '#home';
+    goHome();
+  });
+
+  if (navBrandLogo) {
+    navBrandLogo.addEventListener('click', () => {
+      window.location.hash = '#home';
+      goHome();
+    });
+  }
+
+  // ── Navigation tabs ───────────────────────────────────────
   if (tabAllSheets) {
     tabAllSheets.addEventListener('click', () => {
-      tabAllSheets.classList.add('active');
-      tabRevision.classList.remove('active');
-      renderCompanies();
+      window.location.hash = '#home';
+      goHome();
     });
   }
   if (tabRevision) {
     tabRevision.addEventListener('click', () => {
+      goHome();
       tabRevision.classList.add('active');
-      tabAllSheets.classList.remove('active');
+      if (tabAllSheets) tabAllSheets.classList.remove('active');
+      if (tabSystemDesign) tabSystemDesign.classList.remove('active');
       renderCompanies(true);
+    });
+  }
+  if (tabSystemDesign) {
+    tabSystemDesign.addEventListener('click', () => {
+      window.location.hash = '#system-design';
+      goSystemDesign();
     });
   }
 
@@ -210,7 +265,10 @@ document.addEventListener('DOMContentLoaded', () => {
              </div>`
           : '<svg class="star-icon" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>'}
       `;
-      card.addEventListener('click', () => goSheet(c.id));
+      card.addEventListener('click', () => {
+        window.location.hash = '#company/' + c.id;
+        goSheet(c.id);
+      });
       companiesGrid.appendChild(card);
     });
   }
@@ -546,13 +604,14 @@ document.addEventListener('DOMContentLoaded', () => {
       const data = {
         nl_solved_global: getSolved(),
         nl_solve_count: getSolveCount(),
-        nl_practice_qs: getPracticeQs()
+        nl_practice_qs: getPracticeQs(),
+        nl_sd_completed: JSON.parse(localStorage.getItem('nl_sd_completed') || '[]')
       };
       const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `my_dsa_sheet_backup_${new Date().toISOString().slice(0,10)}.json`;
+      a.download = `nextleet_backup_${new Date().toISOString().slice(0,10)}.json`;
       a.click();
       URL.revokeObjectURL(url);
     });
@@ -570,6 +629,10 @@ document.addEventListener('DOMContentLoaded', () => {
           if (data.nl_solved_global) saveSolved(data.nl_solved_global);
           if (data.nl_solve_count) saveSolveCount(data.nl_solve_count);
           if (data.nl_practice_qs) savePracticeQs(data.nl_practice_qs);
+          if (data.nl_sd_completed) {
+            localStorage.setItem('nl_sd_completed', JSON.stringify(data.nl_sd_completed));
+            if (window.systemDesignApp) window.systemDesignApp.setCompleted(data.nl_sd_completed);
+          }
           alert('Data imported successfully!');
           window.location.reload();
         } catch (err) {
@@ -580,6 +643,24 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // ── Router ────────────────────────────────────────────────
+  function handleRoute() {
+    const hash = window.location.hash || '';
+    if (hash.startsWith('#system-design')) {
+      const parts = hash.replace('#system-design', '').split('/').filter(Boolean);
+      const slug = parts[0];
+      const sec = parts[1];
+      goSystemDesign(slug, sec);
+    } else if (hash.startsWith('#company/')) {
+      const compId = hash.replace('#company/', '');
+      goSheet(compId);
+    } else {
+      goHome();
+    }
+  }
+
+  window.addEventListener('hashchange', handleRoute);
+
   // ── Init ──────────────────────────────────────────────────
-  goHome();
+  handleRoute();
 });

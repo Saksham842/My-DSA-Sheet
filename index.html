@@ -3,36 +3,52 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>MY DSA</title>
+<title>NextLeet - DSA & System Design</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="style.css"/>
+<link rel="stylesheet" href="system_design.css"/>
 </head>
 <body>
 
+<!-- GLOBAL APPLICATION NAVBAR -->
+<header class="app-navbar" style="border-bottom: 1px solid #1a202c; background: rgba(8, 10, 15, 0.95); backdrop-filter: blur(12px); position: sticky; top: 0; z-index: 100; padding: 10px 24px;">
+  <div style="max-width: 1500px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+    <!-- NextLeet Brand Logo -->
+    <div class="brand-logo-wrap" style="display: flex; align-items: center; gap: 10px; cursor: pointer;" id="navBrandLogo">
+      <div style="font-size: 24px; font-weight: 800; letter-spacing: -0.5px; font-family: 'Inter', sans-serif;">
+        <span style="color: rgb(4, 112, 202)">N</span><span style="color: rgb(47, 195, 106)">e</span><span style="color: rgb(249, 129, 47)">x</span><span style="color: rgb(230, 64, 92)">t</span><span style="color: rgb(218, 0, 171)">L</span><span style="color: rgb(183, 0, 218)">e</span><span style="color: rgb(232, 98, 63)">e</span><span style="color: rgb(107, 10, 255)">t</span>
+      </div>
+      <span style="font-size: 11px; font-weight: 600; color: #94a3b8; background: #131722; padding: 3px 8px; border-radius: 6px; border: 1px solid #22293a;">DSA &amp; System Design</span>
+    </div>
 
+    <!-- Navigation Tabs -->
+    <div class="header-tabs" style="display: flex; gap: 8px;">
+      <button class="daily-tab active" id="tabAllSheets">All Sheets</button>
+      <button class="daily-tab" id="tabSystemDesign" style="display: flex; align-items: center; gap: 6px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M3 9h18"></path><path d="M9 21V9"></path></svg>
+        <span>System Design</span>
+      </button>
+      <button class="daily-tab" id="tabRevision">Revision</button>
+      <button class="daily-tab add-btn" id="btnAddProblem" style="border: 1px dashed var(--border-color); cursor: pointer;">+ Add Problem</button>
+    </div>
 
-<!-- PAGE 1: COMPANIES LIST -->
-<main id="homePage" class="main-container">
-  <div class="brand-header" style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center;">
-    <span class="brand-text" style="font-size: 24px; font-weight: 800; background: linear-gradient(90deg, #00a8ff, #ff375f, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">My DSA Sheet</span>
-    <div class="data-actions" style="display: flex; gap: 8px;">
+    <!-- Data Actions -->
+    <div class="data-actions" style="display: flex; align-items: center; gap: 8px;">
       <button id="btnExportData" class="daily-tab" style="padding: 4px 12px; font-size: 12px; height: auto;">Export Data</button>
       <button id="btnImportData" class="daily-tab" style="padding: 4px 12px; font-size: 12px; height: auto;">Import Data</button>
       <input type="file" id="importFileInput" accept=".json" style="display: none;">
     </div>
   </div>
-  
-  <header class="home-header" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px;">
-    <div class="header-tabs" style="display: flex; gap: 12px;">
-      <button class="daily-tab active" id="tabAllSheets">All Sheets</button>
-      <button class="daily-tab" id="tabRevision">Revision</button>
-      <button class="daily-tab add-btn" id="btnAddProblem" style="border: 1px dashed var(--border-color); cursor: pointer;">+ Add Problem</button>
-    </div>
-    <div class="search-container home-search" style="margin-bottom: 0; width: 350px;">
+</header>
+
+<!-- PAGE 1: COMPANIES LIST -->
+<main id="homePage" class="main-container">
+  <div style="display: flex; align-items: center; justify-content: flex-end; margin-bottom: 24px;">
+    <div class="search-container home-search" style="margin-bottom: 0; width: 360px;">
       <input type="text" id="companySearchInput" class="search-input" placeholder="Search any question..." autocomplete="off">
     </div>
-  </header>
+  </div>
 
   <!-- Practice Dashboard -->
   <section class="daily-progress-dashboard" style="margin-bottom: 40px;">
@@ -70,7 +86,6 @@
 
 <!-- PAGE 2: COMPANY SHEET -->
 <main id="sheetPage" class="main-container" style="display: none;">
-  
   <!-- Company Header Card -->
   <div class="company-header-card">
     <div class="header-top">
@@ -127,7 +142,62 @@
   <div class="questions-list" id="questionsList">
     <!-- Questions will be injected here -->
   </div>
+</main>
 
+<!-- PAGE 3: NEXTLEET SYSTEM DESIGN CLONE -->
+<main id="systemDesignPage" style="display: none;">
+  <!-- Reading Progress Bar -->
+  <div id="sdReadingProgressBar"></div>
+
+  <!-- Sidebar -->
+  <aside class="sd-sidebar" id="sdSidebar">
+    <div class="sd-sidebar-header">
+      <div class="sd-sidebar-title-row">
+        <div class="sd-sidebar-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M3 9h18"></path><path d="M9 21V9"></path></svg>
+          <span>System Design</span>
+        </div>
+        <span class="sd-overall-badge" id="sdOverallBadge">0/407 (0%)</span>
+      </div>
+      <div class="sd-sidebar-search-box">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input type="text" id="sdSearchInput" class="sd-sidebar-search-input" placeholder="Search 28 chapters &amp; topics..." autocomplete="off">
+      </div>
+    </div>
+    <div class="sd-chapters-list" id="sdChaptersList">
+      <!-- 28 chapters dynamically rendered by sd_app.js -->
+    </div>
+  </aside>
+
+  <!-- Main Content Area -->
+  <div class="sd-main-area" id="sdMainArea">
+    <!-- Top Control Bar -->
+    <div class="sd-top-control-bar">
+      <div class="sd-top-left-controls">
+        <button class="sd-sidebar-toggle-btn" id="sdSidebarToggle" title="Toggle Sidebar">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M9 3v18"></path></svg>
+        </button>
+        <nav class="sd-breadcrumbs" id="sdBreadcrumbs" aria-label="Breadcrumb">
+          <!-- Breadcrumb links -->
+        </nav>
+      </div>
+    </div>
+
+    <!-- Chapter Content Container -->
+    <div class="sd-content-container" id="sdContentContainer">
+      <!-- Section cards rendered here -->
+    </div>
+  </div>
+
+  <!-- Image Lightbox Modal -->
+  <div class="sd-lightbox-modal" id="sdLightboxModal">
+    <div class="sd-lightbox-content">
+      <button class="sd-lightbox-close" id="sdLightboxClose" title="Close (Esc)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+      <img id="sdLightboxImg" class="sd-lightbox-img" src="" alt="Architecture Diagram">
+    </div>
+  </div>
 </main>
 
 <!-- Add Problem Modal -->
@@ -173,6 +243,8 @@
 </button>
 
 <script src="data.js"></script>
+<script src="sd_data.js"></script>
+<script src="sd_app.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

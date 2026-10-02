@@ -1,0 +1,86 @@
+{
+  "_id": "68a3698d169e3f7abce77c72",
+  "title": "Design a URL Shortener",
+  "chapterNo": 8,
+  "slug": "design-a-url-shortener",
+  "sections": [
+    {
+      "heading": "Overview",
+      "slug": "overview",
+      "content": "<section id='overview'><h1 id='overview-heading'>Design a URL Shortener</h1><p id='overview-p1'>We're tackling a classical system design problem - designing a URL shortening service like TinyURL or bit.ly.</p><p id='overview-p2'>Given a long URL such as <code>https://www.systeminterview.com/q=chatsystem&amp;c=loggedin&amp;v=v3&amp;l=long</code> we want to produce a short alias like <code>https://tinyurl.com/y7keocwj</code>. When a user opens the alias, they are redirected to the original long URL.</p><p id='overview-goals'>Functional goals: high availability, scalability, low latency redirects, and fault tolerance.</p></section>"
+    },
+    {
+      "heading": "Step 1 - Understand the Problem and Establish Design Scope",
+      "slug": "step-1-understand-problem",
+      "content": "<section id='step-1'><h2 id='step-1-heading'>Step 1 - Understand the Problem and Establish Design Scope</h2><p id='qna-intro'>Sample interviewer-candidate Q&amp;A that clarifies scope:</p><ul id='qna-list'><li id='q1'><strong>Candidate:</strong> Can you give an example of how a URL shortening service works?</li><li id='a1'><strong>Interviewer:</strong> Given a long URL, we return a short alias; opening the alias redirects to the original URL.</li><li id='q2'><strong>Candidate:</strong> What is the traffic volume?</li><li id='a2'><strong>Interviewer:</strong> 100 million URLs are generated per day.</li><li id='q3'><strong>Candidate:</strong> How long should short URLs be?</li><li id='a3'><strong>Interviewer:</strong> As short as possible (numbers &amp; letters allowed).</li><li id='q4'><strong>Candidate:</strong> Can shortened URLs be updated or deleted?</li><li id='a4'><strong>Interviewer:</strong> For simplicity, assume they cannot.</li></ul><p id='functional-requirements'>Functional requirements: <strong>create short URL</strong>, <strong>resolve short URL</strong>. Non-functional: high availability, low latency, ability to store billions of mappings, and scale horizontally.</p></section>"
+    },
+    {
+      "heading": "Back-of-the-Envelope Calculation",
+      "slug": "back-of-the-envelope-calculation",
+      "content": "<section id='boe'><h2 id='boe-heading'>Back-of-the-Envelope Calculation</h2><ul id='boe-list'><li id='boe-1'>100 million URLs/day - approximately 1,200 URLs/sec (writes).</li><li id='boe-2'>Assume read:write = 10:1 - approximately 12,000 reads/sec.</li><li id='boe-3'>Run for 10 years - approximately 365 billion records to store.</li><li id='boe-4'>Average long-URL length approximately 100 characters.</li><li id='boe-5'>Storage requirement for 10 years approximately 36.5 TB (raw URL bytes, excluding indices/compression/overhead).</li></ul><p id='boe-note'>These numbers guide design choices (caching, sharding, storage format, and capacity planning).</p></section>"
+    },
+    {
+      "heading": "Step 2 - Propose High-Level Design and Get Buy-In",
+      "slug": "step-2-high-level-design",
+      "content": "<section id='step-2'><h2 id='step-2-heading'>Step 2 - Propose High-Level Design and Get Buy-In</h2><p id='highlevel-intro'>High level components:</p><ul id='highlevel-list'><li id='hl-1'>Clients (browsers / services)</li><li id='hl-2'>Load balancer</li><li id='hl-3'>Shortener service instances (stateless)</li><li id='hl-4'>Cache layer (CDN or in-memory cache like Redis / Varnish)</li><li id='hl-5'>Persistent storage (sharded DB / NoSQL key-value store)</li></ul><p id='api-intro'>We'll surface two REST endpoints:</p><ul id='api-list'><li id='api-create'><code>POST /api/v1/data/shorten</code> - accepts a long URL and returns a short alias.</li><li id='api-lookup'><code>GET /:shortId</code> - resolves the shortId and returns a redirect (301/302) to the long URL.</li></ul></section>"
+    },
+    {
+      "heading": "URL Redirecting: 301 vs 302",
+      "slug": "url-redirecting-301-vs-302",
+      "content": "<section id='redirecting'><h2 id='redirecting-heading'>URL Redirecting</h2><p id='redirecting-explain'>When a short URL is visited, we must respond with an HTTP redirect. Two common codes:</p><ul id='redirect-list'><li id='r-301'><strong>301 Moved Permanently</strong> - indicates permanent redirect. Clients and search engines can cache this and may bypass your service on subsequent requests (reduces load but prevents analytics tracking).</li><li id='r-302'><strong>302 Found (Temporary)</strong> - indicates temporary redirect. Clients typically do not cache the mapping, allowing you to collect analytics on each request.</li></ul><p id='redirect-choice'>Choose 301 for maximum performance and low load when mappings are permanent and analytics are not needed. Choose 302 if you need to collect click analytics or keep flexibility.</p><p id='redirect-storage-note'>During redirect, simplest implementation: lookup <code>&lt;shortId, longUrl&gt;</code> mapping in a fast hash table or cache.</p><p id='tinyurl-img'><img loading='lazy' src='images/tinyurl-example.png' alt='tinyurl example' id='img-tinyurl-example' /></p></section>"
+    },
+    {
+      "heading": "URL Shortening: Hash vs Base62",
+      "slug": "url-shortening-hash-vs-base62",
+      "content": "<section id='shortening-choices'><h2 id='shortening-choices-heading'>URL Shortening: Hash + Collision Detection vs Base62 Conversion</h2><p id='shortening-intro'>Two common approaches to generate a short identifier:</p><ol id='shortening-ol'><li id='method-hash'><strong>Hash + collision resolution</strong>: compute a hash (MD5, SHA-256) and take the first N characters; detect collisions in datastore and iterate/pad input on collision.</li><li id='method-base62'><strong>Base62 conversion of a unique integer ID</strong>: allocate a unique numeric ID per URL (auto-increment-like or distributed generator) and convert that integer to a base62 string (0-9, a-z, A-Z).</li></ol><p id='shortening-compare-intro'>Trade-offs:</p><table id='shortening-table' border='1' cellpadding='6' cellspacing='0'><thead><tr><th>Hash + collision resolution</th><th>Base62 conversion</th></tr></thead><tbody><tr><td>Fixed short URL length possible.</td><td>Short URL length grows with ID; early IDs are very short.</td></tr><tr><td>No need for a unique ID generator.</td><td>Depends on a unique ID generator (distributed or centralized).</td></tr><tr><td>Collisions are possible - need a DB lookup and collision-handling loop.</td><td>No collisions if ID generation is unique.</td></tr><tr><td>Hard to compute a predictable next short ID.</td><td>Next available short URL is predictable (security consideration).</td></tr></tbody></table></section>"
+    },
+    {
+      "heading": "Choosing Length: Base62 Capacity Math",
+      "slug": "base62-capacity",
+      "content": "<section id='base62-capacity'><h2 id='base62-capacity-heading'>Choosing Short-ID Length (Base62 Capacity)</h2><p id='base62-desc'>Character set: 62 characters (0-9, a-z, A-Z). We must pick N where <code>62^N ≥ total URLs</code>.</p><p id='base62-calc'>If we expect approximately 365 billion records (approximately 3.65×10^11) over 10 years, solve <code>62^N ≥ 3.65×10^11</code>. That gives <strong>N = 7</strong> (since 62^7 ≈ 3.52×10^12), which supports approximately 3.5 trillion unique short IDs - comfortably above our target.</p></section>"
+    },
+    {
+      "heading": "ID Generation in Distributed Environment",
+      "slug": "id-generation-distributed",
+      "content": "<section id='id-generation'><h2 id='id-generation-heading'>ID Generation in Distributed Environment</h2><p id='id-gen-intro'>Base62 relies on a globally unique numeric ID. In a distributed system we can generate numeric IDs in multiple ways:</p><ul id='id-gen-list'><li id='ig-ticket'>Central ticket server (single point of allocation; easy but a potential bottleneck / SPOF).</li><li id='ig-auto-increment'>Multi-master DB with strides (server-specific offsets) - works but complicates rack/multi-dc scaling.</li><li id='ig-snowflake'>Twitter Snowflake / distributed ID generator - 64-bit time-sortable IDs, generated locally with unique worker IDs. This is a good fit for our needs (fast, distributed, sortable).</li></ul><p id='id-gen-note'>For a high-scale, low-latency system prefer a decentralized approach (e.g., Snowflake) to avoid synchronous coordination on each new URL.</p></section>"
+    },
+    {
+      "heading": "Step 3 - Design Deep Dive (Data Model & Hashing)",
+      "slug": "step-3-deep-dive",
+      "content": "<section id='step-3'><h2 id='step-3-heading'>Step 3 - Design Deep Dive</h2><h3 id='data-model-heading'>Data Model</h3><p id='data-model-desc'>Simplified relational table for persistence (one possible schema):</p><pre id='table-schema'><code>Table: urls\n- id (bigint) PRIMARY KEY  -- numeric id (used for base62 conversion)\n- short_id (varchar(7)) UNIQUE  -- base62-encoded id or stored short token\n- long_url (text) NOT NULL\n- created_at (timestamp)\n- metadata (json)  -- optional: owner, expiry, analytics flags\n</code></pre><p id='data-model-note'>In practice, we'll shard this table across many nodes (consistent hashing / range-sharding) and replicate for durability.</p><p id='data-model-img'><img loading='lazy' src='images/url-table.png' alt='url table' id='img-url-table' /></p></section>"
+    },
+    {
+      "heading": "Hash Function & Collision Handling",
+      "slug": "hash-function-collision",
+      "content": "<section id='hash-collision'><h3 id='hash-collision-heading'>Hash Function &amp; Collision Handling</h3><p id='hash-collision-desc'>If using a truncated cryptographic hash (e.g., MD5/SHA) truncated to 7 characters, collisions can occur. Typical collision strategy:</p><ol id='collision-steps'><li>Compute hash(text).</li><li>Take first N chars - candidate short token.</li><li>Check database if token already maps to the same long URL (idempotency) or a different URL (collision).</li><li>On collision with a different URL, rehash with a salt/nonce or append a counter and retry until unique.</li></ol><p id='collision-note'>This approach requires a DB lookup on generation and occasional retries. Bloom filters can reduce database hits for likely-absent tokens but cannot eliminate collision checks entirely.</p></section>"
+    },
+    {
+      "heading": "URL Shortening Deep Dive (Workflow)",
+      "slug": "url-shortening-deep-dive",
+      "content": "<section id='url-shortening-deep-dive'><h3 id='url-shortening-deep-dive-heading'>URL Shortening Deep Dive (Workflow)</h3><ol id='shorten-workflow'><li id='sw-1'>Client calls <code>POST /api/v1/data/shorten</code> with the long URL.</li><li id='sw-2'>Service validates the URL (optionally checks for blacklists / malware).</li><li id='sw-3'>If you use base62: allocate a unique numeric ID (via Snowflake or other generator) and convert to base62 - shortId.</li><li id='sw-4'>Store mapping <code>&lt;shortId, longUrl&gt;</code> in persistent storage and populate caches.</li><li id='sw-5'>Return full short URL to client (e.g., <code>https://short.ly/{shortId}</code>).</li></ol><p id='url-shortening-img'><img loading='lazy' src='images/url-shortening-deep-dive.png' alt='url shortening deep dive' id='img-url-shortening-deep-dive' /></p></section>"
+    },
+    {
+      "heading": "URL Redirection Deep Dive (Read Path & Cache)",
+      "slug": "url-redirection-deep-dive",
+      "content": "<section id='url-redirection-deep-dive'><h3 id='url-redirection-deep-dive-heading'>URL Redirection Deep Dive (Read Path &amp; Cache)</h3><p id='redirection-intro'>Reads dominate writes, so introduce caching to reduce DB load and lower latency.</p><ol id='redirect-steps'><li id='rd-1'>User requests <code>GET /{shortId}</code>.</li><li id='rd-2'>Load balancer forwards to a service instance.</li><li id='rd-3'>Service checks cache (in-memory or CDN edge). If found, return redirect immediately (301/302).</li><li id='rd-4'>If miss, query the persistent store (shard appropriate for shortId), then populate cache and return redirect.</li><li id='rd-5'>If shortId doesn't exist, return 404.</li></ol><p id='redirection-img'><img loading='lazy' src='images/url-redirection-deep-dive.png' alt='url redirection deep dive' id='img-url-redirection-deep-dive' /></p></section>"
+    },
+    {
+      "heading": "Scaling & Storage Considerations",
+      "slug": "scaling-storage",
+      "content": "<section id='scaling-storage'><h3 id='scaling-storage-heading'>Scaling &amp; Storage Considerations</h3><ul id='scaling-list'><li id='scale-sharding'>Shard persistent storage across many nodes. Use consistent hashing or range partitioning.</li><li id='scale-replication'>Replicate shards for durability and read scaling; use eventual consistency or tunable quorum depending on requirements.</li><li id='scale-caching'>Cache hot mappings in-memory (Redis / memcached) and at the CDN/edge for global reads.</li><li id='scale-compaction'>Compress stored long URLs (if beneficial) and store only necessary metadata to save space.</li><li id='scale-archive'>Consider TTL or archival policies for links that expire to reclaim space.</li></ul></section>"
+    },
+    {
+      "heading": "Analytics, Rate Limiting & Other Features",
+      "slug": "analytics-rate-limiting",
+      "content": "<section id='analytics-rate-limiting'><h3 id='analytics-rate-limiting-heading'>Analytics, Rate Limiting &amp; Other Features</h3><ul id='extra-features-list'><li id='feature-analytics'>Analytics: instrument click events (store lightweight events in a queue for async processing into an analytics store).</li><li id='feature-rate-limiter'>Rate limiter: protect endpoints (especially create endpoint) from abuse using per-IP / per-user quotas.</li><li id='feature-expiry'>Optional: expiry, custom aliases, password protection, or domain customization for customers.</li><li id='feature-security'>Security: block malicious URLs, monitor unusual traffic patterns, and implement abuse controls.</li></ul></section>"
+    },
+    {
+      "heading": "Step 4 - Wrap Up",
+      "slug": "step-4-wrap-up",
+      "content": "<section id='step-4-wrap-up'><h2 id='wrap-up-heading'>Step 4 - Wrap Up</h2><p id='wrap-up-summary'>We discussed:</p><ul id='wrap-up-list'><li id='wrap-up-api'>API design for create &amp; lookup endpoints.</li><li id='wrap-up-data'>Data model and persistent storage choices.</li><li id='wrap-up-hash'>Hashing vs base62 approach; decided base62 + distributed ID generator (e.g., Snowflake) is a simple robust choice.</li><li id='wrap-up-redirect'>Redirect flow and caching architecture for high read volumes.</li><li id='wrap-up-scale'>Scaling, sharding, replication, and operational concerns (monitoring, backups, and TTL/archival policies).</li></ul><p id='wrap-up-additional'>Additional talking points: rate limiting, web tier scaling (stateless services behind LB), database replication &amp; sharding, analytics pipelines for click events, and availability/consistency trade-offs (see previous chapters for quorum/replication patterns).</p><p id='closing-img'><img loading='lazy' src='images/url-shortening-deep-dive.png' alt='url shortener review' id='img-url-shortener-review' /></p></section>"
+    }
+  ],
+  "createdAt": "2025-08-18T17:57:33.785Z",
+  "updatedAt": "2025-08-18T17:57:33.785Z",
+  "__v": 0
+}

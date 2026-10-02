@@ -1,0 +1,86 @@
+{
+  "_id": "68a36dba169e3f7abce77c94",
+  "title": "Proximity Service",
+  "chapterNo": 16,
+  "slug": "proximity-service",
+  "sections": [
+    {
+      "heading": "Overview",
+      "slug": "overview",
+      "content": "<section id='overview'><h1 id='overview-heading'>Proximity Service</h1><p id='overview-p1'>A proximity service enables users to discover nearby places such as restaurants, hotels, theatres, and more.</p><p id='overview-p2'>This document explains requirements, high-level design, indexing strategies (geohash, quadtree, S2), caching, scaling and a final design suitable for production.</p><p id='overview-img'><img loading='lazy' src='images/high-level-design.png' alt='High level design' id='img-high-level-design' /></p></section>"
+    },
+    {
+      "heading": "Step 1 - Understand the problem and establish scope",
+      "slug": "step-1-understand-scope",
+      "content": "<section id='step-1'><h2 id='step-1-heading'>Step 1 - Understand the problem and establish scope</h2><p id='step-1-intro'>Sample clarifying questions and assumptions used to scope the service:</p><ul id='step-1-qa'><li id='q1'><strong>Q:</strong> Can a user specify a search radius? What if there are not enough businesses within the search area?</li><li id='a1'><strong>A:</strong> We only care about businesses within a certain radius. If time permits, we can discuss enhancements such as expanding the radius automatically.</li><li id='q2'><strong>Q:</strong> What's the maximum radius allowed? Can we assume 20 km?</li><li id='a2'><strong>A:</strong> Yes - assume a reasonable maximum of 20 km.</li><li id='q3'><strong>Q:</strong> Can the user change the radius via the UI?</li><li id='a3'><strong>A:</strong> Yes. Example UI options: 0.5 km, 1 km, 2 km, 5 km, 20 km.</li><li id='q4'><strong>Q:</strong> How is business information modified? Do changes need to be reflected in real time?</li><li id='a4'><strong>A:</strong> Business owners can add/update/delete businesses. For simplicity, assume changes are propagated in a nightly batch (next-day eventual consistency).</li><li id='q5'><strong>Q:</strong> How do we handle results while the user is moving?</li><li id='a5'><strong>A:</strong> We assume users move slowly enough that continuous page updates are not required; periodic re-queries suffice.</li></ul><h3 id='functional-reqs-heading'>Functional requirements</h3><ul id='functional-reqs'><li id='fr1'>Return businesses near the user's location.</li><li id='fr2'>Allow owners to add/update/delete business entries (not necessarily real-time).</li><li id='fr3'>Provide detailed business information on demand.</li></ul><h3 id='nonfunctional-reqs-heading'>Non-functional requirements</h3><ul id='nonfunctional-reqs'><li id='nfr1'>Low latency - results must appear quickly.</li><li id='nfr2'>Data privacy - handle location data sensitively and comply with regulations.</li><li id='nfr3'>High availability and scalability - handle spikes in dense areas.</li></ul><h3 id='boe-heading'>Back-of-the-envelope</h3><p id='boe-p'>Assume 100M DAU and 200M businesses. If each user queries 5 times/day: search QPS ≈ 100M × 5 / 86,400 ≈ 5,000 QPS (rough estimate).</p></section>"
+    },
+    {
+      "heading": "Step 2 - High-level design and APIs",
+      "slug": "step-2-highlevel-design",
+      "content": "<section id='step-2'><h2 id='step-2-heading'>Step 2 - High-level design and APIs</h2><p id='api-intro'>We use RESTful endpoints for searching and business CRUD:</p><pre id='api-example'>GET /v1/search/nearby?lat={lat}&amp;lng={lng}&amp;radius={r}\n\n// Returns paginated business results near the given coordinates.</pre><p id='api-response-example'>Example response:</p><pre id='api-response'>{\n  \"total\": 10,\n  \"businesses\": [ /* business objects */ ]\n}</pre><p id='other-apis'>Other APIs:</p><ul id='other-apis-list'><li id='api-business-get'>GET /v1/businesses/{id} - detailed business info</li><li id='api-business-create'>POST /v1/businesses - create new business</li><li id='api-business-update'>PUT /v1/businesses/{id} - update business</li><li id='api-business-delete'>DELETE /v1/businesses/{id} - delete business</li></ul><p id='traffic-note'>Reads are heavy; writes are light (infrequent updates). This pattern favors read-optimized systems and caching.</p></section>"
+    },
+    {
+      "heading": "Data model",
+      "slug": "data-model",
+      "content": "<section id='data-model'><h2 id='data-model-heading'>Data model</h2><p id='dm-intro'>Main table: <code>business</code> holds name, address, latitude, longitude, categories, hours, contact info and ACLs. We also maintain a geo-index table (e.g., geohash or S2 cell ID) to accelerate spatial queries.</p><p id='dm-img'><img loading='lazy' src='images/business-table.png' alt='Business table' id='img-business-table' /></p></section>"
+    },
+    {
+      "heading": "High-level architecture",
+      "slug": "high-level-architecture",
+      "content": "<section id='hl-architecture'><h2 id='hl-architecture-heading'>High-level architecture</h2><p id='hl-arch-desc'>Components:</p><ul id='hl-arch-list'><li id='hl-arch-lb'>Load balancer - routes traffic to API/LBS services.</li><li id='hl-arch-lbs'>Location-based service (LBS) - stateless, read-heavy service that returns nearby businesses.</li><li id='hl-arch-business'>Business service - handles CRUD and writes into the database.</li><li id='hl-arch-db'>Database cluster - stores business data and geo index; replicated for reads.</li><li id='hl-arch-cache'>Cache (Redis) - caches geohash buckets and business objects for low-latency reads.</li></ul><p id='hl-arch-img'><img loading='lazy' src='images/high-level-design.png' alt='High level design' id='img-high-level-design-2' /></p></section>"
+    },
+    {
+      "heading": "Algorithms to fetch nearby businesses - overview",
+      "slug": "algorithms-overview",
+      "content": "<section id='algorithms'><h2 id='algorithms-heading'>Algorithms to fetch nearby businesses - overview</h2><p id='algorithms-p'>Common approaches for spatial indexing: naive 2D query, geohash (grid-based), quadtree, and Google S2 (cell/Hilbert curve-based). We'll review each and discuss trade-offs.</p></section>"
+    },
+    {
+      "heading": "Two-dimensional (naive) search",
+      "slug": "two-dimensional-search",
+      "content": "<section id='2d-search'><h3 id='2d-search-heading'>Two-dimensional (naive) search</h3><p id='2d-search-p1'>Naive approach: compute a bounding box around the user's location and query latitude/longitude ranges.</p><pre id='2d-query'>SELECT business_id, latitude, longitude\nFROM business\nWHERE latitude BETWEEN {my_lat} - deltaLat AND {my_lat} + deltaLat\n  AND longitude BETWEEN {my_lng} - deltaLng AND {my_lng} + deltaLng;</pre><p id='2d-search-problem'>This is inefficient because it may scan many rows; indexing by lat/lng helps but still requires substantial filtering work.</p><p id='2d-img'><img loading='lazy' src='images/2d-search.png' alt='2D search illustration' id='img-2d-search' /></p></section>"
+    },
+    {
+      "heading": "Evenly divided grid",
+      "slug": "even-grid",
+      "content": "<section id='even-grid'><h3 id='even-grid-heading'>Evenly divided grid</h3><p id='even-grid-p'>Divide the world into equal-size grid cells and map businesses to cells. Drawback: business distribution is highly uneven (dense cities vs deserts), so some cells become hotspots while others are empty.</p><p id='even-grid-img'><img loading='lazy' src='images/evenly-divided-grid.png' alt='Evenly divided grid' id='img-evenly-divided-grid' /></p></section>"
+    },
+    {
+      "heading": "Geohash",
+      "slug": "geohash",
+      "content": "<section id='geohash'><h3 id='geohash-heading'>Geohash</h3><p id='geohash-p1'>Geohash recursively divides the globe into smaller grid cells and encodes them into strings (commonly base32). Nearby points often share common prefixes, which lets us query by prefix to fetch candidates quickly.</p><p id='geohash-p2'>Example of geohash for Google HQ: <code>9q9hvu</code>. Precision levels map to cell sizes; we typically use precision 4-6 for proximity queries.</p><p id='geohash-img'><img loading='lazy' src='images/geohash-example.png' alt='Geohash example' id='img-geohash-example' /></p><p id='geohash-boundary'>Boundary issues: locations near cell edges may be close in distance but not share a common prefix. Fix: fetch neighboring geohash cells and merge results. Geohash expansion (remove suffix characters) can grow the search radius when needed.</p><p id='geohash-expansion-img'><img loading='lazy' src='images/geohash-expansion.png' alt='Geohash expansion' id='img-geohash-expansion' /></p></section>"
+    },
+    {
+      "heading": "Quadtree",
+      "slug": "quadtree",
+      "content": "<section id='quadtree'><h3 id='quadtree-heading'>Quadtree</h3><p id='quadtree-p1'>Quadtrees recursively subdivide space where density is high, resulting in variable-size cells. Good for uneven distributions and nearest-neighbor queries.</p><p id='quadtree-p2'>A simple build algorithm subdivides a node when count > threshold. Leaf nodes store bounding coordinates and lists of business IDs.</p><pre id='quadtree-pseudocode'>public void buildQuadtree(TreeNode node) {\n    if (countNumberOfBusinessesInCurrentGrid(node) > 100) {\n        node.subdivide();\n        for (TreeNode child : node.getChildren()) {\n            buildQuadtree(child);\n        }\n    }\n}</pre><p id='quadtree-img'><img loading='lazy' src='images/quadtree-example.png' alt='Quadtree example' id='img-quadtree-example' /></p><p id='quadtree-considerations'>Memory: the author estimates ~1.7 GB for 200M businesses in a compact quadtree representation - possible to keep in memory on a single large server with replication for HA. Trade-offs: non-trivial update logic and longer startup time to build the tree.</p></section>"
+    },
+    {
+      "heading": "Google S2 (Hilbert curve / cells)",
+      "slug": "google-s2",
+      "content": "<section id='s2'><h3 id='s2-heading'>Google S2</h3><p id='s2-p1'>S2 maps the sphere to a set of hierarchical cells (using space-filling curves such as Hilbert curves). Close 2D points are usually close along the 1D curve, allowing efficient range covers and arbitrary region queries (geofencing).</p><p id='s2-img'><img loading='lazy' src='images/hilbert-curve.png' alt='Hilbert curve illustration' id='img-hilbert-curve' /></p><p id='s2-adv'>Advantages: better support for region covers and arbitrary shapes, fine-grained control over cell levels, and well-supported libraries. Good for advanced geofencing and complex proximity features.</p></section>"
+    },
+    {
+      "heading": "Recommendation",
+      "slug": "recommendation",
+      "content": "<section id='recommendation'><h3 id='recommendation-heading'>Recommendation</h3><p id='rec-p1'>No single solution is perfect. For interview clarity, geohash or quadtree are easy to explain and implement:</p><ul id='rec-list'><li id='rec-geohash'>Geohash - simple, easy to index and cache. Requires fetching neighboring cells to handle edge cases.</li><li id='rec-quadtree'>Quadtree - dynamic cell sizes adapt to density and are good for k-NN queries, but updating is more complex.</li></ul><p id='rec-final'>If you need richer geofencing and region covers, prefer Google S2 in production.</p></section>"
+    },
+    {
+      "heading": "Step 3 - Deep dive: scaling, caching and deployment",
+      "slug": "step-3-deep-dive",
+      "content": "<section id='step-3'><h2 id='step-3-heading'>Step 3 - Deep dive: scaling, caching and deployment</h2><h3 id='scale-db-heading'>Scale the database</h3><p id='scale-db-p1'>If the business table grows beyond a single instance, shard the table (by business id or region). The geo-index (geohash) is compact - it may fit on a single server but should be replicated for read scaling.</p><p id='geohash-table-img'><img loading='lazy' src='images/geohash-table-example.png' alt='Geohash table example' id='img-geohash-table-example' /></p><h3 id='caching-heading'>Caching</h3><p id='caching-p1'>Cache is recommended because the workflow is read-heavy and indexed data is compact. Use geohash (not raw coordinates) as the cache key. Example cache flow:</p><pre id='cache-code'>public List<String> getNearbyBusinessIds(String geohash) {\n    String cacheKey = hash(geohash);\n    List<String> listOfBusinessIds = Redis.get(cacheKey);\n    if (listOfBusinessIds == null) {\n        listOfBusinessIds = runSelectQueryForGeohash(geohash);\n        Redis.set(cacheKey, listOfBusinessIds, 86400); // cache 1 day\n    }\n    return listOfBusinessIds;\n}</pre><p id='cache-note'>Cache different precisions (geohash_4, geohash_5, geohash_6). Redis memory requirements are moderate; replicate for HA and cross-DC reads.</p><h3 id='region-az-heading'>Region / Availability Zones</h3><p id='region-az-p'>Deploy LBS instances globally and route users to the nearest region to minimize latency and comply with data locality regulations.</p><p id='cross-dc-img'><img loading='lazy' src='images/cross-dc-deployment.png' alt='Cross data-center deployment' id='img-cross-dc-deployment' /></p><h3 id='filters-heading'>Follow-up: filtering by type or time</h3><p id='filters-p'>After spatial filtering, remaining results are typically small - apply additional attribute filters (category, open-now) in memory before returning to clients.</p></section>"
+    },
+    {
+      "heading": "Final design diagram and request flow",
+      "slug": "final-design",
+      "content": "<section id='final-design'><h2 id='final-design-heading'>Final design diagram and request flow</h2><p id='final-flow-intro'>Example flow for a 500 m search using geohash precision 6:</p><ol id='final-flow-steps'><li id='f1'>Client requests nearby businesses with location and radius.</li><li id='f2'>Load balancer forwards request to an LBS instance in the nearest region.</li><li id='f3'>LBS converts radius to geohash length 6 and computes neighboring geohashes.</li><li id='f4'>In parallel, LBS queries Redis for each geohash's business IDs (cache hits common).</li><li id='f5'>LBS hydrates business IDs (batch fetch from cache or DB), filters and sorts results, and returns to client.</li><li id='f6'>Business CRUD operations are handled by the business service; nightly jobs update the geohash index for LBS.</li></ol><p id='final-diagram-img'><img loading='lazy' src='images/final-design.png' alt='Final design diagram' id='img-final-design' /></p></section>"
+    },
+    {
+      "heading": "Step 4 - Wrap up",
+      "slug": "step-4-wrap-up",
+      "content": "<section id='wrap-up'><h2 id='wrap-up-heading'>Step 4 - Wrap up</h2><p id='wrap-up-p1'>We discussed indexing options (2D naive, grid, geohash, quadtree, Google S2), caching strategies, replication and cross-DC deployment. For interviews, geohash or quadtree are good choices to explain; for production-grade geofencing and advanced region covers choose S2.</p><p id='wrap-up-p2'>Key trade-offs: ease of implementation (geohash) vs. query power/flexibility (S2) and update complexity (quadtree). Cache hot geohash buckets and business objects to keep latency low.</p><p id='wrap-up-p3'>If you'd like, I can convert this chapter into a JSON payload ready to be pushed via your API, or format it into your requested Mongoose schema where each section's content is HTML (images lazy-loaded and all tags have ids) so it can be stored directly in MongoDB.</p></section>"
+    }
+  ],
+  "createdAt": "2025-08-18T18:15:22.846Z",
+  "updatedAt": "2025-08-18T18:15:22.846Z",
+  "__v": 0
+}

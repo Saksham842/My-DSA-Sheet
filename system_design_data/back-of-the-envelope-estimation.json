@@ -1,0 +1,41 @@
+{
+  "_id": "68a365a8169e3f7abce77c57",
+  "title": "Back-of-the-envelope Estimation",
+  "chapterNo": 2,
+  "slug": "back-of-the-envelope-estimation",
+  "sections": [
+    {
+      "heading": "Back-of-the-envelope Estimation",
+      "slug": "back-of-the-envelope-estimation-intro",
+      "content": "<section id='back-of-the-envelope-estimation-intro'><h1 id='boe-title'>Back-of-the-envelope Estimation</h1><p id='boe-p1'>In a system design interview, you are sometimes asked to estimate performance requirements or system capacity.</p><p id='boe-p2'>These are usually done with thought experiments and common performance numbers, according to Jeff Dean (Google Senior Fellow).</p><p id='boe-p3'>To make these estimations effectively, there are several key techniques you should know.</p></section>"
+    },
+    {
+      "heading": "Power of two",
+      "slug": "power-of-two",
+      "content": "<section id='power-of-two'><h2 id='power-of-two-heading'>Power of Two</h2><p id='power-of-two-desc'>Data volumes can become enormous, but the calculations come down to basics.</p><p id='power-of-two-precise'>For accurate calculations, you need to understand powers of two, which correspond to data units:</p><table border='1' cellspacing='0' cellpadding='6'><thead><tr><th>Power</th><th>Approximate Value</th><th>Full Name</th><th>Short Name</th></tr></thead><tbody><tr><td>10</td><td>1 Thousand</td><td>1 Kilobyte</td><td>1 KB</td></tr><tr><td>20</td><td>1 Million</td><td>1 Megabyte</td><td>1 MB</td></tr><tr><td>30</td><td>1 Billion</td><td>1 Gigabyte</td><td>1 GB</td></tr><tr><td>40</td><td>1 Trillion</td><td>1 Terabyte</td><td>1 TB</td></tr><tr><td>50</td><td>1 Quadrillion</td><td>1 Petabyte</td><td>1 PB</td></tr></tbody></table></section>"
+    },
+    {
+      "heading": "Latency numbers every programmer should know",
+      "slug": "latency-numbers-every-programmer-should-know",
+      "content": "<section id='latency-numbers-every-programmer-should-know'><h2 id='latency-heading'>Latency Numbers Every Programmer Should Know</h2><p id='latency-desc'>There is a well-known table of typical computer operation times, created by Jeff Dean.</p><p id='latency-outdated-note'>These numbers may be slightly outdated due to hardware improvements, but they still give a good relative comparison among operations:</p><table border='1' cellspacing='0' cellpadding='6'><thead><tr><th>Operation Name</th><th>Time</th></tr></thead><tbody><tr><td>L1 cache reference</td><td>0.5 ns</td></tr><tr><td>Branch mispredict</td><td>5 ns</td></tr><tr><td>L2 cache reference</td><td>7 ns</td></tr><tr><td>Mutex lock/unlock</td><td>100 ns</td></tr><tr><td>Main memory reference</td><td>100 ns</td></tr><tr><td>Compress 1 KB (with Zippy)</td><td>10,000 ns ≈ 10 µs</td></tr><tr><td>Send 2 KB over 1 Gbps network</td><td>20,000 ns ≈ 20 µs</td></tr><tr><td>Read 1 MB sequentially from memory</td><td>250,000 ns ≈ 250 µs</td></tr><tr><td>Round trip within same datacenter</td><td>500,000 ns ≈ 500 µs</td></tr><tr><td>Disk seek</td><td>10,000,000 ns ≈ 10 ms</td></tr><tr><td>Read 1 MB sequentially from network</td><td>10,000,000 ns ≈ 10 ms</td></tr><tr><td>Read 1 MB sequentially from disk</td><td>30,000,000 ns ≈ 30 ms</td></tr><tr><td>Send packet California → Netherlands → California</td><td>150,000,000 ns ≈ 150 ms</td></tr></tbody></table><p id='latency-visualization-label'>Here’s a good visualization of the above:</p><p id='latency-visualization-img'><img loading='lazy' src='images/latency-numbers-visu.png' alt='latency-numbers-visu' /></p><p id='latency-conclusions-intro'>Some takeaways from these numbers:</p><ul id='latency-conclusions-list'><li id='latency-conclusion-memory-fast'>Memory is fast, disk is slow</li><li id='latency-conclusion-avoid-disk-seeks'>Avoid disk seeks whenever possible</li><li id='latency-conclusion-compression-fast'>Compression is usually fast</li><li id='latency-conclusion-compress-before-network'>Compress data before sending over the network if possible</li><li id='latency-conclusion-dc-expensive'>Data center round trips are expensive</li></ul></section>"
+    },
+    {
+      "heading": "Availability numbers",
+      "slug": "availability-numbers",
+      "content": "<section id='availability-numbers'><h2 id='availability-heading'>Availability Numbers</h2><p id='availability-def'>High availability means the ability of a system to stay operational continuously — in other words, minimizing downtime.</p><p id='availability-targets'>Typically, services aim for availability between 99% and 100%.</p><p id='sla-def'>An SLA (Service Level Agreement) is a formal agreement between a service provider and a customer.</p><p id='sla-uptime'>It defines the level of uptime your service must guarantee.</p><p id='cloud-sla'>Cloud providers usually set uptime at 99.9% or higher. For example, AWS EC2 has an SLA of 99.99%.</p><p id='sla-summary-label'>Here’s a summary of allowed downtime based on different SLAs:</p><p id='sla-chart-img'><img loading='lazy' src='images/sla-chart.png' alt='sla-chart' /></p></section>"
+    },
+    {
+      "heading": "Example - estimate Twitter QPS and storage requirements",
+      "slug": "example-estimate-twitter-qps-and-storage-requirements",
+      "content": "<section id='twitter-example'><h2 id='twitter-example-heading'>Example – Estimate Twitter QPS and Storage Requirements</h2><h3 id='twitter-assumptions-heading'>Assumptions:</h3><ul id='twitter-assumptions-list'><li id='assumption-mau'>300M monthly active users (MAU)</li><li id='assumption-dau'>50% of users use Twitter daily</li><li id='assumption-tweets-per-day'>Users post 2 tweets per day on average</li><li id='assumption-media-percent'>10% of tweets contain media</li><li id='assumption-retention'>Data is stored for 5 years</li></ul><h3 id='twitter-estimations-heading'>Estimations:</h3><ul id='twitter-estimations-list'><li id='estimation-write-rps'>Write RPS estimation = 150M * 2 / 24h / 60m / 60s ≈ 3400–3600 tweets per second, peak = ~7000 TPS</li><li id='estimation-media-storage'>Media storage per day = 300M * 10% = 30M media items per day<ul id='estimation-media-sublist'><li id='estimation-media-size'>Assume 1MB per media → 30M * 1MB = 30TB per day</li><li id='estimation-media-5y'>In 5 years → 30TB * 365 * 5 ≈ 55PB</li></ul></li><li id='estimation-tweet-storage'>Tweet storage estimation:<ul id='estimation-tweet-sublist'><li id='tweet-size-breakdown'>1 tweet = 64B ID + 140B text + 1000B metadata</li><li id='tweets-per-day'>~3500 * 60 * 60 * 24 = ~302MB per day</li><li id='tweets-5y'>In 5 years → 302MB * 365 * 5 ≈ 551GB</li></ul></li></ul></section>"
+    },
+    {
+      "heading": "Tips",
+      "slug": "tips",
+      "content": "<section id='tips'><h2 id='tips-heading'>Tips</h2><p id='tips-intro'>Back-of-the-envelope estimations are about the process, not the exact results. Interviewers often test your problem-solving approach.</p><p id='tips-considerations-intro'>Some tips to keep in mind:</p><ul id='tips-list'><li id='tip-rounding'>Use rounding and approximation – don’t calculate 99987 ÷ 9.1, round it to 100000 ÷ 10 instead, which is easier.</li><li id='tip-assumptions'>Write down your assumptions before starting calculations</li><li id='tip-units'>Always label your units clearly. For example, write 5MB instead of just 5.</li><li id='tip-common-estimates'>Common estimates include: QPS (queries per second), peak QPS, storage, cache size, number of servers.</li></ul></section>"
+    }
+  ],
+  "createdAt": "2025-08-18T17:40:56.513Z",
+  "updatedAt": "2025-08-18T17:40:56.513Z",
+  "__v": 0
+}

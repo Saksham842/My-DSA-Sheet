@@ -1,0 +1,101 @@
+{
+  "_id": "68a36cba169e3f7abce77c8a",
+  "title": "Design YouTube",
+  "chapterNo": 14,
+  "slug": "design-youtube",
+  "sections": [
+    {
+      "heading": "Overview",
+      "slug": "overview",
+      "content": "<section id='overview'><h1 id='overview-heading'>Design YouTube</h1><p id='overview-p1'>This chapter is about designing a video-sharing platform such as YouTube. The solution here can also be applied to services like Netflix or Hulu.</p><p id='overview-p2'>We'll focus on the core features required to upload and watch videos: a fast and reliable upload flow, smooth streaming with adaptive quality, low infrastructure cost, and high availability and scalability for international users on mobile, web, and smart TV clients.</p><p id='overview-img'><img loading='lazy' src='images/high-level-sys-design.png' alt='High level system design' id='img-high-level-sys-design' /></p></section>"
+    },
+    {
+      "heading": "Step 1 - Understand the problem and establish design scope",
+      "slug": "step-1-understand-problem",
+      "content": "<section id='step-1'><h2 id='step-1-heading'>Step 1 - Understand the problem and establish design scope</h2><p id='step-1-intro'>Clarify requirements before designing. Example Q&amp;A:</p><ul id='step-1-qa'><li id='q1'><strong>Q:</strong> What features are important?</li><li id='a1'><strong>A:</strong> Upload videos and watch videos.</li><li id='q2'><strong>Q:</strong> Which clients do we need to support?</li><li id='a2'><strong>A:</strong> Mobile apps, web apps, and smart TVs.</li><li id='q3'><strong>Q:</strong> How many DAUs?</li><li id='a3'><strong>A:</strong> 5 million.</li><li id='q4'><strong>Q:</strong> Average time per day spent on the site?</li><li id='a4'><strong>A:</strong> 30 minutes.</li><li id='q5'><strong>Q:</strong> International users?</li><li id='a5'><strong>A:</strong> Yes - must support international users.</li><li id='q6'><strong>Q:</strong> Video resolutions?</li><li id='a6'><strong>A:</strong> Support most common resolutions (mobile up to 4K where applicable).</li><li id='q7'><strong>Q:</strong> Is encryption required?</li><li id='a7'><strong>A:</strong> Yes.</li><li id='q8'><strong>Q:</strong> Max file size?</li><li id='a8'><strong>A:</strong> 1 GB per upload (example constraint).</li><li id='q9'><strong>Q:</strong> Can we use cloud infrastructure?</li><li id='a9'><strong>A:</strong> Yes - leveraging existing cloud/CDN providers is acceptable and recommended.</li></ul><p id='step-1-features'>Focus areas: fast uploads, smooth streaming, adaptive bitrate support, low cost, high availability and international scale.</p></section>"
+    },
+    {
+      "heading": "Back-of-the-envelope estimation",
+      "slug": "back-of-the-envelope",
+      "content": "<section id='boe'><h2 id='boe-heading'>Back-of-the-envelope estimation</h2><p id='boe-intro'>Quick numbers to guide capacity planning and cost estimates.</p><ul id='boe-list'><li id='boe-1'>Users: 5 million DAU.</li><li id='boe-2'>Assume each user watches 5 videos per day → 25 million video views/day.</li><li id='boe-3'>10% of users upload 1 video/day → 500k uploads/day.</li><li id='boe-4'>Average video size: 300 MB.</li><li id='boe-storage'>Daily storage ingested: 500k × 300 MB ≈ 150 TB/day (raw uploads before transcoding)</li><li id='boe-cdn-cost'>CDN bandwidth cost (example): 5M users × 5 videos × 0.3 GB × $0.02/GB ≈ $150,000/day.</li></ul><p id='boe-note'>These numbers are rough; they help determine CDN, storage, and transcoding capacity and guide optimizations (caching, on-demand encoding, regional replication).</p></section>"
+    },
+    {
+      "heading": "Step 2 - High-level design and tradeoffs",
+      "slug": "step-2-high-level-design",
+      "content": "<section id='step-2'><h2 id='step-2-heading'>Step 2 - High-level design and tradeoffs</h2><p id='tradeoffs-intro'>We will leverage existing cloud and CDN infrastructure - building end-to-end CDN/edge networks from scratch is costly and unnecessary in most interview designs. Focus on the right architecture and components.</p><p id='highlevel-img'><img loading='lazy' src='images/high-level-sys-design.png' alt='High-level system design' id='img-high-level-design-2' /></p><p id='highlevel-desc'>Main components:</p><ul id='highlevel-components'><li id='hl-client'>Client (web, mobile, TV) - plays and uploads videos.</li><li id='hl-cdn'>CDN - stores and serves encoded video chunks near users.</li><li id='hl-api'>API servers - handle metadata, authentication, feed/recommendation logic, and generate upload URLs.</li><li id='hl-blob'>Blob storage - persistent original uploads and encoded artifacts (cloud object storage).</li><li id='hl-transcode'>Transcoding/encoding cluster - convert uploaded videos to multiple bitrates and codecs.</li><li id='hl-transcoded-storage'>Transcoded storage - stores encoded files ready to be pushed to CDN.</li><li id='hl-queues'>Completion queues and workers - coordinate async processing and metadata updates.</li></ul></section>"
+    },
+    {
+      "heading": "Video uploading flow",
+      "slug": "video-uploading-flow",
+      "content": "<section id='upload-flow'><h2 id='upload-flow-heading'>Video uploading flow</h2><p id='upload-flow-desc'>High-level upload steps:</p><ol id='upload-steps'><li id='upload-step-1'>Client requests a presigned upload URL from the API server.</li><li id='upload-step-2'>Client uploads the original video to blob storage (possibly using multipart/resumable upload).</li><li id='upload-step-3'>API server records metadata (title, owner, placeholder status) in the metadata DB and cache.</li><li id='upload-step-4'>Transcoding servers fetch the original video and run encoding jobs to produce multiple bitrates/codecs.</li><li id='upload-step-5'>Transcoded files are stored in transcoded storage and pushed or replicated to the CDN.</li><li id='upload-step-6'>Transcoding completion events are queued; workers pick them up and update metadata status and caches.</li><li id='upload-step-7'>API notifies the user that the video is available (or partially available) depending on policy.</li></ol><p id='upload-img'><img loading='lazy' src='images/video-uploading-flow.png' alt='Video uploading flow' id='img-video-uploading-flow' /></p></section>"
+    },
+    {
+      "heading": "Metadata update flow",
+      "slug": "metadata-update-flow",
+      "content": "<section id='metadata-update'><h3 id='metadata-update-heading'>Metadata update flow</h3><p id='metadata-update-desc'>While uploading or after upload completes, clients may update metadata (title, description, tags, thumbnail). Metadata updates go through API servers which update the metadata DB and invalidate/update cache entries.</p><p id='metadata-img'><img loading='lazy' src='images/metadata-update-flow.png' alt='Metadata update flow' id='img-metadata-update' /></p></section>"
+    },
+    {
+      "heading": "Video streaming flow",
+      "slug": "video-streaming-flow",
+      "content": "<section id='streaming-flow'><h2 id='streaming-flow-heading'>Video streaming flow</h2><p id='streaming-flow-desc'>When a user plays a video:</p><ol id='streaming-steps'><li id='stream-step-1'>Client requests playback URL from API (may include authentication/DRM checks).</li><li id='stream-step-2'>API returns a CDN URL or signed URL for the appropriate playlist/manifest (HLS/DASH).</li><li id='stream-step-3'>Client fetches the manifest and downloads media segments (chunks) from the nearest CDN edge.</li><li id='stream-step-4'>Client player requests different quality segments as network conditions change (adaptive bitrate switching).</li></ol><p id='streaming-img'><img loading='lazy' src='images/video-streaming-flow.png' alt='Video streaming flow' id='img-video-streaming-flow' /></p><p id='protocols'>Common streaming protocols: MPEG-DASH, Apple HLS, Microsoft Smooth Streaming. Choose a protocol that fits your target devices and CDN capabilities.</p></section>"
+    },
+    {
+      "heading": "Step 3 - Design deep dive: transcoding and processing",
+      "slug": "step-3-deep-dive",
+      "content": "<section id='step-3'><h2 id='step-3-heading'>Step 3 - Design deep dive: transcoding and processing</h2><p id='transcode-intro'>Transcoding is compute-intensive and central to video platforms. It enables multiple resolutions, adaptive bitrate streaming, compatibility with different devices, and lower storage/bandwidth costs.</p></section>"
+    },
+    {
+      "heading": "Why transcode?",
+      "slug": "why-transcode",
+      "content": "<section id='why-transcode'><h3 id='why-transcode-heading'>Why transcode?</h3><ul id='why-list'><li id='wt-1'>Raw uploads are large; transcoding reduces size via codecs (H.264, VP9, HEVC).</li><li id='wt-2'>Different devices/browsers support different containers and codecs.</li><li id='wt-3'>Adaptive bitrate streaming requires multiple bitrate ladders.</li><li id='wt-4'>Transcoding allows runtime quality switching for smooth UX on varying networks.</li></ul></section>"
+    },
+    {
+      "heading": "DAG model for processing",
+      "slug": "dag-model",
+      "content": "<section id='dag'><h3 id='dag-heading'>Directed Acyclic Graph (DAG) model</h3><p id='dag-p'>Video processing is modeled as a DAG to enable parallelism and custom pipelines. Tasks include validation, splitting to GOPs, audio/video encoding, thumbnail generation, watermarking, and packaging into streaming formats.</p><p id='dag-img'><img loading='lazy' src='images/dag-model.png' alt='DAG model for transcoding' id='img-dag-model' /></p></section>"
+    },
+    {
+      "heading": "Transcoding architecture: components",
+      "slug": "transcoding-architecture",
+      "content": "<section id='transcoding-arch'><h3 id='transcoding-arch-heading'>Transcoding architecture: components</h3><p id='arch-desc'>Key components:</p><ul id='arch-list'><li id='arch-preprocessor'><strong>Preprocessor</strong> - splits video into chunks (GOP aligned), validates formats, and builds the DAG configuration.</li><li id='arch-scheduler'><strong>DAG scheduler</strong> - decomposes DAG into tasks and enqueues them for execution.</li><li id='arch-resource'><strong>Resource manager</strong> - matches tasks to available workers, tracks utilization, and enforces priorities.</li><li id='arch-workers'><strong>Task workers</strong> - perform encoding, packaging, thumbnailing, watermarking.</li><li id='arch-temp'><strong>Temporary storage</strong> - stores intermediate files and chunk artifacts.</li><li id='arch-output'><strong>Encoded storage</strong> - stores final encoded outputs ready to be sent to the CDN.</li></ul><p id='transcode-img'><img loading='lazy' src='images/video-transcoding-architecture.png' alt='Video transcoding architecture' id='img-video-transcoding-architecture' /></p></section>"
+    },
+    {
+      "heading": "Preprocessor",
+      "slug": "preprocessor",
+      "content": "<section id='preprocessor'><h4 id='preprocessor-heading'>Preprocessor</h4><p id='preprocessor-p'>Responsibilities:</p><ul id='preprocessor-list'><li id='pp-1'>Split video into GOP-aligned chunks for resumable uploads and parallel encoding.</li><li id='pp-2'>Validate the uploaded file and generate a DAG configuration based on the required output formats.</li><li id='pp-3'>Persist intermediate artifacts for retry and audit.</li></ul><p id='preprocessor-img'><img loading='lazy' src='images/preprocessor.png' alt='Preprocessor' id='img-preprocessor' /></p></section>"
+    },
+    {
+      "heading": "DAG scheduler and resource manager",
+      "slug": "dag-scheduler-resource-manager",
+      "content": "<section id='dag-scheduler'><h4 id='dag-scheduler-heading'>DAG Scheduler</h4><p id='dag-scheduler-p'>The scheduler breaks the DAG into stages and enqueues tasks into priority queues. It coordinates with the resource manager to assign tasks to workers.</p><p id='dag-scheduler-img'><img loading='lazy' src='images/dag-scheduler.png' alt='DAG scheduler' id='img-dag-scheduler' /></p><h4 id='resource-manager-heading'>Resource Manager</h4><p id='resource-manager-p'>Manages worker pools and optimizes allocation. Key data structures: task queue (priority), worker queue (available workers), and running queue (active tasks).</p><p id='resource-manager-img'><img loading='lazy' src='images/resource-manager.png' alt='Resource manager' id='img-resource-manager' /></p></section>"
+    },
+    {
+      "heading": "Task workers and temporary storage",
+      "slug": "task-workers-temp-storage",
+      "content": "<section id='task-workers'><h4 id='task-workers-heading'>Task Workers</h4><p id='task-workers-p'>Workers execute encoding and packaging tasks. Different worker types can be provisioned separately (e.g., GPU workers for certain codecs, CPU for others). Workers report status to the scheduler and push artifacts to temporary storage.</p><p id='task-workers-img'><img loading='lazy' src='images/task-workers.png' alt='Task workers' id='img-task-workers' /></p><h4 id='temp-storage-heading'>Temporary Storage</h4><p id='temp-storage-p'>Intermediate results are persisted (in cloud object storage or fast block/ephemeral volumes) to allow retries and to reduce recomputation.</p><p id='temp-storage-img'><img loading='lazy' src='images/temporary-storage.png' alt='Temporary storage' id='img-temp-storage' /></p></section>"
+    },
+    {
+      "heading": "Encoded video and CDN integration",
+      "slug": "encoded-video-cdn",
+      "content": "<section id='encoded-video'><h4 id='encoded-video-heading'>Encoded video and CDN integration</h4><p id='encoded-video-p'>Final encoded outputs (different resolutions, bitrates, codecs) are packaged into manifests/playlists (HLS/DASH) and stored in transcoded storage. These artifacts are pushed or invalidated on the CDN edge so clients can stream from the nearest edge location.</p><p id='encoded-video-img'><img loading='lazy' src='images/encoded-video.png' alt='Encoded video artifacts' id='img-encoded-video' /></p></section>"
+    },
+    {
+      "heading": "System optimizations",
+      "slug": "system-optimizations",
+      "content": "<section id='optimizations'><h3 id='optimizations-heading'>System optimizations</h3><h4 id='speed-optimizations-heading'>Speed optimizations</h4><ul id='speed-list'><li id='sp-1'><strong>Parallel uploads:</strong> Split uploads into chunks (GOP alignment) to support resumable and parallel uploads from clients.</li><li id='sp-2'><strong>Upload edge locations:</strong> Use upload centers/CDN edges close to users to reduce latency and accelerate uploads.</li><li id='sp-3'><strong>Parallelism in pipeline:</strong> Use message queues so components can process tasks independently and in parallel.</li></ul><p id='upload-optim-img'><img loading='lazy' src='images/video-uploading-optimization.png' alt='Upload parallelism optimization' id='img-video-uploading-optimization' /></p><h4 id='safety-optimizations-heading'>Safety optimizations</h4><ul id='safety-list'><li id='sf-1'><strong>Pre-signed upload URLs:</strong> API servers generate presigned URLs for secure uploads to blob storage.</li><li id='sf-2'><strong>DRM and encryption:</strong> Use DRM (Widevine/FairPlay/PlayReady) and AES encryption where required; decrypt on the client per license.</li><li id='sf-3'><strong>Watermarking:</strong> Optionally watermark videos to discourage theft.</li></ul><p id='presigned-img'><img loading='lazy' src='images/presigned-upload-url.png' alt='Pre-signed upload URL flow' id='img-presigned-upload-url' /></p><h4 id='cost-optimizations-heading'>Cost-saving optimizations</h4><ul id='cost-list'><li id='ct-1'><strong>Hot/cold strategy:</strong> Cache only popular videos in CDN; serve long-tail videos from cheaper origin storage and optionally encode on demand.</li><li id='ct-2'><strong>Regional replication:</strong> Only replicate videos to regions where they are popular.</li><li id='ct-3'><strong>On-demand encoding:</strong> Avoid storing many encodes for rarely watched videos; encode less common formats on demand.</li></ul><p id='cdn-opt-img'><img loading='lazy' src='images/cdn-optimization.png' alt='CDN optimization' id='img-cdn-optimization' /></p></section>"
+    },
+    {
+      "heading": "Error handling and retries",
+      "slug": "error-handling",
+      "content": "<section id='error-handling'><h3 id='error-handling-heading'>Error handling and retries</h3><p id='error-handling-p'>Errors are inevitable. Classify errors as:</p><ul id='err-types'><li id='err-recoverable'><strong>Recoverable:</strong> transient network issues, worker timeouts - retry with backoff and failover to another worker.</li><li id='err-nonrecoverable'><strong>Non-recoverable:</strong> corrupt uploads or invalid inputs - reject and notify the user.</li></ul><p id='typical-errors'>Example handling:</p><ul id='typical-list'><li id='te-1'>Upload error - retry; if retries fail, resume upload or notify the client to reupload.</li><li id='te-2'>Transcoding error - retry; log and, if persistent, flag the video for manual inspection.</li><li id='te-3'>DAG scheduler/resource manager down - use replicas and fallback queues.</li><li id='te-4'>Task worker down - reassign tasks to other workers from the running or retry queue.</li><li id='te-5'>API server down - route to other stateless API servers.</li><li id='te-6'>Metadata DB/cache down - use replicas and promote slaves or use read-only degraded mode for non-critical features.</li></ul></section>"
+    },
+    {
+      "heading": "Step 4 - Wrap up and additional topics",
+      "slug": "step-4-wrap-up",
+      "content": "<section id='wrap-up'><h2 id='wrap-up-heading'>Step 4 - Wrap up and additional topics</h2><p id='wrap-up-p1'>We designed a video platform covering upload, encoding, storage, CDN delivery, and metadata management. The design leverages cloud blob storage and CDNs, a DAG-based transcoding pipeline, and multiple optimizations for speed, safety, and cost.</p><h3 id='additional-topics-heading'>Additional talking points</h3><ul id='additional-list'><li id='at-1'><strong>API scaling:</strong> API layer is stateless and easy to scale horizontally.</li><li id='at-2'><strong>Database scaling:</strong> Shard and replicate metadata DB; use caches for hot items.</li><li id='at-3'><strong>Live streaming:</strong> Live streaming requires different protocols and lower end-to-end latency; the pipeline is similar but has more stringent timing and fewer long-lived artifacts.</li><li id='at-4'><strong>Content moderation and takedowns:</strong> Videos violating policies must be removed either during upload (automated checks) or after user flags - support async takedown and metadata updates.</li><li id='at-5'><strong>Analytics:</strong> Collect viewing metrics for recommendations and billing; process with streaming systems (Kafka/Flink/Spark).</li><li id='at-6'><strong>Monitoring and SLOs:</strong> Monitor transcoding throughput, CDN hit ratio, playback failures, latency, and error rates. Define SLOs for availability, upload/processing time, and playback start time.</li></ul><p id='final-note'>When presenting this design in an interview: state assumptions (DAU, average video sizes, costs), justify tradeoffs (pre-encode vs on-demand), and discuss operational concerns (monitoring, deployments, capacity planning).</p></section>"
+    }
+  ],
+  "createdAt": "2025-08-18T18:11:06.736Z",
+  "updatedAt": "2025-08-18T18:11:06.736Z",
+  "__v": 0
+}

@@ -1,0 +1,1938 @@
+[
+  {
+    "_id": "68a34758fe6a7d44db153f95",
+    "title": "Scale From Zero to Millions of Users",
+    "chapterNo": 1,
+    "slug": "scale-from-zero-to-millions-of-users",
+    "sections": [
+      {
+        "heading": "Scale From Zero to Millions of Users",
+        "slug": "scale-from-zero-to-millions-of-users-intro"
+      },
+      {
+        "heading": "Single server setup",
+        "slug": "single-server-setup"
+      },
+      {
+        "heading": "Database",
+        "slug": "database"
+      },
+      {
+        "heading": "Vertical scaling vs. horizontal scaling",
+        "slug": "vertical-vs-horizontal-scaling"
+      },
+      {
+        "heading": "Load balancer",
+        "slug": "load-balancer"
+      },
+      {
+        "heading": "Database replication",
+        "slug": "database-replication"
+      },
+      {
+        "heading": "Cache",
+        "slug": "cache"
+      },
+      {
+        "heading": "Content Delivery Network (CDN)",
+        "slug": "content-delivery-network-cdn"
+      },
+      {
+        "heading": "Stateless web tier",
+        "slug": "stateless-web-tier"
+      },
+      {
+        "heading": "Data centers",
+        "slug": "data-centers"
+      },
+      {
+        "heading": "Message queues",
+        "slug": "message-queues"
+      },
+      {
+        "heading": "Logging, metrics, automation",
+        "slug": "logging-metrics-automation"
+      },
+      {
+        "heading": "Database scaling",
+        "slug": "database-scaling"
+      },
+      {
+        "heading": "Millions of users and beyond",
+        "slug": "millions-of-users-and-beyond"
+      }
+    ],
+    "createdAt": "2025-08-18T15:31:36.338Z",
+    "updatedAt": "2025-08-18T15:31:36.338Z",
+    "__v": 0
+  },
+  {
+    "_id": "68a365a8169e3f7abce77c57",
+    "title": "Back-of-the-envelope Estimation",
+    "chapterNo": 2,
+    "slug": "back-of-the-envelope-estimation",
+    "sections": [
+      {
+        "heading": "Back-of-the-envelope Estimation",
+        "slug": "back-of-the-envelope-estimation-intro"
+      },
+      {
+        "heading": "Power of two",
+        "slug": "power-of-two"
+      },
+      {
+        "heading": "Latency numbers every programmer should know",
+        "slug": "latency-numbers-every-programmer-should-know"
+      },
+      {
+        "heading": "Availability numbers",
+        "slug": "availability-numbers"
+      },
+      {
+        "heading": "Example - estimate Twitter QPS and storage requirements",
+        "slug": "example-estimate-twitter-qps-and-storage-requirements"
+      },
+      {
+        "heading": "Tips",
+        "slug": "tips"
+      }
+    ],
+    "createdAt": "2025-08-18T17:40:56.513Z",
+    "updatedAt": "2025-08-18T17:40:56.513Z",
+    "__v": 0
+  },
+  {
+    "_id": "68a36667169e3f7abce77c5c",
+    "title": "A Framework for System Design Interviews",
+    "chapterNo": 3,
+    "slug": "framework-system-design-interviews",
+    "sections": [
+      {
+        "heading": "Introduction",
+        "slug": "introduction"
+      },
+      {
+        "heading": "What Is the Goal of a System Design Interview?",
+        "slug": "interview-goal"
+      },
+      {
+        "heading": "A Four-Step Process for Effective System Design Interviews",
+        "slug": "4-step-process-overview"
+      },
+      {
+        "heading": "Step 1 – Understand the Problem and Establish Design Scope",
+        "slug": "step-1-understand-problem"
+      },
+      {
+        "heading": "Step 2 – Propose High-Level Design and Get Buy-In",
+        "slug": "step-2-high-level-design"
+      },
+      {
+        "heading": "Step 3 – Design Deep Dive",
+        "slug": "step-3-deep-dive"
+      },
+      {
+        "heading": "Step 4 – Wrap-Up",
+        "slug": "step-4-wrap-up"
+      },
+      {
+        "heading": "Time Allocation for Each Step",
+        "slug": "time-allocation"
+      }
+    ],
+    "createdAt": "2025-08-18T17:44:07.337Z",
+    "updatedAt": "2025-08-18T17:44:07.337Z",
+    "__v": 0
+  },
+  {
+    "_id": "68a3671d169e3f7abce77c61",
+    "title": "Design a Rate Limiter",
+    "chapterNo": 4,
+    "slug": "design-a-rate-limiter",
+    "sections": [
+      {
+        "heading": "Overview",
+        "slug": "overview"
+      },
+      {
+        "heading": "Step 1 - Understand the Problem and Establish Design Scope",
+        "slug": "step-1-understand-problem"
+      },
+      {
+        "heading": "Step 2 - Propose High-Level Design and Get Buy-in",
+        "slug": "step-2-high-level-design"
+      },
+      {
+        "heading": "Algorithms for Rate Limiting",
+        "slug": "algorithms-for-rate-limiting"
+      },
+      {
+        "heading": "Token Bucket Algorithm",
+        "slug": "token-bucket-algorithm"
+      },
+      {
+        "heading": "Leaking Bucket Algorithm",
+        "slug": "leaking-bucket-algorithm"
+      },
+      {
+        "heading": "Fixed Window Counter Algorithm",
+        "slug": "fixed-window-counter-algorithm"
+      },
+      {
+        "heading": "Sliding Window Log Algorithm",
+        "slug": "sliding-window-log-algorithm"
+      },
+      {
+        "heading": "Sliding Window Counter Algorithm",
+        "slug": "sliding-window-counter-algorithm"
+      },
+      {
+        "heading": "High-Level Architecture",
+        "slug": "high-level-architecture"
+      },
+      {
+        "heading": "Step 3 - Design Deep Dive",
+        "slug": "step-3-design-deep-dive"
+      },
+      {
+        "heading": "Rate Limiting Rules",
+        "slug": "rate-limiting-rules"
+      },
+      {
+        "heading": "Exceeding the Rate Limit",
+        "slug": "exceeding-the-rate-limit"
+      },
+      {
+        "heading": "Detailed Design",
+        "slug": "detailed-design"
+      },
+      {
+        "heading": "Rate Limiter in a Distributed Environment",
+        "slug": "rate-limiter-distributed-environment"
+      },
+      {
+        "heading": "Performance Optimization",
+        "slug": "performance-optimization"
+      },
+      {
+        "heading": "Monitoring",
+        "slug": "monitoring"
+      },
+      {
+        "heading": "Step 4 - Wrap Up",
+        "slug": "step-4-wrap-up"
+      }
+    ],
+    "createdAt": "2025-08-18T17:47:09.934Z",
+    "updatedAt": "2025-08-18T17:47:09.934Z",
+    "__v": 0
+  },
+  {
+    "_id": "68a3671d169e3f7abce77c62",
+    "title": "Design Consistent Hashing",
+    "chapterNo": 5,
+    "slug": "design-consistent-hashing",
+    "sections": [
+      {
+        "heading": "Introduction",
+        "slug": "introduction"
+      },
+      {
+        "heading": "The Rehashing Problem",
+        "slug": "the-rehashing-problem"
+      },
+      {
+        "heading": "Consistent Hashing",
+        "slug": "consistent-hashing"
+      },
+      {
+        "heading": "Challenges and Solutions",
+        "slug": "challenges-and-solutions"
+      },
+      {
+        "heading": "Affected Keys",
+        "slug": "affected-keys"
+      },
+      {
+        "heading": "Benefits of Consistent Hashing",
+        "slug": "benefits-of-consistent-hashing"
+      },
+      {
+        "heading": "Real-World Applications",
+        "slug": "real-world-applications"
+      }
+    ],
+    "createdAt": "2025-08-18T17:50:15.234Z",
+    "updatedAt": "2025-08-18T17:50:15.234Z",
+    "__v": 0
+  },
+  {
+    "_id": "68a368c3169e3f7abce77c6b",
+    "title": "Design a Key-Value Store",
+    "chapterNo": 6,
+    "slug": "design-a-key-value-store",
+    "sections": [
+      {
+        "heading": "Overview",
+        "slug": "overview"
+      },
+      {
+        "heading": "Understand the problem and establish design scope",
+        "slug": "understand-problem-scope"
+      },
+      {
+        "heading": "Single server key-value store",
+        "slug": "single-server"
+      },
+      {
+        "heading": "Distributed key-value store",
+        "slug": "distributed-kv"
+      },
+      {
+        "heading": "System components",
+        "slug": "system-components"
+      },
+      {
+        "heading": "Data partition",
+        "slug": "data-partition"
+      },
+      {
+        "heading": "Data replication",
+        "slug": "data-replication"
+      },
+      {
+        "heading": "Consistency and quorum",
+        "slug": "consistency-quorum"
+      },
+      {
+        "heading": "Consistency models",
+        "slug": "consistency-models"
+      },
+      {
+        "heading": "Versioning and inconsistency resolution",
+        "slug": "versioning-resolution"
+      },
+      {
+        "heading": "Handling failures",
+        "slug": "handling-failures"
+      },
+      {
+        "heading": "Failure detection",
+        "slug": "failure-detection"
+      },
+      {
+        "heading": "Handling temporary failures (hinted handoff)",
+        "slug": "hinted-handoff"
+      },
+      {
+        "heading": "Handling permanent failures (anti-entropy, Merkle trees)",
+        "slug": "permanent-failures"
+      },
+      {
+        "heading": "Handling data center outage",
+        "slug": "data-center-outage"
+      },
+      {
+        "heading": "System architecture diagram",
+        "slug": "architecture-diagram"
+      },
+      {
+        "heading": "Write path",
+        "slug": "write-path"
+      },
+      {
+        "heading": "Read path",
+        "slug": "read-path"
+      },
+      {
+        "heading": "Summary",
+        "slug": "summary"
+      }
+    ],
+    "createdAt": "2025-08-18T17:54:11.419Z",
+    "updatedAt": "2025-08-18T17:54:11.419Z",
+    "__v": 0
+  },
+  {
+    "_id": "68a3692f169e3f7abce77c6d",
+    "title": "Design a Unique ID Generator in Distributed Systems",
+    "chapterNo": 7,
+    "slug": "design-unique-id-generator-distributed-systems",
+    "sections": [
+      {
+        "heading": "Overview",
+        "slug": "overview"
+      },
+      {
+        "heading": "Step 1 - Understand the Problem and Establish Design Scope",
+        "slug": "step-1-understand-problem"
+      },
+      {
+        "heading": "Step 2 - Propose High-Level Design and Get Buy-In",
+        "slug": "step-2-high-level-design"
+      },
+      {
+        "heading": "Step 3 - Design Deep Dive (Snowflake)",
+        "slug": "step-3-deep-dive"
+      },
+      {
+        "heading": "Step 4 - Wrap Up and Operational Considerations",
+        "slug": "step-4-wrap-up"
+      }
+    ],
+    "createdAt": "2025-08-18T17:55:59.522Z",
+    "updatedAt": "2025-08-18T17:55:59.522Z",
+    "__v": 0
+  },
+  {
+    "_id": "68a3698d169e3f7abce77c72",
+    "title": "Design a URL Shortener",
+    "chapterNo": 8,
+    "slug": "design-a-url-shortener",
+    "sections": [
+      {
+        "heading": "Overview",
+        "slug": "overview"
+      },
+      {
+        "heading": "Step 1 - Understand the Problem and Establish Design Scope",
+        "slug": "step-1-understand-problem"
+      },
+      {
+        "heading": "Back-of-the-Envelope Calculation",
+        "slug": "back-of-the-envelope-calculation"
+      },
+      {
+        "heading": "Step 2 - Propose High-Level Design and Get Buy-In",
+        "slug": "step-2-high-level-design"
+      },
+      {
+        "heading": "URL Redirecting: 301 vs 302",
+        "slug": "url-redirecting-301-vs-302"
+      },
+      {
+        "heading": "URL Shortening: Hash vs Base62",
+        "slug": "url-shortening-hash-vs-base62"
+      },
+      {
+        "heading": "Choosing Length: Base62 Capacity Math",
+        "slug": "base62-capacity"
+      },
+      {
+        "heading": "ID Generation in Distributed Environment",
+        "slug": "id-generation-distributed"
+      },
+      {
+        "heading": "Step 3 - Design Deep Dive (Data Model & Hashing)",
+        "slug": "step-3-deep-dive"
+      },
+      {
+        "heading": "Hash Function & Collision Handling",
+        "slug": "hash-function-collision"
+      },
+      {
+        "heading": "URL Shortening Deep Dive (Workflow)",
+        "slug": "url-shortening-deep-dive"
+      },
+      {
+        "heading": "URL Redirection Deep Dive (Read Path & Cache)",
+        "slug": "url-redirection-deep-dive"
+      },
+      {
+        "heading": "Scaling & Storage Considerations",
+        "slug": "scaling-storage"
+      },
+      {
+        "heading": "Analytics, Rate Limiting & Other Features",
+        "slug": "analytics-rate-limiting"
+      },
+      {
+        "heading": "Step 4 - Wrap Up",
+        "slug": "step-4-wrap-up"
+      }
+    ],
+    "createdAt": "2025-08-18T17:57:33.785Z",
+    "updatedAt": "2025-08-18T17:57:33.785Z",
+    "__v": 0
+  },
+  {
+    "_id": "68a369f3169e3f7abce77c74",
+    "title": "Design a Web Crawler",
+    "chapterNo": 9,
+    "slug": "design-a-web-crawler",
+    "sections": [
+      {
+        "heading": "Overview",
+        "slug": "overview"
+      },
+      {
+        "heading": "Step 1 - Understand the Problem and Establish Design Scope",
+        "slug": "step-1-understand-problem"
+      },
+      {
+        "heading": "Back-of-the-Envelope Estimation",
+        "slug": "boe-estimation"
+      },
+      {
+        "heading": "Step 2 - High-Level Design and Workflow",
+        "slug": "step-2-high-level-design"
+      },
+      {
+        "heading": "Step 3 - Design Deep Dive",
+        "slug": "step-3-deep-dive"
+      },
+      {
+        "heading": "Step 4 - Wrap Up and Additional Considerations",
+        "slug": "step-4-wrap-up"
+      }
+    ],
+    "createdAt": "2025-08-18T17:59:15.300Z",
+    "updatedAt": "2025-08-18T17:59:15.300Z",
+    "__v": 0
+  },
+  {
+    "_id": "68a36a77169e3f7abce77c79",
+    "title": "Design a Notification System",
+    "chapterNo": 10,
+    "slug": "design-a-notification-system",
+    "sections": [
+      {
+        "heading": "Overview",
+        "slug": "overview"
+      },
+      {
+        "heading": "Step 1 - Understand the Problem and Establish Design Scope",
+        "slug": "step-1-understand-problem"
+      },
+      {
+        "heading": "Step 2 - High-Level Design",
+        "slug": "step-2-high-level-design"
+      },
+      {
+        "heading": "Contact Info and Opt-In Handling",
+        "slug": "contact-info-opt-in"
+      },
+      {
+        "heading": "Notification Sending/Receiving Flow",
+        "slug": "sending-receiving-flow"
+      },
+      {
+        "heading": "Step 3 - Design Deep Dive: Reliability and Delivery Guarantees",
+        "slug": "step-3-reliability-deep-dive"
+      },
+      {
+        "heading": "Additional Components and Considerations",
+        "slug": "additional-components"
+      },
+      {
+        "heading": "Updated Detailed Design",
+        "slug": "updated-detailed-design"
+      },
+      {
+        "heading": "Step 4 - Wrap Up and Operational Considerations",
+        "slug": "step-4-wrap-up"
+      }
+    ],
+    "createdAt": "2025-08-18T18:01:27.274Z",
+    "updatedAt": "2025-08-18T18:01:27.274Z",
+    "__v": 0
+  },
+  {
+    "_id": "68a36acd169e3f7abce77c7e",
+    "title": "Design a News Feed System",
+    "chapterNo": 11,
+    "slug": "design-a-news-feed-system",
+    "sections": [
+      {
+        "heading": "Overview",
+        "slug": "overview"
+      },
+      {
+        "heading": "Step 1 - Understand the problem and establish design scope",
+        "slug": "step-1-understand-problem"
+      },
+      {
+        "heading": "Step 2 - High-level design and get buy-in",
+        "slug": "step-2-high-level-design"
+      },
+      {
+        "heading": "Step 3 - Design deep dive",
+        "slug": "step-3-design-deep-dive"
+      },
+      {
+        "heading": "Feed publishing deep dive",
+        "slug": "feed-publishing-deep-dive"
+      },
+      {
+        "heading": "News feed retrieval deep dive",
+        "slug": "news-feed-retrieval-deep-dive"
+      },
+      {
+        "heading": "Cache architecture",
+        "slug": "cache-architecture"
+      },
+      {
+        "heading": "Scaling considerations and hotkeys",
+        "slug": "scaling-hotkeys"
+      },
+      {
+        "heading": "Operational concerns",
+        "slug": "operational-concerns"
+      },
+      {
+        "heading": "Step 4 - Wrap up",
+        "slug": "step-4-wrap-up"
+      }
+    ],
+    "createdAt": "2025-08-18T18:02:53.600Z",
+    "updatedAt": "2025-08-18T18:02:53.600Z",
+    "__v": 0
+  },
+  {
+    "_id": "68a36b74169e3f7abce77c83",
+    "title": "Design a Chat System",
+    "chapterNo": 12,
+    "slug": "design-a-chat-system",
+    "sections": [
+      {
+        "heading": "Overview",
+        "slug": "overview"
+      },
+      {
+        "heading": "Step 1 - Understand the problem and establish design scope",
+        "slug": "step-1-understand-problem"
+      },
+      {
+        "heading": "Step 2 - High-level design and communication options",
+        "slug": "step-2-high-level-design"
+      },
+      {
+        "heading": "High-level system components",
+        "slug": "high-level-system-components"
+      },
+      {
+        "heading": "Scalability considerations",
+        "slug": "scalability-considerations"
+      },
+      {
+        "heading": "Storage choices and chat history",
+        "slug": "storage-choices"
+      },
+      {
+        "heading": "Data models",
+        "slug": "data-models"
+      },
+      {
+        "heading": "Step 3 - Deep dive: service discovery, message flows, and presence",
+        "slug": "step-3-deep-dive"
+      },
+      {
+        "heading": "Service discovery",
+        "slug": "service-discovery"
+      },
+      {
+        "heading": "Message flows - one-on-one chat",
+        "slug": "message-flows-one-on-one"
+      },
+      {
+        "heading": "Message synchronization across devices",
+        "slug": "message-sync-across-devices"
+      },
+      {
+        "heading": "Group chat flow (small groups)",
+        "slug": "group-chat-flow-small"
+      },
+      {
+        "heading": "Online presence",
+        "slug": "online-presence"
+      },
+      {
+        "heading": "Failure handling and operational concerns",
+        "slug": "failure-handling-ops"
+      },
+      {
+        "heading": "Step 4 - Wrap up",
+        "slug": "step-4-wrap-up"
+      }
+    ],
+    "createdAt": "2025-08-18T18:05:40.567Z",
+    "updatedAt": "2025-08-18T18:05:40.567Z",
+    "__v": 0
+  },
+  {
+    "_id": "68a36c01169e3f7abce77c85",
+    "title": "Design A Search Autocomplete System",
+    "chapterNo": 13,
+    "slug": "design-a-search-autocomplete-system",
+    "sections": [
+      {
+        "heading": "Overview",
+        "slug": "overview"
+      },
+      {
+        "heading": "Step 1 - Understand the problem and establish design scope",
+        "slug": "step-1-understand-problem"
+      },
+      {
+        "heading": "Back-of-the-envelope estimation",
+        "slug": "back-of-the-envelope-estimation"
+      },
+      {
+        "heading": "Step 2 - High-level design and get buy-in",
+        "slug": "step-2-high-level-design"
+      },
+      {
+        "heading": "Step 3 - Design deep dive",
+        "slug": "step-3-design-deep-dive"
+      },
+      {
+        "heading": "Trie data structure",
+        "slug": "trie-data-structure"
+      },
+      {
+        "heading": "Optimizations for trie",
+        "slug": "trie-optimizations"
+      },
+      {
+        "heading": "Data gathering service (analytics & aggregation)",
+        "slug": "data-gathering-service"
+      },
+      {
+        "heading": "Query service and caching",
+        "slug": "query-service-caching"
+      },
+      {
+        "heading": "Trie operations: create, update, delete",
+        "slug": "trie-operations"
+      },
+      {
+        "heading": "Scaling the storage and sharding",
+        "slug": "scaling-storage-sharding"
+      },
+      {
+        "heading": "Step 4 - Wrap up",
+        "slug": "step-4-wrap-up"
+      }
+    ],
+    "createdAt": "2025-08-18T18:08:01.955Z",
+    "updatedAt": "2025-08-18T18:08:01.955Z",
+    "__v": 0
+  },
+  {
+    "_id": "68a36cba169e3f7abce77c8a",
+    "title": "Design YouTube",
+    "chapterNo": 14,
+    "slug": "design-youtube",
+    "sections": [
+      {
+        "heading": "Overview",
+        "slug": "overview"
+      },
+      {
+        "heading": "Step 1 - Understand the problem and establish design scope",
+        "slug": "step-1-understand-problem"
+      },
+      {
+        "heading": "Back-of-the-envelope estimation",
+        "slug": "back-of-the-envelope"
+      },
+      {
+        "heading": "Step 2 - High-level design and tradeoffs",
+        "slug": "step-2-high-level-design"
+      },
+      {
+        "heading": "Video uploading flow",
+        "slug": "video-uploading-flow"
+      },
+      {
+        "heading": "Metadata update flow",
+        "slug": "metadata-update-flow"
+      },
+      {
+        "heading": "Video streaming flow",
+        "slug": "video-streaming-flow"
+      },
+      {
+        "heading": "Step 3 - Design deep dive: transcoding and processing",
+        "slug": "step-3-deep-dive"
+      },
+      {
+        "heading": "Why transcode?",
+        "slug": "why-transcode"
+      },
+      {
+        "heading": "DAG model for processing",
+        "slug": "dag-model"
+      },
+      {
+        "heading": "Transcoding architecture: components",
+        "slug": "transcoding-architecture"
+      },
+      {
+        "heading": "Preprocessor",
+        "slug": "preprocessor"
+      },
+      {
+        "heading": "DAG scheduler and resource manager",
+        "slug": "dag-scheduler-resource-manager"
+      },
+      {
+        "heading": "Task workers and temporary storage",
+        "slug": "task-workers-temp-storage"
+      },
+      {
+        "heading": "Encoded video and CDN integration",
+        "slug": "encoded-video-cdn"
+      },
+      {
+        "heading": "System optimizations",
+        "slug": "system-optimizations"
+      },
+      {
+        "heading": "Error handling and retries",
+        "slug": "error-handling"
+      },
+      {
+        "heading": "Step 4 - Wrap up and additional topics",
+        "slug": "step-4-wrap-up"
+      }
+    ],
+    "createdAt": "2025-08-18T18:11:06.736Z",
+    "updatedAt": "2025-08-18T18:11:06.736Z",
+    "__v": 0
+  },
+  {
+    "_id": "68a36d47169e3f7abce77c8f",
+    "title": "Design Google Drive",
+    "chapterNo": 15,
+    "slug": "design-google-drive",
+    "sections": [
+      {
+        "heading": "Overview",
+        "slug": "overview"
+      },
+      {
+        "heading": "Step 1 - Understand the problem and establish scope",
+        "slug": "step-1-understand-scope"
+      },
+      {
+        "heading": "Back-of-the-envelope estimation",
+        "slug": "back-of-the-envelope"
+      },
+      {
+        "heading": "Step 2 - High-level design",
+        "slug": "step-2-high-level-design"
+      },
+      {
+        "heading": "Scale out: storage, load balancing, metadata DB",
+        "slug": "scale-out-storage"
+      },
+      {
+        "heading": "Sync conflicts and versioning",
+        "slug": "sync-conflicts"
+      },
+      {
+        "heading": "High-level architecture diagram",
+        "slug": "architecture"
+      },
+      {
+        "heading": "Step 3 - Deep dive: block servers",
+        "slug": "block-servers"
+      },
+      {
+        "heading": "Strong consistency requirements",
+        "slug": "consistency"
+      },
+      {
+        "heading": "Metadata database and schema",
+        "slug": "metadata-database"
+      },
+      {
+        "heading": "Upload flow (detailed)",
+        "slug": "upload-flow-detailed"
+      },
+      {
+        "heading": "Download and sync flow",
+        "slug": "download-sync-flow"
+      },
+      {
+        "heading": "Notification service (long polling vs WebSockets)",
+        "slug": "notification-service"
+      },
+      {
+        "heading": "Save storage space: deduplication and lifecycle",
+        "slug": "storage-savings"
+      },
+      {
+        "heading": "Failure handling and redundancy",
+        "slug": "failure-handling"
+      },
+      {
+        "heading": "Step 4 - Wrap up and alternatives",
+        "slug": "wrap-up"
+      }
+    ],
+    "createdAt": "2025-08-18T18:13:27.610Z",
+    "updatedAt": "2025-08-18T18:13:27.610Z",
+    "__v": 0
+  },
+  {
+    "_id": "68a36dba169e3f7abce77c94",
+    "title": "Proximity Service",
+    "chapterNo": 16,
+    "slug": "proximity-service",
+    "sections": [
+      {
+        "heading": "Overview",
+        "slug": "overview"
+      },
+      {
+        "heading": "Step 1 - Understand the problem and establish scope",
+        "slug": "step-1-understand-scope"
+      },
+      {
+        "heading": "Step 2 - High-level design and APIs",
+        "slug": "step-2-highlevel-design"
+      },
+      {
+        "heading": "Data model",
+        "slug": "data-model"
+      },
+      {
+        "heading": "High-level architecture",
+        "slug": "high-level-architecture"
+      },
+      {
+        "heading": "Algorithms to fetch nearby businesses - overview",
+        "slug": "algorithms-overview"
+      },
+      {
+        "heading": "Two-dimensional (naive) search",
+        "slug": "two-dimensional-search"
+      },
+      {
+        "heading": "Evenly divided grid",
+        "slug": "even-grid"
+      },
+      {
+        "heading": "Geohash",
+        "slug": "geohash"
+      },
+      {
+        "heading": "Quadtree",
+        "slug": "quadtree"
+      },
+      {
+        "heading": "Google S2 (Hilbert curve / cells)",
+        "slug": "google-s2"
+      },
+      {
+        "heading": "Recommendation",
+        "slug": "recommendation"
+      },
+      {
+        "heading": "Step 3 - Deep dive: scaling, caching and deployment",
+        "slug": "step-3-deep-dive"
+      },
+      {
+        "heading": "Final design diagram and request flow",
+        "slug": "final-design"
+      },
+      {
+        "heading": "Step 4 - Wrap up",
+        "slug": "step-4-wrap-up"
+      }
+    ],
+    "createdAt": "2025-08-18T18:15:22.846Z",
+    "updatedAt": "2025-08-18T18:15:22.846Z",
+    "__v": 0
+  },
+  {
+    "_id": "68a37980169e3f7abce77ccb",
+    "title": "Nearby Friends",
+    "chapterNo": 17,
+    "slug": "nearby-friends",
+    "sections": [
+      {
+        "heading": "Nearby Friends Overview",
+        "slug": "overview"
+      },
+      {
+        "heading": "Step 1: Understand the Problem and Establish Design Scope",
+        "slug": "step-1-understand-scope"
+      },
+      {
+        "heading": "Functional Requirements",
+        "slug": "functional-requirements"
+      },
+      {
+        "heading": "Non-functional Requirements",
+        "slug": "non-functional-requirements"
+      },
+      {
+        "heading": "Back-of-the-Envelope Estimation",
+        "slug": "back-of-the-envelope"
+      },
+      {
+        "heading": "Step 2: Propose High-Level Design and Get Buy-In",
+        "slug": "step-2-high-level-design"
+      },
+      {
+        "heading": "System Architecture Components",
+        "slug": "system-architecture"
+      },
+      {
+        "heading": "Periodic Location Update Flow",
+        "slug": "periodic-location-update"
+      },
+      {
+        "heading": "API Design",
+        "slug": "api-design"
+      },
+      {
+        "heading": "Data Model",
+        "slug": "data-model"
+      },
+      {
+        "heading": "Step 3: Design Deep Dive",
+        "slug": "step-3-deep-dive"
+      },
+      {
+        "heading": "Component Scaling Analysis",
+        "slug": "component-scaling"
+      },
+      {
+        "heading": "Scaling Redis Pub/Sub Deep Dive",
+        "slug": "redis-pubsub-scaling"
+      },
+      {
+        "heading": "Scaling Operations and Considerations",
+        "slug": "scaling-operations"
+      },
+      {
+        "heading": "Adding/Removing Friends",
+        "slug": "friend-management"
+      },
+      {
+        "heading": "Users with Many Friends",
+        "slug": "whale-users"
+      },
+      {
+        "heading": "Nearby Random Person Feature",
+        "slug": "random-person-feature"
+      },
+      {
+        "heading": "Alternative to Redis Pub/Sub",
+        "slug": "alternative-solution"
+      },
+      {
+        "heading": "Step 4: Wrap Up",
+        "slug": "step-4-wrap-up"
+      }
+    ],
+    "createdAt": "2025-08-19T10:30:00.000Z",
+    "updatedAt": "2025-08-19T10:30:00.000Z",
+    "__v": 0
+  },
+  {
+    "_id": "68a3bf87a26055319c426442",
+    "title": "Google Maps",
+    "chapterNo": 18,
+    "slug": "google-maps",
+    "sections": [
+      {
+        "heading": "Google Maps Overview",
+        "slug": "overview"
+      },
+      {
+        "heading": "Step 1 Understand the problem and establish scope",
+        "slug": "step-1-understand-scope"
+      },
+      {
+        "heading": "Map 101",
+        "slug": "map-101"
+      },
+      {
+        "heading": "Positioning System",
+        "slug": "positioning-system"
+      },
+      {
+        "heading": "Map Projection (3D to 2D)",
+        "slug": "map-projection"
+      },
+      {
+        "heading": "Geocoding",
+        "slug": "geocoding"
+      },
+      {
+        "heading": "Geohashing",
+        "slug": "geohashing"
+      },
+      {
+        "heading": "Map Rendering Basics",
+        "slug": "map-rendering-basics"
+      },
+      {
+        "heading": "Road Data & Routing Graphs",
+        "slug": "road-data-routing-graphs"
+      },
+      {
+        "heading": "Back-of-the-envelope Estimation",
+        "slug": "estimation"
+      },
+      {
+        "heading": "Step 2 High-Level Design",
+        "slug": "step-2-high-level-design"
+      },
+      {
+        "heading": "Location Service",
+        "slug": "location-service"
+      },
+      {
+        "heading": "Navigation Service",
+        "slug": "navigation-service"
+      },
+      {
+        "heading": "Map Rendering (server-side)",
+        "slug": "map-rendering-server-side"
+      },
+      {
+        "heading": "Step 3 Design Deep Dive",
+        "slug": "step-3-deep-dive"
+      },
+      {
+        "heading": "Data Model - Routing Tiles",
+        "slug": "data-model-routing-tiles"
+      },
+      {
+        "heading": "Data Model - User Location Data",
+        "slug": "data-model-user-location-data"
+      },
+      {
+        "heading": "Data Model - Geocoding Database",
+        "slug": "data-model-geocoding"
+      },
+      {
+        "heading": "Data Model - Precomputed Map Images",
+        "slug": "data-model-precomputed-images"
+      },
+      {
+        "heading": "Services - Location Service Deep Dive",
+        "slug": "services-location-deep-dive"
+      },
+      {
+        "heading": "Services - Rendering Map Deep Dive",
+        "slug": "services-rendering-deep-dive"
+      },
+      {
+        "heading": "Services - Navigation Service Deep Dive",
+        "slug": "services-navigation-deep-dive"
+      },
+      {
+        "heading": "Improvement Adaptive ETA and Rerouting",
+        "slug": "improvement-adaptive-eta-and-rerouting"
+      },
+      {
+        "heading": "Delivery Protocols",
+        "slug": "delivery-protocols"
+      },
+      {
+        "heading": "Step 4 Wrap Up",
+        "slug": "step-4-wrap-up"
+      }
+    ],
+    "createdAt": "2025-08-19T00:04:23.504Z",
+    "updatedAt": "2025-08-19T00:04:23.504Z",
+    "__v": 0
+  },
+  {
+    "_id": "68a3bff8a26055319c426445",
+    "title": "Distributed Message Queue",
+    "chapterNo": 19,
+    "slug": "distributed-message-queue",
+    "sections": [
+      {
+        "heading": "Overview",
+        "slug": "overview"
+      },
+      {
+        "heading": "Step 1 - Understand the problem and establish design scope",
+        "slug": "step-1-understand-problem"
+      },
+      {
+        "heading": "Step 2 - High-level design and get buy-in",
+        "slug": "step-2-high-level-design"
+      },
+      {
+        "heading": "Messaging models",
+        "slug": "messaging-models"
+      },
+      {
+        "heading": "Topics, partitions and brokers",
+        "slug": "topics-partitions-brokers"
+      },
+      {
+        "heading": "Consumer groups",
+        "slug": "consumer-groups"
+      },
+      {
+        "heading": "High-level architecture",
+        "slug": "high-level-architecture"
+      },
+      {
+        "heading": "Step 3 - Design deep dive",
+        "slug": "step-3-deep-dive"
+      },
+      {
+        "heading": "Data storage",
+        "slug": "data-storage"
+      },
+      {
+        "heading": "Message data structure",
+        "slug": "message-data-structure"
+      },
+      {
+        "heading": "Batching",
+        "slug": "batching"
+      },
+      {
+        "heading": "Producer flow",
+        "slug": "producer-flow"
+      },
+      {
+        "heading": "Consumer flow",
+        "slug": "consumer-flow"
+      },
+      {
+        "heading": "Consumer rebalancing",
+        "slug": "consumer-rebalancing"
+      },
+      {
+        "heading": "State storage",
+        "slug": "state-storage"
+      },
+      {
+        "heading": "Metadata storage",
+        "slug": "metadata-storage"
+      },
+      {
+        "heading": "ZooKeeper (coordination service)",
+        "slug": "zookeeper"
+      },
+      {
+        "heading": "Replication",
+        "slug": "replication"
+      },
+      {
+        "heading": "In-sync replicas (ISR)",
+        "slug": "in-sync-replicas"
+      },
+      {
+        "heading": "Consumer read strategy and leader load",
+        "slug": "consumer-read-strategy"
+      },
+      {
+        "heading": "Scalability",
+        "slug": "scalability"
+      },
+      {
+        "heading": "Data delivery semantics",
+        "slug": "delivery-semantics"
+      },
+      {
+        "heading": "Advanced features",
+        "slug": "advanced-features"
+      },
+      {
+        "heading": "Step 4 - Wrap up",
+        "slug": "step-4-wrap-up"
+      }
+    ],
+    "createdAt": "2025-08-19T00:06:16.155Z",
+    "updatedAt": "2025-08-19T00:06:16.155Z",
+    "__v": 0
+  },
+  {
+    "_id": "68a376ea169e3f7abce77cb6",
+    "title": "Metrics Monitoring and Alerting System",
+    "chapterNo": 20,
+    "slug": "metrics-monitoring-and-alerting-system",
+    "sections": [
+      {
+        "heading": "Overview",
+        "slug": "overview"
+      },
+      {
+        "heading": "Step 1 - Understand the Problem and Establish Design Scope",
+        "slug": "step-1-understand-problem"
+      },
+      {
+        "heading": "High-level requirements and assumptions",
+        "slug": "high-level-requirements-assumptions"
+      },
+      {
+        "heading": "Non-functional requirements",
+        "slug": "non-functional-requirements"
+      },
+      {
+        "heading": "Step 2 - Propose High-Level Design and Get Buy-In",
+        "slug": "step-2-propose-high-level-design"
+      },
+      {
+        "heading": "Data model",
+        "slug": "data-model"
+      },
+      {
+        "heading": "High-level Design",
+        "slug": "high-level-design"
+      },
+      {
+        "heading": "Step 3 - Design Deep Dive",
+        "slug": "step-3-design-deep-dive"
+      },
+      {
+        "heading": "Metrics collection",
+        "slug": "metrics-collection"
+      },
+      {
+        "heading": "Scale the metrics transmission pipeline",
+        "slug": "scale-metrics-transmission-pipeline"
+      },
+      {
+        "heading": "Where aggregations can happen",
+        "slug": "where-aggregations-can-happen"
+      },
+      {
+        "heading": "Query Service",
+        "slug": "query-service"
+      },
+      {
+        "heading": "Storage layer",
+        "slug": "storage-layer"
+      },
+      {
+        "heading": "Alerting system",
+        "slug": "alerting-system"
+      },
+      {
+        "heading": "Visualization system",
+        "slug": "visualization-system"
+      },
+      {
+        "heading": "Step 4 - Wrap up",
+        "slug": "step-4-wrap-up"
+      }
+    ],
+    "createdAt": "2025-08-19T00:07:59.306Z",
+    "updatedAt": "2025-08-19T00:07:59.306Z",
+    "__v": 0
+  },
+  {
+    "_id": "68a3744e169e3f7abce77cb2",
+    "title": "Ad Click Event Aggregation",
+    "chapterNo": 21,
+    "slug": "ad-click-event-aggregation",
+    "sections": [
+      {
+        "heading": "Overview",
+        "slug": "overview"
+      },
+      {
+        "heading": "Step 1 - Understand the problem and establish design scope",
+        "slug": "step-1-understand-problem"
+      },
+      {
+        "heading": "Functional and Non-functional requirements",
+        "slug": "requirements"
+      },
+      {
+        "heading": "Back-of-the-envelope estimation",
+        "slug": "estimation"
+      },
+      {
+        "heading": "Step 2 - Query API design",
+        "slug": "query-api-design"
+      },
+      {
+        "heading": "Data model",
+        "slug": "data-model"
+      },
+      {
+        "heading": "High-level design",
+        "slug": "high-level-design"
+      },
+      {
+        "heading": "Use-cases and pre-aggregation",
+        "slug": "use-cases-preaggregation"
+      },
+      {
+        "heading": "Step 3 - Design deep dive",
+        "slug": "step-3-deep-dive"
+      },
+      {
+        "heading": "Streaming vs Batching",
+        "slug": "streaming-vs-batching"
+      },
+      {
+        "heading": "Time and watermarks",
+        "slug": "time-watermarks"
+      },
+      {
+        "heading": "Aggregation windows",
+        "slug": "aggregation-windows"
+      },
+      {
+        "heading": "Delivery guarantees and exactly-once semantics",
+        "slug": "delivery-guarantees"
+      },
+      {
+        "heading": "Data deduplication",
+        "slug": "data-deduplication"
+      },
+      {
+        "heading": "Scaling the system",
+        "slug": "scaling"
+      },
+      {
+        "heading": "Fault tolerance and recovery",
+        "slug": "fault-tolerance"
+      },
+      {
+        "heading": "Data monitoring, correctness and reconciliation",
+        "slug": "monitoring-correctness"
+      },
+      {
+        "heading": "Alternative design and off-the-shelf tooling",
+        "slug": "alternative-design"
+      },
+      {
+        "heading": "Step 4 - Wrap up",
+        "slug": "step-4-wrap-up"
+      },
+      {
+        "heading": "References and implementation notes",
+        "slug": "references-notes"
+      }
+    ],
+    "createdAt": "2025-08-19T00:10:45.253Z",
+    "updatedAt": "2025-08-19T00:10:45.253Z",
+    "__v": 0
+  },
+  {
+    "_id": "68a37740169e3f7abce77cb8",
+    "title": "Hotel Reservation System",
+    "chapterNo": 22,
+    "slug": "hotel-reservation-system",
+    "sections": [
+      {
+        "heading": "Overview",
+        "slug": "overview"
+      },
+      {
+        "heading": "Step 1 - Understand the Problem and Establish Design Scope",
+        "slug": "step-1-understand-problem"
+      },
+      {
+        "heading": "Non-functional requirements and Back-of-the-envelope estimation",
+        "slug": "non-functional-and-estimation"
+      },
+      {
+        "heading": "Step 2 - Propose High-Level Design and Get Buy-In",
+        "slug": "step-2-propose-high-level-design"
+      },
+      {
+        "heading": "API Design",
+        "slug": "api-design"
+      },
+      {
+        "heading": "Data model",
+        "slug": "data-model"
+      },
+      {
+        "heading": "High-level Design",
+        "slug": "high-level-design"
+      },
+      {
+        "heading": "Step 3 - Design Deep Dive",
+        "slug": "step-3-design-deep-dive"
+      },
+      {
+        "heading": "Improved data model",
+        "slug": "improved-data-model"
+      },
+      {
+        "heading": "Concurrency issues",
+        "slug": "concurrency-issues"
+      },
+      {
+        "heading": "Scalability",
+        "slug": "scalability"
+      },
+      {
+        "heading": "Data consistency among services",
+        "slug": "data-consistency-among-services"
+      },
+      {
+        "heading": "Step 4 - Wrap Up",
+        "slug": "step-4-wrap-up"
+      }
+    ],
+    "createdAt": "2025-08-19T00:11:28.113Z",
+    "updatedAt": "2025-08-19T00:11:28.113Z",
+    "__v": 0
+  },
+  {
+    "_id": "68a37768169e3f7abce77cba",
+    "title": "Distributed Email Service",
+    "chapterNo": 23,
+    "slug": "distributed-email-service",
+    "sections": [
+      {
+        "heading": "Overview",
+        "slug": "overview"
+      },
+      {
+        "heading": "Step 1 - Understand the Problem and Establish Design Scope",
+        "slug": "step-1-understand-problem"
+      },
+      {
+        "heading": "Non-functional requirements and Back-of-the-envelope estimation",
+        "slug": "non-functional-and-estimation"
+      },
+      {
+        "heading": "Step 2 - Propose High-Level Design and Get Buy-In",
+        "slug": "step-2-propose-high-level-design"
+      },
+      {
+        "heading": "Email knowledge 101",
+        "slug": "email-knowledge-101"
+      },
+      {
+        "heading": "Traditional mail servers",
+        "slug": "traditional-mail-servers"
+      },
+      {
+        "heading": "Distributed mail servers",
+        "slug": "distributed-mail-servers"
+      },
+      {
+        "heading": "Email sending flow",
+        "slug": "email-sending-flow"
+      },
+      {
+        "heading": "Email receiving flow",
+        "slug": "email-receiving-flow"
+      },
+      {
+        "heading": "Step 3 - Design Deep Dive",
+        "slug": "step-3-design-deep-dive"
+      },
+      {
+        "heading": "Metadata database",
+        "slug": "metadata-database"
+      },
+      {
+        "heading": "Email deliverability",
+        "slug": "email-deliverability"
+      },
+      {
+        "heading": "Search",
+        "slug": "search"
+      },
+      {
+        "heading": "Scalability and availability",
+        "slug": "scalability-and-availability"
+      },
+      {
+        "heading": "Step 4 - Wrap up",
+        "slug": "step-4-wrap-up"
+      }
+    ],
+    "createdAt": "2025-08-19T00:11:45.620Z",
+    "updatedAt": "2025-08-19T00:11:45.620Z",
+    "__v": 0
+  },
+  {
+    "_id": "68a37786169e3f7abce77cbc",
+    "title": "Real-time Gaming Leaderboard",
+    "chapterNo": 24,
+    "slug": "real-time-gaming-leaderboard",
+    "sections": [
+      {
+        "heading": "Overview",
+        "slug": "overview"
+      },
+      {
+        "heading": "Step 1 - Understand the Problem and Establish Design Scope",
+        "slug": "step-1-understand-problem"
+      },
+      {
+        "heading": "Requirements",
+        "slug": "requirements"
+      },
+      {
+        "heading": "Back-of-the-envelope estimation",
+        "slug": "estimation"
+      },
+      {
+        "heading": "Step 2 - Propose High-Level Design and Get Buy-In",
+        "slug": "step-2-propose-high-level-design"
+      },
+      {
+        "heading": "API Design",
+        "slug": "api-design"
+      },
+      {
+        "heading": "High-level architecture",
+        "slug": "high-level-architecture"
+      },
+      {
+        "heading": "Data models & storage options",
+        "slug": "data-models"
+      },
+      {
+        "heading": "Operational considerations (Redis specifics)",
+        "slug": "redis-ops"
+      },
+      {
+        "heading": "Step 3 - Design Deep Dive",
+        "slug": "step-3-deep-dive"
+      },
+      {
+        "heading": "Cloud vs self-hosted",
+        "slug": "cloud-vs-self-hosted"
+      },
+      {
+        "heading": "Scaling Redis (detailed)",
+        "slug": "scaling-redis-detailed"
+      },
+      {
+        "heading": "NoSQL alternative (detailed)",
+        "slug": "nosql-detailed"
+      },
+      {
+        "heading": "Additional considerations",
+        "slug": "additional-considerations"
+      },
+      {
+        "heading": "Step 4 - Wrap Up",
+        "slug": "step-4-wrap-up"
+      }
+    ],
+    "createdAt": "2025-08-19T00:12:57.077Z",
+    "updatedAt": "2025-08-19T00:12:57.077Z",
+    "__v": 0
+  },
+  {
+    "_id": "68a3c3807856d04801b42040",
+    "title": "S3-like Object Storage",
+    "chapterNo": 25,
+    "slug": "s3-like-object-storage",
+    "sections": [
+      {
+        "heading": "Overview",
+        "slug": "overview"
+      },
+      {
+        "heading": "Step 1 - Understand the Problem and Establish Design Scope",
+        "slug": "step-1-understand-problem"
+      },
+      {
+        "heading": "Non-functional requirements",
+        "slug": "non-functional-requirements"
+      },
+      {
+        "heading": "Back-of-the-envelope estimation",
+        "slug": "estimation"
+      },
+      {
+        "heading": "Step 2 - Propose High-Level Design and Get Buy-In",
+        "slug": "step-2-propose-high-level-design"
+      },
+      {
+        "heading": "Step 3 - Design Deep Dive",
+        "slug": "step-3-design-deep-dive"
+      },
+      {
+        "heading": "Step 4 - Wrap Up",
+        "slug": "step-4-wrap-up"
+      }
+    ],
+    "createdAt": "2025-08-19T00:21:20.533Z",
+    "updatedAt": "2025-08-19T00:21:20.533Z",
+    "__v": 0
+  },
+  {
+    "_id": "68a377ae169e3f7abce77cbe",
+    "title": "Payment System",
+    "chapterNo": 26,
+    "slug": "payment-system",
+    "sections": [
+      {
+        "heading": "Overview",
+        "slug": "overview"
+      },
+      {
+        "heading": "Step 1 - Understand the Problem and Establish Design Scope",
+        "slug": "step-1-understand-problem"
+      },
+      {
+        "heading": "Requirements and Estimation",
+        "slug": "requirements-estimation"
+      },
+      {
+        "heading": "Step 2 - High-Level Design",
+        "slug": "step-2-high-level-design"
+      },
+      {
+        "heading": "Pay-in Flow (Overview)",
+        "slug": "payin-flow-overview"
+      },
+      {
+        "heading": "Payment APIs",
+        "slug": "payment-apis"
+      },
+      {
+        "heading": "Data Model (Payment Service)",
+        "slug": "data-model-payment"
+      },
+      {
+        "heading": "Double-entry Ledger & Wallet",
+        "slug": "double-entry-ledger"
+      },
+      {
+        "heading": "Hosted Payment Page & Tokenization",
+        "slug": "hosted-payment-page"
+      },
+      {
+        "heading": "Pay-out Flow",
+        "slug": "payout-flow"
+      },
+      {
+        "heading": "Step 3 - Deep Dive: Robustness, Performance, Security",
+        "slug": "step-3-deep-dive"
+      },
+      {
+        "heading": "PSP Integration Patterns",
+        "slug": "psp-integration"
+      },
+      {
+        "heading": "Reconciliation",
+        "slug": "reconciliation"
+      },
+      {
+        "heading": "Handling Long-running & Pending Payments",
+        "slug": "long-running-payments"
+      },
+      {
+        "heading": "Inter-service Communication: Sync vs Async",
+        "slug": "communication-patterns"
+      },
+      {
+        "heading": "Failed Payments & Retry Strategies",
+        "slug": "failed-payments"
+      },
+      {
+        "heading": "Exactly-once & Idempotency",
+        "slug": "idempotency-exactly-once"
+      },
+      {
+        "heading": "Consistency & Replication Concerns",
+        "slug": "consistency-replication"
+      },
+      {
+        "heading": "Payment Security",
+        "slug": "payment-security"
+      },
+      {
+        "heading": "Step 4 - Wrap Up",
+        "slug": "step-4-wrap-up"
+      }
+    ],
+    "createdAt": "2025-08-19T00:14:03.258Z",
+    "updatedAt": "2025-08-19T00:14:03.258Z",
+    "__v": 0
+  },
+  {
+    "_id": "68a37814169e3f7abce77cc3",
+    "title": "Digital Wallet",
+    "chapterNo": 27,
+    "slug": "digital-wallet",
+    "sections": [
+      {
+        "heading": "Overview",
+        "slug": "overview"
+      },
+      {
+        "heading": "Step 1 - Understand the Problem and Establish Design Scope",
+        "slug": "step-1-understand-problem"
+      },
+      {
+        "heading": "Back-of-the-envelope estimation",
+        "slug": "back-of-the-envelope"
+      },
+      {
+        "heading": "Step 2 - Propose High-Level Design and Get Buy-In",
+        "slug": "step-2-propose-high-level-design"
+      },
+      {
+        "heading": "API Design",
+        "slug": "api-design"
+      },
+      {
+        "heading": "In-memory sharding solution",
+        "slug": "in-memory-sharding"
+      },
+      {
+        "heading": "Distributed transactions: Two-Phase Commit (2PC)",
+        "slug": "distributed-transactions-2pc"
+      },
+      {
+        "heading": "Try-Confirm/Cancel (TCC) distributed transaction",
+        "slug": "tcc"
+      },
+      {
+        "heading": "TCC failure modes & recovery",
+        "slug": "tcc-failure-modes"
+      },
+      {
+        "heading": "Sagas (orchestration & choreography)",
+        "slug": "saga"
+      },
+      {
+        "heading": "Event sourcing for reproducibility and auditability",
+        "slug": "event-sourcing"
+      },
+      {
+        "heading": "Step 3 - Design Deep Dive",
+        "slug": "step-3-design-deep-dive"
+      },
+      {
+        "heading": "High-performance event sourcing optimizations",
+        "slug": "high-performance-event-sourcing"
+      },
+      {
+        "heading": "Reliable high-performance event sourcing (replication)",
+        "slug": "reliable-high-perf"
+      },
+      {
+        "heading": "Distributed event sourcing & scaling across partitions",
+        "slug": "distributed-event-sourcing"
+      },
+      {
+        "heading": "Step 4 - Wrap Up",
+        "slug": "step-4-wrap-up"
+      }
+    ],
+    "createdAt": "2025-08-19T00:14:27.561Z",
+    "updatedAt": "2025-08-19T00:14:27.561Z",
+    "__v": 0
+  },
+  {
+    "_id": "68a3c3177856d04801b4203e",
+    "title": "Stock Exchange",
+    "chapterNo": 28,
+    "slug": "stock-exchange",
+    "sections": [
+      {
+        "heading": "Overview",
+        "slug": "overview"
+      },
+      {
+        "heading": "Step 1 - Understand the Problem and Establish Design scope",
+        "slug": "step-1-understand-problem"
+      },
+      {
+        "heading": "Non-functional requirements",
+        "slug": "non-functional-requirements"
+      },
+      {
+        "heading": "Back-of-the-envelope estimation",
+        "slug": "estimation"
+      },
+      {
+        "heading": "Step 2 - Propose High-Level Design and Get Buy-In",
+        "slug": "step-2-high-level-design"
+      },
+      {
+        "heading": "Business Knowledge 101",
+        "slug": "business-knowledge-101"
+      },
+      {
+        "heading": "High-level design",
+        "slug": "high-level-design-details"
+      },
+      {
+        "heading": "Trading flow",
+        "slug": "trading-flow"
+      },
+      {
+        "heading": "Market data flow",
+        "slug": "market-data-flow"
+      },
+      {
+        "heading": "Reporting flow",
+        "slug": "reporting-flow"
+      },
+      {
+        "heading": "API Design",
+        "slug": "api-design"
+      },
+      {
+        "heading": "Data models",
+        "slug": "data-models"
+      },
+      {
+        "heading": "Step 3 - Design Deep Dive",
+        "slug": "step-3-deep-dive"
+      },
+      {
+        "heading": "Performance",
+        "slug": "performance"
+      },
+      {
+        "heading": "Event sourcing",
+        "slug": "event-sourcing"
+      },
+      {
+        "heading": "High availability",
+        "slug": "high-availability"
+      },
+      {
+        "heading": "Fault tolerance",
+        "slug": "fault-tolerance"
+      },
+      {
+        "heading": "Matching algorithms",
+        "slug": "matching-algorithms"
+      },
+      {
+        "heading": "Determinism",
+        "slug": "determinism"
+      },
+      {
+        "heading": "Market data publisher optimizations",
+        "slug": "market-data-publisher-optimizations"
+      },
+      {
+        "heading": "Distribution fairness of market data and multicast",
+        "slug": "distribution-fairness"
+      },
+      {
+        "heading": "Colocation",
+        "slug": "colocation"
+      },
+      {
+        "heading": "Network Security",
+        "slug": "network-security"
+      },
+      {
+        "heading": "Step 4 - Wrap Up",
+        "slug": "step-4-wrap-up"
+      }
+    ],
+    "createdAt": "2025-08-19T00:19:35.363Z",
+    "updatedAt": "2025-08-19T00:19:35.363Z",
+    "__v": 0
+  }
+]

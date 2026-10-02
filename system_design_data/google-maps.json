@@ -1,0 +1,136 @@
+{
+  "_id": "68a3bf87a26055319c426442",
+  "title": "Google Maps",
+  "chapterNo": 18,
+  "slug": "google-maps",
+  "sections": [
+    {
+      "heading": "Google Maps Overview",
+      "slug": "overview",
+      "content": "<section id='overview'><h1 id='overview-heading'>Google Maps Overview</h1><p id='overview-p1'>We'll design a simple version of Google Maps.</p><p id='overview-p2'>Some facts about Google Maps:</p><ul id='overview-facts'><li id='fact-1'>Started in 2005.</li><li id='fact-2'>Provides various services - satellite imagery, street maps, real-time traffic conditions, and route planning.</li><li id='fact-3'>By 2021, it had about 1 billion daily active users, ~99% global coverage, and tens of millions of real-time location updates daily.</li></ul><p id='overview-img'><img loading='lazy' src='images/google-maps-overview.png' alt='Google Maps overview' id='img-google-maps-overview' /></p></section>"
+    },
+    {
+      "heading": "Step 1 Understand the problem and establish scope",
+      "slug": "step-1-understand-scope",
+      "content": "<section id='step-1'><h2 id='step-1-heading'>Step 1 Understand the problem and establish scope</h2><p id='step-1-intro'>Sample Q&A between candidate and interviewer:</p><ul id='qa-sample'><li id='q-1'><strong>Candidate:</strong> How many daily active users are we dealing with?</li><li id='a-1'><strong>Interviewer:</strong> 1 billion DAU.</li><li id='q-2'><strong>Candidate:</strong> What features should we focus on?</li><li id='a-2'><strong>Interviewer:</strong> Location update, navigation, ETA, map rendering.</li><li id='q-3'><strong>Candidate:</strong> How large is road data? Do we have access to it?</li><li id='a-3'><strong>Interviewer:</strong> We obtained road data from various sources; it's terabytes of raw data.</li><li id='q-4'><strong>Candidate:</strong> Should we take traffic conditions into consideration?</li><li id='a-4'><strong>Interviewer:</strong> Yes - we should for accurate time estimations.</li><li id='q-5'><strong>Candidate:</strong> How about different travel modes - walking, biking, driving?</li><li id='a-5'><strong>Interviewer:</strong> We should support those.</li><li id='q-6'><strong>Candidate:</strong> How about multi-stop directions?</li><li id='a-6'><strong>Interviewer:</strong> Let's not focus on that for the interview scope.</li><li id='q-7'><strong>Candidate:</strong> Business places and photos?</li><li id='a-7'><strong>Interviewer:</strong> Good question, but no need to consider those here.</li></ul><p id='scope-summary'>We'll focus on three key features: user location updates, navigation service (including ETA), and map rendering.</p><h3 id='nonfunctional-heading'>Non-functional requirements</h3><ul id='nonfunctional-list'><li id='nf-accuracy'>Accuracy - users should not receive incorrect directions.</li><li id='nf-smooth'>Smooth navigation - users should experience fluid map rendering.</li><li id='nf-data-battery'>Data and battery usage - the client should use minimal data and battery (critical for mobile devices).</li><li id='nf-availability'>General availability and scalability requirements.</li></ul></section>"
+    },
+    {
+      "heading": "Map 101",
+      "slug": "map-101",
+      "content": "<section id='map-101'><h2 id='map-101-heading'>Map 101</h2><p id='map-101-intro'>Before jumping into the design, there are some map-related concepts we should understand.</p></section>"
+    },
+    {
+      "heading": "Positioning System",
+      "slug": "positioning-system",
+      "content": "<section id='positioning-system'><h3 id='positioning-heading'>Positioning system</h3><p id='positioning-p1'>The world is approximately a sphere with positions represented by latitude (north/south) and longitude (east/west).</p><p id='positioning-p2'>Latitude and longitude together identify geographic locations used by mapping and navigation systems.</p><p id='positioning-img'><img loading='lazy' src='images/partitioning-system.png' alt='partitioning system' id='img-partitioning-system' /></p></section>"
+    },
+    {
+      "heading": "Map Projection (3D to 2D)",
+      "slug": "map-projection",
+      "content": "<section id='map-projection'><h3 id='map-projection-heading'>Going from 3D to 2D</h3><p id='map-projection-p1'>Translating 3D globe coordinates to a 2D plane is called map projection; all projections introduce distortions.</p><p id='map-projection-p2'>Google Maps uses a variant of the Mercator projection called Web Mercator to balance usability and scale.</p><p id='map-projection-img'><img loading='lazy' src='images/map-projections.png' alt='map projections' id='img-map-projections' /></p></section>"
+    },
+    {
+      "heading": "Geocoding",
+      "slug": "geocoding",
+      "content": "<section id='geocoding'><h3 id='geocoding-heading'>Geocoding</h3><p id='geocoding-p1'>Geocoding converts addresses or place names to geographic coordinates (lat/lng).</p><p id='geocoding-p2'>Reverse geocoding converts coordinates back to human-readable addresses.</p><p id='geocoding-p3'>Techniques include interpolation and leveraging GIS datasets that map street networks to coordinates.</p></section>"
+    },
+    {
+      "heading": "Geohashing",
+      "slug": "geohashing",
+      "content": "<section id='geohashing'><h3 id='geohashing-heading'>Geohashing</h3><p id='geohashing-p1'>Geohashing encodes geographic areas into strings by recursively subdividing the world into quadrants.</p><p id='geohashing-p2'>It enables efficient spatial indexing and lookup for nearby tiles or points.</p><p id='geohashing-img'><img loading='lazy' src='images/geohashing.png' alt='geohashing' id='img-geohashing' /></p></section>"
+    },
+    {
+      "heading": "Map Rendering Basics",
+      "slug": "map-rendering-basics",
+      "content": "<section id='map-rendering-basics'><h3 id='map-rendering-heading'>Map rendering</h3><p id='map-rendering-p1'>Map rendering uses tiling: the world is divided into many small image tiles which the client fetches and stitches together.</p><p id='map-rendering-p2'>Different zoom levels have different tile sets; e.g., zoomed-out views require fewer tiles.</p><p id='map-rendering-note'>Tiling reduces bandwidth and allows caching via CDNs.</p></section>"
+    },
+    {
+      "heading": "Road Data & Routing Graphs",
+      "slug": "road-data-routing-graphs",
+      "content": "<section id='road-data'><h3 id='road-data-heading'>Road data processing for navigation algorithms</h3><p id='road-data-p1'>Intersections become nodes and roads become edges in graph representations used for routing.</p><p id='road-data-p2'>Routing often uses modified Dijkstra or A* algorithms; the graph size strongly affects performance.</p><p id='road-data-img'><img loading='lazy' src='images/road-representation.png' alt='road representation' id='img-road-representation' /></p><p id='road-tiling'>To scale, the world is subdivided into routing tiles that reference neighbors so algorithms can stitch graphs as needed.</p><p id='routing-tiles-img'><img loading='lazy' src='images/routing-tiles.png' alt='routing tiles' id='img-routing-tiles' /></p></section>"
+    },
+    {
+      "heading": "Back-of-the-envelope Estimation",
+      "slug": "estimation",
+      "content": "<section id='estimation'><h3 id='estimation-heading'>Back-of-the-envelope estimation</h3><p id='estimation-p1'>Storage estimates include map tiles (~70PB compressed estimate), metadata (negligible), and routing tiles.</p><p id='estimation-p2'>Traffic: 1B DAU with average usage implies very large QPS; conservative batched GPS model yields ~200k QPS and peaks toward 1M QPS.</p></section>"
+    },
+    {
+      "heading": "Step 2 High-Level Design",
+      "slug": "step-2-high-level-design",
+      "content": "<section id='step-2'><h2 id='step-2-heading'>Step 2 - Propose High-Level Design and Get Buy-In</h2><p id='step-2-intro'><img loading='lazy' src='images/high-level-design.png' alt='high level design' id='img-high-level-design' /></p></section>"
+    },
+    {
+      "heading": "Location Service",
+      "slug": "location-service",
+      "content": "<section id='location-service'><h3 id='location-service-heading'>Location service</h3><p id='location-service-p1'>Responsible for recording user location updates which are sent every <code>t</code> seconds or as batched arrays.</p><p id='location-service-p2'>Location streams power traffic analysis, ETA improvement, road closure detection, and analytics.</p><p id='location-service-img'><img loading='lazy' src='images/location-service.png' alt='location service' id='img-location-service' /></p><p id='location-service-batching'>Client-side batching reduces chattiness; server-side systems (Cassandra for writes, Kafka for streaming) handle scale.</p><pre id='location-sample' class='sample'>POST /v1/locations Parameters locs: JSON encoded array of (latitude, longitude, timestamp) tuples.</pre></section>"
+    },
+    {
+      "heading": "Navigation Service",
+      "slug": "navigation-service",
+      "content": "<section id='navigation-service'><h3 id='navigation-service-heading'>Navigation service</h3><p id='navigation-service-p1'>Finds routes between origin and destination with accuracy prioritized; slight latency is acceptable.</p><p id='navigation-service-p2'>Example request: <code>GET /v1/nav?origin=1355+market+street,SF&amp;destination=Disneyland</code></p><p id='navigation-service-example'>Example response payload includes distance, duration, start/end locations, html_instructions, polyline, geocoded_waypoints, and travel_mode.</p><pre id='nav-example' class='sample'>{\n  \"distance\": {\n    \"text\": \"0.2 mi\",\n    \"value\": 259\n  },\n  \"duration\": {\n    \"text\": \"1 min\",\n    \"value\": 83\n  },\n  \"end_location\": {\n    \"lat\": 37.4038943,\n    \"lng\": -121.9410454\n  },\n  \"html_instructions\": \"Head &lt;b&gt;northeast&lt;/b&gt; on &lt;b&gt;Brandon St&lt;/b&gt; toward &lt;b&gt;Lumin Way&lt;/b&gt;<div style='font-size:0.9em'>Restricted usage road</div>\",\n  \"polyline\": {\n    \"points\": \"_fhcFjbhgVuAwDsCal\"\n  },\n  \"start_location\": {\n    \"lat\": 37.4027165,\n    \"lng\": -121.9435809\n  },\n  \"geocoded_waypoints\": [\n    {\n      \"geocoder_status\": \"OK\",\n      \"partial_match\": true,\n      \"place_id\": \"ChIJwZNMti1fawwRO2aVVVX2yKg\",\n      \"types\": [\n        \"locality\",\n        \"political\"\n      ]\n    },\n    {\n      \"geocoder_status\": \"OK\",\n      \"partial_match\": true,\n      \"place_id\": \"ChIJ3aPgQGtXawwRLYeiBMUi7bM\",\n      \"types\": [\n        \"locality\",\n        \"political\"\n      ]\n    }\n  ],\n  \"travel_mode\": \"DRIVING\"\n}</pre></section>"
+    },
+    {
+      "heading": "Map Rendering (server-side)",
+      "slug": "map-rendering-server-side",
+      "content": "<section id='map-rendering-server'><h3 id='map-rendering-server-heading'>Map rendering</h3><p id='map-rendering-server-p1'>Precompute static map tiles per geohash and serve via CDN to minimize latency and enable caching.</p><p id='map-rendering-server-p2'>Alternate optimization: serve vector tile data (paths & polygons) so clients render dynamically and save bandwidth.</p><p id='map-tiles-img'><img loading='lazy' src='images/static-map-tiles.png' alt='static map tiles' id='img-static-tiles' /></p></section>"
+    },
+    {
+      "heading": "Step 3 Design Deep Dive",
+      "slug": "step-3-deep-dive",
+      "content": "<section id='step-3'><h2 id='step-3-heading'>Step 3 - Design Deep Dive</h2><p id='step-3-intro'>Detailed data models and service internals for routing tiles, location data, geocoding DB, and rendering.</p></section>"
+    },
+    {
+      "heading": "Data Model - Routing Tiles",
+      "slug": "data-model-routing-tiles",
+      "content": "<section id='data-routing'><h3 id='data-routing-heading'>Routing tiles</h3><p id='data-routing-p1'>Raw road data is processed offline into graph-based routing tiles, stored as compressed binary objects in S3 (or equivalent object storage) and cached aggressively.</p><p id='data-routing-p2'>Libraries compress adjacency lists; tiles reference neighbors to enable stitching during route computation.</p></section>"
+    },
+    {
+      "heading": "Data Model - User Location Data",
+      "slug": "data-model-user-location-data",
+      "content": "<section id='data-user-locs'><h3 id='data-user-locs-heading'>User location data</h3><p id='data-user-locs-p1'>Write-heavy time-series location data suits Cassandra for high-throughput writes and range queries per user.</p><p id='data-user-locs-p2'>Rows are keyed by <code>user_id</code> (partition key) with <code>timestamp</code> as clustering key to keep updates time-ordered.</p><p id='data-user-locs-img'><img loading='lazy' src='images/user-location-data-torw.png' alt='user location row' id='img-user-location-row' /></p></section>"
+    },
+    {
+      "heading": "Data Model - Geocoding Database",
+      "slug": "data-model-geocoding",
+      "content": "<section id='data-geocoding'><h3 id='data-geocoding-heading'>Geocoding database</h3><p id='data-geocoding-p1'>Key-value store mapping lat/lng to place metadata; Redis is suitable for low-latency reads with infrequent writes.</p></section>"
+    },
+    {
+      "heading": "Data Model - Precomputed Map Images",
+      "slug": "data-model-precomputed-images",
+      "content": "<section id='data-precomputed'><h3 id='data-precomputed-heading'>Precomputed images of the world</h3><p id='data-precomputed-p1'>Precompute map tiles per zoom level and push to CDN POPs for fast delivery; store originals in object storage with cache control headers.</p><p id='data-precomputed-img'><img loading='lazy' src='images/precomputed-map-tile-image.png' alt='precomputed map tile' id='img-precomputed' /></p></section>"
+    },
+    {
+      "heading": "Services - Location Service Deep Dive",
+      "slug": "services-location-deep-dive",
+      "content": "<section id='services-location'><h3 id='services-location-heading'>Location service deep dive</h3><p id='services-location-p1'>Client batches location points and posts to <code>/v1/locations</code>; server writes to Cassandra and publishes to Kafka for downstream consumers.</p><p id='services-location-p2'>This supports real-time traffic aggregation, ETA improvements, and analytics pipelines.</p><p id='services-location-img'><img loading='lazy' src='images/location-service-diagram.png' alt='location service diagram' id='img-location-diagram' /></p></section>"
+    },
+    {
+      "heading": "Services - Rendering Map Deep Dive",
+      "slug": "services-rendering-deep-dive",
+      "content": "<section id='services-rendering'><h3 id='services-rendering-heading'>Rendering map deep dive</h3><p id='services-rendering-p1'>Tiles stored by zoom-level and geohash; clients fetch only required tiles. Vector tiles reduce bandwidth by sending shapes not pixels.</p><p id='services-rendering-p2'>CDN distribution and client-side caching are essential to scale.</p><p id='services-rendering-img'><img loading='lazy' src='images/zoom-level-increases.png' alt='zoom levels' id='img-zoom-levels' /></p></section>"
+    },
+    {
+      "heading": "Services - Navigation Service Deep Dive",
+      "slug": "services-navigation-deep-dive",
+      "content": "<section id='services-navigation'><h3 id='services-navigation-heading'>Navigation service deep dive</h3><p id='services-navigation-p1'>Geocoding service converts addresses to lat/lng; route planner uses shortest-path (A* variants) on routing tiles to propose paths.</p><p id='services-navigation-p2'>ETA service provides ML-driven time estimates; ranker filters/ranks candidate routes; updater maintains offline datasets asynchronously.</p><p id='services-navigation-img'><img loading='lazy' src='images/shortest-path-service.png' alt='shortest path service' id='img-shortest-path' /></p><pre id='geocode-example' class='sample'>https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA</pre></section>"
+    },
+    {
+      "heading": "Improvement Adaptive ETA and Rerouting",
+      "slug": "improvement-adaptive-eta-and-rerouting",
+      "content": "<section id='improvement-adaptive'><h3 id='improvement-heading'>Improvement - adaptive ETA and rerouting</h3><p id='improvement-p1'>Track users currently navigating as sequences of routing tiles so incidents on a tile can identify affected users for rerouting.</p><p id='improvement-p2'>Store multi-resolution tile references (origin, super-tiles) to compress storage and speed lookups.</p><pre id='user-tiles' class='sample'>user_1: r_1, r_2, r_3, ..., r_k</pre><p id='improvement-img'><img loading='lazy' src='images/adaptive-eta-data-storage.png' alt='adaptive eta data storage' id='img-adaptive-eta' /></p></section>"
+    },
+    {
+      "heading": "Delivery Protocols",
+      "slug": "delivery-protocols",
+      "content": "<section id='delivery-protocols'><h3 id='delivery-protocols-heading'>Delivery protocols</h3><p id='delivery-protocols-p1'>To push data proactively to clients: mobile pushes are limited; WebSocket is preferred for bi-directional low-footprint comms; SSE is an alternative for unidirectional streaming.</p><ul id='delivery-list'><li id='dp-1'>Mobile push notifications - limited payload and not ideal for web.</li><li id='dp-2'>WebSocket - general recommendation for real-time two-way communication.</li><li id='dp-3'>SSE - useful for simple server-to-client streaming where WebSocket is unnecessary.</li></ul></section>"
+    },
+    {
+      "heading": "Step 4 Wrap Up",
+      "slug": "step-4-wrap-up",
+      "content": "<section id='step-4'><h2 id='step-4-heading'>Step 4 - Wrap Up</h2><p id='step-4-p1'>Final design combines precomputed tiles, routing tiles, location streaming, and a navigation stack with ETA, ranker, and updater services.</p><p id='step-4-p2'>Optional enterprise feature: multi-stop navigation for route optimization across multiple locations (valuable to delivery and rideshare customers).</p><p id='final-img'><img loading='lazy' src='images/final-design.png' alt='final design' id='img-final-design' /></p></section>"
+    }
+  ],
+  "createdAt": "2025-08-19T00:04:23.504Z",
+  "updatedAt": "2025-08-19T00:04:23.504Z",
+  "__v": 0
+}

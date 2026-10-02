@@ -1,0 +1,106 @@
+{
+  "_id": "68a368c3169e3f7abce77c6b",
+  "title": "Design a Key-Value Store",
+  "chapterNo": 6,
+  "slug": "design-a-key-value-store",
+  "sections": [
+    {
+      "heading": "Overview",
+      "slug": "overview",
+      "content": "<section id='overview'><h1 id='overview-heading'>Design a Key-Value Store</h1><p id='overview-p1'>Key-value stores are a type of non-relational database where each unique identifier (the <em>key</em>) maps to an associated <em>value</em>. They are intentionally simple and extremely fast for many use cases.</p><p id='overview-p2'>Characteristics:</p><ul id='overview-list'><li id='overview-list-1'>Each unique identifier is stored as a key with a value associated with it.</li><li id='overview-list-2'>Keys must be unique and can be plain text or hashes.</li><li id='overview-list-3'>Performance-wise, short keys usually work better.</li></ul><h3 id='overview-examples-heading'>Example keys:</h3><ul id='overview-examples-list'><li id='example-plain'>Plain-text: <code>\"last_logged_in_at\"</code></li><li id='example-hash'>Hashed key: <code>253DDEC4</code></li></ul><p id='overview-note'>We'll design a key-value store that supports two basic operations:</p><pre id='overview-ops'><code>put(key, value)  // insert or update value associated with key\nget(key)         // retrieve value associated with key\n</code></pre></section>"
+    },
+    {
+      "heading": "Understand the problem and establish design scope",
+      "slug": "understand-problem-scope",
+      "content": "<section id='understand-problem-scope'><h2 id='scope-heading'>Understand the problem and establish design scope</h2><p id='scope-p1'>When designing a key-value store, there are several trade-offs to balance: read vs write throughput, memory usage, and consistency vs availability. Be explicit about which guarantees you want because they affect architecture choices.</p><p id='scope-p2'>Target characteristics for our design:</p><ul id='scope-targets'><li id='target-1'>Key-value pair size is small around <code>10KB</code>.</li><li id='target-2'>Able to store very large datasets spanning many nodes.</li><li id='target-3'>High availability system must respond quickly, even during some failures.</li><li id='target-4'>High scalability scale horizontally to support growth.</li><li id='target-5'>Automatic scaling adding/removing servers should be easy and automated.</li><li id='target-6'>Tunable consistency operators should be able to trade some consistency for latency when needed.</li><li id='target-7'>Low latency for reads and writes.</li></ul></section>"
+    },
+    {
+      "heading": "Single server key-value store",
+      "slug": "single-server",
+      "content": "<section id='single-server'><h2 id='single-server-heading'>Single server key-value store</h2><p id='single-server-p1'>On a single machine, the simplest implementation is an in-memory hash map (dictionary) that stores key-value pairs. This is trivial and fast but limited by the machine's memory.</p><p id='single-server-p2'>Scaling limits and mitigations:</p><ul id='single-server-mitigations'><li id='mit-1'>Memory is a bottleneck; consider data compression to reduce footprint.</li><li id='mit-2'>Store only frequently-accessed data in memory (hot data) and keep the rest on disk.</li></ul><p id='single-server-p3'>However, even with compression and caching, a single server cannot hold massive datasets or provide the availability guarantees we want, which motivates a distributed design.</p></section>"
+    },
+    {
+      "heading": "Distributed key-value store",
+      "slug": "distributed-kv",
+      "content": "<section id='distributed-kv'><h2 id='distributed-kv-heading'>Distributed key-value store</h2><p id='distributed-kv-p1'>A distributed key-value store distributes data across many nodes using a distributed hash table (DHT) so that keys are partitioned across nodes. This enables horizontal scaling and higher availability when implemented correctly.</p><p id='distributed-kv-p2'>When designing a distributed store, you must consider the <strong>CAP theorem</strong>:</p><p id='cap-image'><img loading='lazy' src='images/cap-theorem.png' alt='CAP theorem' id='img-cap-theorem' /></p><h3 id='cap-heading'>CAP theorem summary</h3><ul id='cap-list'><li id='cap-consistency'>Consistency: All clients see the same data at the same time.</li><li id='cap-availability'>Availability: Every request receives a response, regardless of which node it reaches.</li><li id='cap-partition'>Partition tolerance: The system continues to operate despite network partitions.</li></ul><p id='cap-note'>Because network partitions are inevitable in real distributed systems, you must choose between consistency and availability during partitions. Different systems make different trade-offs (e.g., Dynamo-style stores often choose availability with eventual consistency).</p></section>"
+    },
+    {
+      "heading": "System components",
+      "slug": "system-components",
+      "content": "<section id='system-components'><h2 id='system-components-heading'>System components</h2><p id='system-components-intro'>Key components to consider when building a distributed key-value store:</p><ol id='components-list'><li id='comp-partition'>Data partitioning</li><li id='comp-replication'>Data replication</li><li id='comp-consistency'>Consistency protocol and versioning</li><li id='comp-failure'>Failure detection and recovery</li><li id='comp-storage'>Local storage (commit log, memtable, SSTables)</li></ol></section>"
+    },
+    {
+      "heading": "Data partition",
+      "slug": "data-partition",
+      "content": "<section id='data-partition'><h3 id='data-partition-heading'>Data partition</h3><p id='data-partition-p1'>For large datasets, you must partition (shard) data across many nodes. A common approach is consistent hashing:</p><p id='consistent-hash-img'><img loading='lazy' src='images/consistent-hashing.png' alt='consistent hashing' id='img-consistent-hashing' /></p><p id='data-partition-advantages'>Advantages of consistent hashing:</p><ul id='data-partition-advantages-list'><li id='dp-adv-1'>Automatic scaling adding/removing servers minimally affects key locations.</li><li id='dp-adv-2'>Heterogeneity higher-capacity machines can be assigned more virtual nodes.</li></ul></section>"
+    },
+    {
+      "heading": "Data replication",
+      "slug": "data-replication",
+      "content": "<section id='data-replication'><h3 id='data-replication-heading'>Data replication</h3><p id='data-replication-p1'>To achieve availability and durability, replicate each key across multiple nodes (replicas). On the hash ring, choose successive nodes clockwise as replica targets.</p><p id='data-replication-img'><img loading='lazy' src='images/data-replication.png' alt='data replication across nodes' id='img-data-replication' /></p><p id='data-replication-caveat'>Caveat: ensure that replicas for a single key are placed on distinct physical machines (avoid selecting multiple vnodes on the same physical host) and, when possible, on separate data centers to tolerate datacenter-level failures.</p></section>"
+    },
+    {
+      "heading": "Consistency and quorum",
+      "slug": "consistency-quorum",
+      "content": "<section id='consistency-quorum'><h3 id='consistency-quorum-heading'>Consistency and quorum</h3><p id='consistency-quorum-p1'>When data is replicated, you must define read and write quorums to control consistency:</p><ul id='quorum-list'><li id='quorum-n'>N total number of replicas for each key.</li><li id='quorum-w'>W number of replicas that must acknowledge a write to consider it successful.</li><li id='quorum-r'>R number of replicas that must respond to a read.</li></ul><p id='quorum-tradeoff'>Trade-offs:</p><ul id='quorum-tradeoffs-list'><li id='q-trade-1'><code>W = 1, R = 1</code> low latency, eventual consistency.</li><li id='q-trade-2'><code>W + R &gt; N</code> provides strong consistency but increases latency.</li><li id='q-trade-3'>Common patterns: <code>R = 1, W = N</code> (fast reads, slow writes) or <code>R = N, W = 1</code> (fast writes, slow reads).</li></ul></section>"
+    },
+    {
+      "heading": "Consistency models",
+      "slug": "consistency-models",
+      "content": "<section id='consistency-models'><h3 id='consistency-models-heading'>Consistency models</h3><ul id='consistency-models-list'><li id='cm-strong'>Strong consistency reads return the most up-to-date value; clients never see stale data.</li><li id='cm-weak'>Weak consistency reads might not reflect recent writes.</li><li id='cm-eventual'>Eventual consistency reads might be stale, but updates converge over time to the latest state.</li></ul><p id='consistency-choice-note'>Strong consistency often requires blocking operations during partitions; eventual consistency (used by Dynamo and Cassandra) favors availability while requiring conflict resolution mechanisms.</p></section>"
+    },
+    {
+      "heading": "Versioning and inconsistency resolution",
+      "slug": "versioning-resolution",
+      "content": "<section id='versioning-resolution'><h3 id='versioning-resolution-heading'>Versioning and inconsistency resolution</h3><p id='versioning-resolution-p1'>Replication can lead to conflicting versions of the same key. One way to detect and resolve conflicts is vector clocks.</p><p id='vector-clock-desc'>A vector clock is a set of <code>[server_id, counter]</code> pairs attached to each object. Each time a replica modifies the object, it increments its counter. By comparing vector clocks you can see whether one version is an ancestor of another or whether versions have diverged (conflict).</p><p id='vector-clock-example'>Example workflow:</p><ol id='vector-clock-example-list'><li id='vc-ex-1'>Client writes D1 handled by Sx → D1 gets version <code>[Sx:1]</code>.</li><li id='vc-ex-2'>Later, Sx updates to <code>[Sx:2]</code>.</li><li id='vc-ex-3'>Another client updates from a different replica Sy producing <code>[Sx:2, Sy:1]</code>.</li><li id='vc-ex-4'>Simultaneous writes on Sz could produce <code>[Sx:2, Sz:1]</code>, which is concurrent with the previous version.</li><li id='vc-ex-5'>When a client reads two concurrent versions, it must reconcile them (application-specific merge) and write back a merged version with an updated vector clock.</li></ol><p id='vector-clock-tradeoffs'>Trade-offs: vector clocks increase client complexity and can grow in size (many replicas); they are suitable when application-level conflict resolution is possible.</p></section>"
+    },
+    {
+      "heading": "Handling failures",
+      "slug": "handling-failures",
+      "content": "<section id='handling-failures'><h3 id='handling-failures-heading'>Handling failures</h3><p id='handling-failures-p1'>Failures are inevitable; the system must detect and recover from them. Strategies include failure detection, temporary failure handling, and permanent failure recovery.</p></section>"
+    },
+    {
+      "heading": "Failure detection",
+      "slug": "failure-detection",
+      "content": "<section id='failure-detection'><h4 id='failure-detection-heading'>Failure detection</h4><p id='failure-detection-p1'>Simple failure detection by one host failing to respond is insufficient. Decentralized techniques like gossip protocols are efficient at scale.</p><p id='gossip-desc'>Gossip protocol summary:</p><ul id='gossip-list'><li id='gossip-1'>Each node maintains a membership list with heartbeat counters.</li><li id='gossip-2'>Nodes periodically increment their heartbeats and send them to a random subset of other nodes.</li><li id='gossip-3'>Receivers update and propagate heartbeats, so information spreads rapidly and reliably.</li><li id='gossip-4'>If a node's heartbeat isn't updated within a timeout, it is suspected offline; the suspicion is gossip-propagated and confirmed by other nodes.</li></ul><p id='gossip-img'><img loading='lazy' src='images/gossip-protocol.png' alt='gossip protocol' id='img-gossip-protocol' /></p></section>"
+    },
+    {
+      "heading": "Handling temporary failures (hinted handoff)",
+      "slug": "hinted-handoff",
+      "content": "<section id='hinted-handoff'><h4 id='hinted-handoff-heading'>Handling temporary failures (hinted handoff)</h4><p id='hinted-handoff-p1'>When a primary replica is temporarily down, another healthy node can accept writes on its behalf and store them with a hint that the primary should receive this data later. This is called hinted handoff. Once the primary returns, the hint is handed off and the primary is reconciled.</p><p id='hinted-handoff-benefit'>Hinted handoff improves availability during transient outages without requiring immediate full replication.</p></section>"
+    },
+    {
+      "heading": "Handling permanent failures (anti-entropy, Merkle trees)",
+      "slug": "permanent-failures",
+      "content": "<section id='permanent-failures'><h4 id='permanent-failures-heading'>Handling permanent failures (anti-entropy)</h4><p id='permanent-failures-p1'>For permanent or long-lived replica divergence, anti-entropy mechanisms reconcile replicas. Merkle trees are commonly used to compare large datasets efficiently.</p><p id='merkle-desc'>A Merkle tree is a hash tree where leaves are hashes of data buckets and internal nodes hash their children. Two replicas compare root hashes; if they differ, they recursively compare children, allowing them to exchange only differing buckets instead of entire datasets.</p><p id='merkle-img'><img loading='lazy' src='images/merkle-tree.png' alt='merkle tree' id='img-merkle-tree' /></p></section>"
+    },
+    {
+      "heading": "Handling data center outage",
+      "slug": "data-center-outage",
+      "content": "<section id='data-center-outage'><h4 id='data-center-outage-heading'>Handling data center outage</h4><p id='data-center-outage-p1'>To survive a data center outage, replicate data across multiple geographical regions (multi-datacenter replication). This increases durability but introduces additional complexity (cross-region latency, consistency decisions, and cost).</p><p id='data-center-outage-p2'>Carefully design replication strategies and failure domains so that a single data center failure does not make the data unavailable.</p></section>"
+    },
+    {
+      "heading": "System architecture diagram",
+      "slug": "architecture-diagram",
+      "content": "<section id='architecture-diagram'><h3 id='architecture-diagram-heading'>System architecture diagram</h3><p id='architecture-diagram-p1'>High-level architecture:</p><p id='architecture-diagram-img'><img loading='lazy' src='images/architecture-diagram.png' alt='system architecture diagram' id='img-architecture-diagram' /></p><p id='architecture-features'>Main features:</p><ul id='architecture-features-list'><li id='af-1'>Clients communicate with the key-value store through a simple API or coordinator/proxy.</li><li id='af-2'>A coordinator/proxy routes requests to the appropriate nodes based on consistent hashing.</li><li id='af-3'>Nodes are placed on a hash ring using consistent hashing.</li><li id='af-4'>The system is decentralized; adding and removing nodes is supported and can be automated.</li><li id='af-5'>Data is replicated across multiple nodes and possibly across multiple data centers; there is no single point of failure.</li></ul><p id='node-responsibilities-img'><img loading='lazy' src='images/node-responsibilities.png' alt='node responsibilities' id='img-node-responsibilities' /></p></section>"
+    },
+    {
+      "heading": "Write path",
+      "slug": "write-path",
+      "content": "<section id='write-path'><h3 id='write-path-heading'>Write path</h3><p id='write-path-p1'>Typical write path (Log-structured storage approach):</p><ol id='write-steps'><li id='write-step-1'>Write requests are appended to a durable commit log (write-ahead log) on disk to ensure durability.</li><li id='write-step-2'>Data is saved in an in-memory structure (memtable) for fast reads and writes.</li><li id='write-step-3'>When the in-memory table reaches a threshold, its contents are flushed to disk as an SSTable (Sorted String Table).</li></ol><p id='sstable-desc'>SSTables are immutable, sorted files on disk that make range scans and merges efficient. Compaction merges SSTables to reduce lookup overhead and reclaim space.</p><p id='write-path-img'><img loading='lazy' src='images/write-pth.png' alt='write path' id='img-write-path' /></p></section>"
+    },
+    {
+      "heading": "Read path",
+      "slug": "read-path",
+      "content": "<section id='read-path'><h3 id='read-path-heading'>Read path</h3><p id='read-path-p1'>Read behaviour depends on data location:</p><h4 id='read-in-memory-heading'>If data is in memory:</h4><p id='read-in-memory-p'>Fetch from the in-memory structure (memtable) and return to the client this is the fastest path.</p><p id='read-in-memory-img'><img loading='lazy' src='images/read-path-in-memory.png' alt='read path in memory' id='img-read-path-in-memory' /></p><h4 id='read-not-in-memory-heading'>If data is not in memory:</h4><p id='read-not-in-memory-p'>Check SSTables on disk. Use a bloom filter to quickly test whether an SSTable may contain the key and avoid unnecessary disk seeks. Merge results from memtable and SSTables to find the most recent value.</p><p id='read-not-in-memory-img'><img loading='lazy' src='images/read-path-not-in-memory.png' alt='read path not in memory' id='img-read-path-not-in-memory' /></p></section>"
+    },
+    {
+      "heading": "Summary",
+      "slug": "summary",
+      "content": "<section id='summary'><h3 id='summary-heading'>Summary</h3><p id='summary-p1'>We covered major design choices and techniques for building a scalable, available key-value store. Below is a concise mapping of goals to common techniques.</p><table id='summary-table' border='1' cellpadding='6' cellspacing='0'><thead id='summary-table-head'><tr id='summary-table-head-row'><th id='col-goal'>Goal / Problem</th><th id='col-technique'>Technique</th></tr></thead><tbody id='summary-table-body'><tr id='row-1'><td id='r1c1'>Ability to store big data</td><td id='r1c2'>Use consistent hashing to spread load across servers</td></tr><tr id='row-2'><td id='r2c1'>High availability reads</td><td id='r2c2'>Data replication, multi-datacenter setup</td></tr><tr id='row-3'><td id='r3c1'>Highly available writes</td><td id='r3c2'>Versioning and conflict resolution with vector clocks</td></tr><tr id='row-4'><td id='r4c1'>Dataset partition</td><td id='r4c2'>Consistent hashing</td></tr><tr id='row-5'><td id='r5c1'>Incremental scalability</td><td id='r5c2'>Consistent hashing and vnode assignments</td></tr><tr id='row-6'><td id='r6c1'>Heterogeneity</td><td id='r6c2'>Assign more virtual nodes to higher-capacity machines</td></tr><tr id='row-7'><td id='r7c1'>Tunable consistency</td><td id='r7c2'>Quorum consensus (N, R, W)</td></tr><tr id='row-8'><td id='r8c1'>Handling temporary failures</td><td id='r8c2'>Sloppy quorum and hinted handoff</td></tr><tr id='row-9'><td id='r9c1'>Handling permanent failures</td><td id='r9c2'>Merkle trees for efficient anti-entropy</td></tr><tr id='row-10'><td id='r10c1'>Handling datacenter outage</td><td id='r10c2'>Cross-datacenter replication and careful failure domains</td></tr></tbody></table><p id='final-note'>Design notes: clearly state your consistency and availability requirements, tune replication and quorum sizes accordingly, and instrument the system heavily for monitoring and alerting so you can iterate after deployment.</p></section>"
+    }
+  ],
+  "createdAt": "2025-08-18T17:54:11.419Z",
+  "updatedAt": "2025-08-18T17:54:11.419Z",
+  "__v": 0
+}

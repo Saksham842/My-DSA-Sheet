@@ -1,0 +1,91 @@
+{
+  "_id": "68a37814169e3f7abce77cc3",
+  "title": "Digital Wallet",
+  "chapterNo": 27,
+  "slug": "digital-wallet",
+  "sections": [
+    {
+      "heading": "Overview",
+      "slug": "overview",
+      "content": "<section id='overview'><h1 id='overview-heading'>Digital Wallet</h1><p id='overview-p1'>Payment platforms usually have a wallet service, where they allow clients to store funds within the application, which they can withdraw later.</p><p id='overview-p2'>You can also use it to pay for goods & services or transfer money to other users who use the digital wallet service. That can be faster and cheaper than doing it via normal payment rails.</p><p id='overview-img'><img loading='lazy' src='images/digital-wallet.png' alt='digital-wallet' id='img-digital-wallet' /></p></section>"
+    },
+    {
+      "heading": "Step 1 - Understand the Problem and Establish Design Scope",
+      "slug": "step-1-understand-problem",
+      "content": "<section id='step-1'><h2 id='step-1-heading'>Step 1 - Understand the Problem and Establish Design Scope</h2><p id='qna-intro'>Clarify scope with key questions:</p><ul id='qna-list'><li><strong>C:</strong> Should we only focus on transfers between digital wallets? Should we support any other operations?</li><li><strong>I:</strong> Let's focus on transfers between digital wallets for now.</li><li><strong>C:</strong> How many transactions per second does the system need to support?</li><li><strong>I:</strong> Let's assume 1 million TPS.</li><li><strong>C:</strong> A digital wallet has strict correctness requirements. Can we assume transactional guarantees are sufficient?</li><li><strong>I:</strong> Sounds good.</li><li><strong>C:</strong> Do we need to prove correctness?</li><li><strong>I:</strong> We can do that via reconciliation, but that only detects discrepancies vs. showing us the root cause for them. Instead, we want to be able to replay data from the beginning to reconstruct the history.</li><li><strong>C:</strong> Can we assume availability requirement is 99.99%?</li><li><strong>I:</strong> Yes.</li><li><strong>C:</strong> Do we need to take foreign exchange into consideration?</li><li><strong>I:</strong> No, it's out of scope.</li></ul><p id='summary'>In summary we must: support balance transfers between two accounts, support 1M TPS, ensure 99.99% reliability, provide transactional guarantees and reproducibility.</p></section>"
+    },
+    {
+      "heading": "Back-of-the-envelope estimation",
+      "slug": "back-of-the-envelope",
+      "content": "<section id='estimation'><h3 id='estimation-heading'>Back-of-the-envelope estimation</h3><p id='estimation-body'>A traditional relational database in the cloud can handle ~1k TPS. To reach 1M TPS you'd need many nodes or approaches to raise per-node throughput. Considering two legs per transfer, the effective requirement is ~2M small operations per second.</p><table id='tps-estimate'><thead><tr><th>Per-node TPS</th><th>Node Number</th></tr></thead><tbody><tr><td>100</td><td>20,000</td></tr><tr><td>1,000</td><td>2,000</td></tr><tr><td>10,000</td><td>200</td></tr></tbody></table></section>"
+    },
+    {
+      "heading": "Step 2 - Propose High-Level Design and Get Buy-In",
+      "slug": "step-2-propose-high-level-design",
+      "content": "<section id='step-2'><h2 id='step-2-heading'>Step 2 - Propose High-Level Design and Get Buy-In</h2><p id='step-2-intro'>We'll propose APIs, a sharding approach, and transaction models (2PC, TCC, Saga), and discuss event sourcing for reproducibility.</p></section>"
+    },
+    {
+      "heading": "API Design",
+      "slug": "api-design",
+      "content": "<section id='api-design'><h3 id='api-heading'>API Design</h3><p id='single-endpoint'>We only need one primary endpoint for the interview:</p><pre id='api-example'><code>POST /v1/wallet/balance_transfer\n{\n  \"from_account\": \"A123\",\n  \"to_account\": \"B987\",\n  \"amount\": \"1.00\",\n  \"currency\": \"USD\",\n  \"transaction_id\": \"idempotency-uuid\"\n}\n</code></pre><p id='api-response'>Sample response:</p><pre id='api-response-example'><code>{\n  \"status\": \"success\",\n  \"transaction_id\": \"01589980-2664-11ec-9621-0242ac130002\"\n}\n</code></pre><p id='api-notes'>Notes: <code>amount</code> is a string (avoid floating point), <code>transaction_id</code> acts as an idempotency key. The endpoint must be highly available and authenticated.</p></section>"
+    },
+    {
+      "heading": "In-memory sharding solution",
+      "slug": "in-memory-sharding",
+      "content": "<section id='in-memory-sharding'><h3 id='in-memory-heading'>In-memory sharding solution</h3><p id='in-memory-desc'>A natural first design: keep balances in-memory (Redis) as <code>map<account_id, balance></code>. Because one Redis node cannot handle 1M TPS, partition data across many Redis nodes using consistent hashing or fixed hash partitioning.</p><p id='partition-example'>Example partitioning algorithm:</p><pre id='partition-code'><code>String accountID = \"A\";\nInt partitionNumber = 7;\nInt myPartition = accountID.hashCode() % partitionNumber;</code></pre><p id='coordination'>Zookeeper (or similar) can store partition count and addresses. The wallet service is stateless and routes operations to the correct partition.</p><p id='in-memory-problem'>This approach is scalable but doesn't provide cross-partition atomic transfers - we must address atomicity for debit+credit legs.</p><p id='wallet-service-img'><img loading='lazy' src='images/wallet-service.png' alt='wallet-service' id='img-wallet-service' /></p></section>"
+    },
+    {
+      "heading": "Distributed transactions: Two-Phase Commit (2PC)",
+      "slug": "distributed-transactions-2pc",
+      "content": "<section id='2pc'><h3 id='2pc-heading'>Distributed transactions (2PC)</h3><p id='2pc-desc'>One way to get atomic multi-shard transfers is 2PC across transactional databases. A coordinator asks participants to prepare, then commit if all agree.</p><p id='2pc-img'><img loading='lazy' src='images/distributed-transactions-relational-dbs.png' alt='distributed-transactions-relational-dbs' id='img-distributed-transactions-relational-dbs' /></p><p id='2pc-pros-cons'>Downsides: lock contention, performance hit, coordinator single point of failure. Not ideal at 1M TPS.</p></section>"
+    },
+    {
+      "heading": "Try-Confirm/Cancel (TCC) distributed transaction",
+      "slug": "tcc",
+      "content": "<section id='tcc'><h3 id='tcc-heading'>Distributed transaction using Try-Confirm/Cancel (TCC)</h3><p id='tcc-desc'>TCC is a compensation-style protocol: Try reserves resources, Confirm applies, Cancel rolls back. It's database-agnostic and supports parallel execution of tries.</p><p id='tcc-table'>Phases:</p><table id='tcc-table'><thead><tr><th>Phase</th><th>Operation</th><th>A</th><th>C</th></tr></thead><tbody><tr><td>1 Try</td><td>Reserve/reduce</td><td>Balance change: -$1</td><td>Do nothing</td></tr><tr><td>2 Confirm</td><td>Apply credit</td><td>Do nothing</td><td>Balance change: +$1</td></tr></tbody></table><p id='tcc-figures'>Try, Confirm, Cancel sequences are handled by a coordinator. TCC is parallelizable (tries can run in parallel) and suitable where low latency is important.</p></section>"
+    },
+    {
+      "heading": "TCC failure modes & recovery",
+      "slug": "tcc-failure-modes",
+      "content": "<section id='tcc-failure'><h3 id='tcc-failure-heading'>TCC Failure modes</h3><p id='tcc-failure-desc'>The coordinator may die mid-flight. We must persist phase status in durable phase-status tables (atomically) so the coordinator or a recovery process can resume or roll back.</p><p id='phase-table-img'><img loading='lazy' src='images/phase-status-tables.png' alt='phase-status-tables' id='img-phase-status-tables' /></p><p id='out-of-order'>Out-of-order execution is possible (cancel arrives before try). Use flags and idempotency checks in phase-status to detect and handle such cases. Always perform deductions before additions to avoid users spending intermediary (reserved) funds.</p></section>"
+    },
+    {
+      "heading": "Sagas (orchestration & choreography)",
+      "slug": "saga",
+      "content": "<section id='saga'><h3 id='saga-heading'>Distributed transaction using Saga</h3><p id='saga-desc'>Sagas sequence local transactions; on failure, compensating transactions undo previous steps. Two coordination styles: choreography (event-driven) or orchestration (central coordinator). For a wallet, orchestration is easier to reason about.</p><p id='saga-img'><img loading='lazy' src='images/saga.png' alt='saga' id='img-saga' /></p><p id='saga-compare'>Comparison (TCC vs Saga): TCC is parallelizable and may offer lower latency; Saga is linear but simpler to implement with compensation logic. Both expose brief inconsistent states which must be handled.</p></section>"
+    },
+    {
+      "heading": "Event sourcing for reproducibility and auditability",
+      "slug": "event-sourcing",
+      "content": "<section id='event-sourcing'><h3 id='event-sourcing-heading'>Event sourcing</h3><p id='es-intro'>Event sourcing stores an immutable log of events (facts) so the entire state can be reconstructed by replaying events. This supports auditability, reproducibility, and easier debugging.</p><p id='es-concepts'>Key concepts:</p><ul id='es-list'><li><strong>Command</strong> - intent (transfer $1). Commands can fail and may produce events.</li><li><strong>Event</strong> - a fact that happened (A debited $1, B credited $1). Events are immutable.</li><li><strong>State</strong> - derived from applying events (balances).</li><li><strong>State machine</strong> - a deterministic processor that validates commands and emits events.</li></ul><p id='es-img'><img loading='lazy' src='images/event-sourcing.png' alt='event-sourcing' id='img-event-sourcing' /></p><p id='es-flow'>Flow: commands are placed in a FIFO queue (Kafka) to ensure global order; a state machine consumes commands, validates, and emits events; events are appended to the immutable event log and applied to the state.</p><p id='replay'>Advantages: replayable history, deterministic state reconstruction, ability to run different code versions against the same event stream for verification.</p><p id='cqrs-img'><img loading='lazy' src='images/cqrs-architecture.png' alt='cqrs-architecture' id='img-cqrs-architecture' /></p><p id='cqrs-note'>Use CQRS: separate write (event sourcing) from read (materialized views) to optimize queries and scalability.</p></section>"
+    },
+    {
+      "heading": "Step 3 - Design Deep Dive",
+      "slug": "step-3-design-deep-dive",
+      "content": "<section id='deep-dive'><h2 id='deep-dive-heading'>Step 3 - Design Deep Dive</h2><p id='intro'>We now examine performance optimizations required to reach 1M TPS, durability and replication strategies, and sharding with coordinated transactions.</p></section>"
+    },
+    {
+      "heading": "High-performance event sourcing optimizations",
+      "slug": "high-performance-event-sourcing",
+      "content": "<section id='hp-es'><h3 id='hp-es-heading'>High-performance event sourcing</h3><p id='opt-intro'>Optimizations to get extreme TPS:</p><ul id='opt-list'><li>Append commands/events to a local disk instead of a remote broker (reduce network overhead).</li><li>Use OS-backed memory mapping (mmap) to keep recent appends in cache for fast access.</li><li>Store state locally using RocksDB (LSM-tree optimized for writes) or SQLite for compact local state.</li><li>Periodically snapshot state to avoid replaying the entire history for recovery.</li></ul><p id='mmap-img'><img loading='lazy' src='images/mmap-optimization.png' alt='mmap-optimization' id='img-mmap-optimization' /></p><p id='rocksdb-img'><img loading='lazy' src='images/rocks-db-approach.png' alt='rocks-db-approach' id='img-rocks-db-approach' /></p><p id='snapshot-img'><img loading='lazy' src='images/snapshot-approach.png' alt='snapshot-approach' id='img-snapshot-approach' /></p></section>"
+    },
+    {
+      "heading": "Reliable high-performance event sourcing (replication)",
+      "slug": "reliable-high-perf",
+      "content": "<section id='reliable-hp'><h3 id='reliable-hp-heading'>Reliable high-performance event sourcing</h3><p id='reliable-intro'>Local-first storage is fast but stateful - we must replicate event logs for durability while preserving order. Use consensus (Raft) to replicate the event log across a Raft group.</p><p id='raft-img'><img loading='lazy' src='images/raft-replication.png' alt='raft-replication' id='img-raft-replication' /></p><p id='raft-note'>Raft ensures a leader appends events and followers replicate in the same order. As long as a majority is available, the log is durable and ordered.</p></section>"
+    },
+    {
+      "heading": "Distributed event sourcing & scaling across partitions",
+      "slug": "distributed-event-sourcing",
+      "content": "<section id='dist-es'><h3 id='dist-es-heading'>Distributed event sourcing</h3><p id='dist-intro'>Single Raft group capacity is limited. To scale, shard accounts across many Raft groups (partitions). Each partition is a Raft group with its own leader and followers.</p><p id='sharded-img'><img loading='lazy' src='images/sharded-raft-groups.png' alt='sharded-raft-groups' id='img-sharded-raft-groups' /></p><p id='coordination'>Cross-partition transfers require distributed coordination (Saga or TCC). To provide a smooth client UX, combine a reverse proxy + CQRS read machines that can push results back once materialized.</p><p id='reverse-proxy-img'><img loading='lazy' src='images/reverse-proxy.png' alt='reverse-proxy' id='img-reverse-proxy' /></p><p id='push-state-machines-img'><img loading='lazy' src='images/push-state-machines.png' alt='push-state-machines' id='img-push-state-machines' /></p><p id='final-lifecycle'>Example lifecycle: a client sends a request to the Saga coordinator -> the coordinator determines partitions -> sends commands to partition leaders -> the leaders convert commands to events and replicate via Raft -> read-side materializers update views and push responses -> the coordinator continues to the next steps and finally responds to the client.</p></section>"
+    },
+    {
+      "heading": "Step 4 - Wrap Up",
+      "slug": "step-4-wrap-up",
+      "content": "<section id='wrap-up'><h2 id='wrap-up-heading'>Step 4 - Wrap Up</h2><p id='evolution-summary'>Design evolution summary:</p><ol id='evolution-list'><li>Started with an in-memory Redis approach - scalable but not durable.</li><li>Considered relational DBs with distributed transactions (2PC) - correct but heavy and not performant for 1M TPS.</li><li>Explored TCC and Saga for distributed transactions with compensating actions.</li><li>Adopted event sourcing for auditability, reproducibility and to simplify recovery.</li><li>Optimized by storing logs locally with mmap and RocksDB, snapshotting state, and using Raft for replication.</li><li>Scaled via sharded Raft groups and orchestrated cross-shard transactions (Saga/TCC) with CQRS and a reverse-proxy for better UX.</li></ol><p id='final-note'>This architecture balances performance, durability, and correctness. Event sourcing + Raft + sharding + careful transaction orchestration (TCC or Saga) is the recommended direction for building a 1M TPS, auditable, and highly available digital wallet.</p></section>"
+    }
+  ],
+  "createdAt": "2025-08-19T00:14:27.561Z",
+  "updatedAt": "2025-08-19T00:14:27.561Z",
+  "__v": 0
+}

@@ -1,0 +1,106 @@
+{
+  "_id": "68a37980169e3f7abce77ccb",
+  "title": "Nearby Friends",
+  "chapterNo": 17,
+  "slug": "nearby-friends",
+  "sections": [
+    {
+      "heading": "Nearby Friends Overview",
+      "slug": "overview",
+      "content": "<section id='overview'><h1 id='overview-heading'>Nearby Friends Overview</h1><p id='overview-p1'>This chapter focuses on designing a scalable backend for an application which enables users to share their location and discover friends who are nearby.</p><p id='overview-p2'>The major difference with the proximity chapter is that in this problem, locations constantly change, whereas in that one, business addresses more or less stay the same.</p></section>"
+    },
+    {
+      "heading": "Step 1: Understand the Problem and Establish Design Scope",
+      "slug": "step-1-understand-scope",
+      "content": "<section id='step-1'><h2 id='step-1-heading'>Step 1: Understand the Problem and Establish Design Scope</h2><p id='step-1-intro'>Some questions to drive the interview:</p><ul id='qa-sample'><li id='q-1'><strong>C:</strong> How geographically close is considered to be \"nearby\"?</li><li id='a-1'><strong>I:</strong> 5 miles, this number should be configurable.</li><li id='q-2'><strong>C:</strong> Is distance calculated as straight-line distance vs. taking into consideration e.g. a river in-between friends?</li><li id='a-2'><strong>I:</strong> Yes, that is a reasonable assumption.</li><li id='q-3'><strong>C:</strong> How many users does the app have?</li><li id='a-3'><strong>I:</strong> 1 billion users and 10% of them use the nearby friends feature.</li><li id='q-4'><strong>C:</strong> Do we need to store location history?</li><li id='a-4'><strong>I:</strong> Yes, it can be valuable for e.g. machine learning.</li><li id='q-5'><strong>C:</strong> Can we assume inactive friends will disappear from the feature in 10 minutes?</li><li id='a-5'><strong>I:</strong> Yes.</li><li id='q-6'><strong>C:</strong> Do we need to worry about GDPR, etc?</li><li id='a-6'><strong>I:</strong> No, for simplicity's sake.</li></ul></section>"
+    },
+    {
+      "heading": "Functional Requirements",
+      "slug": "functional-requirements",
+      "content": "<section id='functional-requirements'><h3 id='functional-heading'>Functional Requirements</h3><ul id='functional-list'><li id='func-1'>Users should be able to see nearby friends on their mobile app. Each friend has a distance and timestamp, indicating when the location was updated.</li><li id='func-2'>Nearby friends list should be updated every few seconds.</li></ul></section>"
+    },
+    {
+      "heading": "Non-functional Requirements",
+      "slug": "non-functional-requirements",
+      "content": "<section id='non-functional-requirements'><h3 id='non-functional-heading'>Non-functional Requirements</h3><ul id='non-functional-list'><li id='nf-latency'>Low latency - it's important to receive location updates without too much delay.</li><li id='nf-reliability'>Reliability - Occasional data point loss is acceptable, but the system should be generally available.</li><li id='nf-consistency'>Eventual consistency - Location data store doesn't need strong consistency. A few seconds delay in receiving location data in different replicas is acceptable.</li></ul></section>"
+    },
+    {
+      "heading": "Back-of-the-Envelope Estimation",
+      "slug": "back-of-the-envelope",
+      "content": "<section id='boe'><h3 id='boe-heading'>Back-of-the-Envelope Estimation</h3><p id='boe-intro'>Some estimations to determine potential scale:</p><ul id='estimation-list'><li id='est-1'>Nearby friends are friends within 5-mile radius.</li><li id='est-2'>Location refresh interval is 30 seconds. Human walking speed is slow, hence, no need to update location too frequently.</li><li id='est-3'>On average, 100 million users use the feature every day with 10% concurrent users, i.e. 10 million.</li><li id='est-4'>On average, a user has 400 friends, all of them use the nearby friends feature.</li><li id='est-5'>App displays 20 nearby friends per page.</li><li id='est-6'>Location Update QPS = 10 million / 30 ≈ 334k updates per second.</li></ul></section>"
+    },
+    {
+      "heading": "Step 2: Propose High-Level Design and Get Buy-In",
+      "slug": "step-2-high-level-design",
+      "content": "<section id='high-level'><h2 id='high-level-heading'>Step 2: Propose High-Level Design and Get Buy-In</h2><p id='high-level-intro'>Before exploring API and data model design, we'll study the communication protocol we'll use as it's less ubiquitous than traditional request-response communication model.</p><h3 id='high-level-design-heading'>High-level Design</h3><p id='high-level-p1'>At a high level we'd want to establish effective message passing between peers. This can be done via a peer-to-peer protocol, but that's not practical for a mobile app with flaky connection and tight power consumption constraints.</p><p id='high-level-p2'>A more practical approach is to use a shared backend as a fan-out mechanism towards friends you want to reach:</p><p id='backend-role'>What does the backend do?</p><ul id='backend-tasks'><li id='task-1'>Receives location updates from all active users.</li><li id='task-2'>For each location update, find all active users which should receive it and forward it to them.</li><li id='task-3'>Do not forward location data if distance between friends is beyond the configured threshold.</li></ul><p id='challenge'>This sounds simple but the challenge is to design the system for the scale we're operating with.</p></section>"
+    },
+    {
+      "heading": "System Architecture Components",
+      "slug": "system-architecture",
+      "content": "<section id='architecture'><h3 id='architecture-heading'>System Architecture Components</h3><p id='architecture-intro'>We'll start with a simpler design at first and discuss a more advanced approach in the deep dive:</p><ul id='component-list'><li id='comp-1'>The load balancer spreads traffic across REST API servers as well as bidirectional WebSocket servers.</li><li id='comp-2'>The REST API servers handle auxiliary tasks such as managing friends, updating profiles, etc.</li><li id='comp-3'>The WebSocket servers are stateful servers, which forward location update requests to respective clients. They also manage seeding the mobile client with nearby friends locations at initialization.</li><li id='comp-4'>Redis location cache is used to store the most recent location data for each active user. There is a TTL set on each entry in the cache. When the TTL expires, the user is no longer active and their data is removed from the cache.</li><li id='comp-5'>User database stores user and friendship data. Either a relational or NoSQL database can be used for this purpose.</li><li id='comp-6'>Location history database stores a history of user location data, not necessarily used directly within the nearby friends feature, but instead used to track historical data for analytical purposes.</li><li id='comp-7'>Redis pub/sub is used as a lightweight message bus which enables different topics for each user channel for location updates.</li></ul></section>"
+    },
+    {
+      "heading": "Periodic Location Update Flow",
+      "slug": "periodic-location-update",
+      "content": "<section id='location-update'><h3 id='location-update-heading'>Periodic Location Update Flow</h3><p id='location-update-intro'>Here's how the periodic location update flow works:</p><ol id='update-flow'><li id='flow-1'>Mobile client sends a location update to the load balancer.</li><li id='flow-2'>Load balancer forwards location update to the WebSocket server's persistent connection for that client.</li><li id='flow-3'>WebSocket server saves location data to location history database.</li><li id='flow-4'>Location data is updated in location cache. WebSocket server also saves location data in-memory for subsequent distance calculations for that user.</li><li id='flow-5'>WebSocket server publishes location data in user's channel via Redis pub/sub.</li><li id='flow-6'>Redis pub/sub broadcasts location update to all subscribers for that user channel, i.e. servers responsible for the friends of that user.</li><li id='flow-7'>Subscribed WebSocket servers receive location update, calculate which users the update should be sent to and sends it.</li></ol><p id='average-updates'>On average, there's going to be 40 location updates to forward as a user has 400 friends on average and 10% of them are online at a time.</p></section>"
+    },
+    {
+      "heading": "API Design",
+      "slug": "api-design",
+      "content": "<section id='api-design'><h3 id='api-design-heading'>API Design</h3><h4 id='websocket-routines'>WebSocket Routines</h4><p id='websocket-intro'>WebSocket routines we'll need to support:</p><ul id='websocket-list'><li id='ws-1'>Periodic location update - user sends location data to WebSocket server.</li><li id='ws-2'>Client receives location update - server sends friend location data and timestamp.</li><li id='ws-3'>WebSocket client initialization - client sends user location, server sends back nearby friends location data.</li><li id='ws-4'>Subscribe to a new friend - WebSocket server sends a friend ID mobile client is supposed to track e.g. when friend appears online for the first time.</li><li id='ws-5'>Unsubscribe a friend - WebSocket server sends a friend ID, mobile client is supposed to unsubscribe from due to e.g. friend going offline.</li></ul><h4 id='http-api'>HTTP API</h4><p id='http-api-desc'>Traditional request/response payloads for auxiliary responsibilities.</p></section>"
+    },
+    {
+      "heading": "Data Model",
+      "slug": "data-model",
+      "content": "<section id='data-model'><h3 id='data-model-heading'>Data Model</h3><ul id='data-model-list'><li id='dm-1'>The location cache will store a mapping between user_id and lat, long, timestamp. Redis is a great choice for this cache as we only care about current location and it supports TTL eviction which we need for our use case.</li><li id='dm-2'>Location history table stores the same data but in a relational table with the four columns stated above. Cassandra can be used for this data as it is optimized for write-heavy loads.</li></ul></section>"
+    },
+    {
+      "heading": "Step 3: Design Deep Dive",
+      "slug": "step-3-deep-dive",
+      "content": "<section id='deep-dive'><h2 id='deep-dive-heading'>Step 3: Design Deep Dive</h2><p id='deep-dive-intro'>Let's discuss how we scale the high-level design so that it works at the scale we're targeting.</p></section>"
+    },
+    {
+      "heading": "Component Scaling Analysis",
+      "slug": "component-scaling",
+      "content": "<section id='scaling-analysis'><h3 id='scaling-heading'>How Well Does Each Component Scale?</h3><ul id='scaling-list'><li id='scale-1'><strong>API servers</strong> - can be easily scaled via autoscaling groups and replicating server instances.</li><li id='scale-2'><strong>WebSocket servers</strong> - we can easily scale out the WebSocket servers, but we need to ensure we gracefully shutdown existing connections when tearing down a server. E.g. we can mark a server as \"draining\" in the load balancer and stop sending connections to it, prior to being finally removed from the server pool.</li><li id='scale-3'><strong>Client initialization</strong> - when a client first connects to a server, it fetches the user's friends, subscribes to their channels on Redis pub/sub, fetches their location from cache and finally forwards to client.</li><li id='scale-4'><strong>User database</strong> - We can shard the database based on user_id. It might also make sense to expose user/friends data via a dedicated service and API, managed by a dedicated team.</li><li id='scale-5'><strong>Location cache</strong> - We can shard the cache easily by spinning up several Redis nodes. Also, the TTL puts a limit on the max memory we could have taken up at a time. But we still want to handle the large write load.</li><li id='scale-6'><strong>Redis pub/sub server</strong> - we leverage the fact that no memory is consumed if there are channels initialized but are not in use. Hence, we can pre-allocate channels for all users who use the nearby friends feature to avoid having to deal with e.g. bringing up a new channel when a user comes online and notifying active WebSocket servers.</li></ul></section>"
+    },
+    {
+      "heading": "Scaling Redis Pub/Sub Deep Dive",
+      "slug": "redis-pubsub-scaling",
+      "content": "<section id='redis-scaling'><h3 id='redis-scaling-heading'>Scaling Deep-dive on Redis Pub/Sub Component</h3><p id='redis-memory'>We will need around 200GB of memory to maintain all pub/sub channels. This can be achieved by using 2 Redis servers with 100GB each.</p><p id='redis-load'>Given that we need to push approximately 14 million location updates per second, we will however need at least 140 Redis servers to handle that amount of load, assuming that a single server can handle approximately 100k pushes per second.</p><p id='redis-cluster'>Hence, we'll need a distributed Redis server cluster to handle the intense CPU load.</p><p id='service-discovery'>In order to support a distributed Redis cluster, we'll need to utilize a service discovery component, such as Zookeeper or etcd, to keep track of which servers are alive.</p><p id='scaling-considerations'>In terms of scaling the server cluster up or down, we can setup a daily job to scale the cluster as needed based on historical traffic data. We can also overprovision the cluster to handle spikes in loads.</p></section>"
+    },
+    {
+      "heading": "Scaling Operations and Considerations",
+      "slug": "scaling-operations",
+      "content": "<section id='scaling-ops'><h3 id='scaling-ops-heading'>Scaling Operations and Considerations</h3><p id='stateful-storage'>The Redis cluster can be treated as a stateful storage server as there is some state maintained for the channels and there is a need for coordination with subscribers so that they hand-off to newly provisioned nodes in the cluster.</p><p id='potential-issues'>We have to be mindful of some potential issues during scaling operations:</p><ul id='issues-list'><li id='issue-1'>There will be a lot of resubscription requests from the WebSocket servers due to channels being moved around.</li><li id='issue-2'>Some location updates might be missed from clients during the operation, which is acceptable for this problem, but we should still minimize it from happening. Consider doing such operation when traffic is at lowest point of the day.</li><li id='issue-3'>We can leverage consistent hashing to minimize amount of channels moved in the event of adding/removing servers.</li></ul></section>"
+    },
+    {
+      "heading": "Adding/Removing Friends",
+      "slug": "friend-management",
+      "content": "<section id='friend-mgmt'><h3 id='friend-mgmt-heading'>Adding/Removing Friends</h3><p id='friend-process'>Whenever a friend is added/removed, WebSocket server responsible for affected user needs to subscribe/unsubscribe from the friend's channel.</p><p id='callback-mechanism'>Since the \"nearby friends\" feature is part of a larger app, we can assume that a callback on the mobile client side can be registered whenever any of the events occur and the client will send a message to the WebSocket server to do the appropriate action.</p></section>"
+    },
+    {
+      "heading": "Users with Many Friends",
+      "slug": "whale-users",
+      "content": "<section id='whale-users'><h3 id='whale-users-heading'>Users with Many Friends</h3><p id='friend-cap'>We can put a cap on the total number of friends one can have, e.g. Facebook has a cap of 5000 max friends.</p><p id='whale-handling'>The WebSocket server handling the \"whale\" user might have a higher load on its end, but as long as we have enough WebSocket servers, we should be okay.</p></section>"
+    },
+    {
+      "heading": "Nearby Random Person Feature",
+      "slug": "random-person-feature",
+      "content": "<section id='random-person'><h3 id='random-person-heading'>Nearby Random Person</h3><p id='random-intro'>What if the interviewer wants to update the design to include a feature where we can occasionally see a random person pop up on our nearby friends map?</p><p id='geohash-solution'>One way to handle this is to define a pool of pub/sub channels, based on geohash.</p><p id='geohash-subscription'>Anyone within the geohash subscribes to the appropriate channel to receive location updates for random users.</p><p id='border-handling'>We could also subscribe to several geohashes to handle cases where someone is close but in a bordering geohash.</p></section>"
+    },
+    {
+      "heading": "Alternative to Redis Pub/Sub",
+      "slug": "alternative-solution",
+      "content": "<section id='alternative'><h3 id='alternative-heading'>Alternative to Redis Pub/Sub</h3><p id='erlang-intro'>An alternative to using Redis for pub/sub is to leverage Erlang - a general programming language, optimized for distributed computing applications.</p><p id='erlang-benefits'>With it, we can spawn millions of small, Erlang processes which communicate with each other. We can handle both WebSocket connections and pub/sub channels within the distributed Erlang application.</p><p id='erlang-challenge'>A challenge with using Erlang, though, is that it's a niche programming language and it could be hard to source strong Erlang developers.</p></section>"
+    },
+    {
+      "heading": "Step 4: Wrap Up",
+      "slug": "step-4-wrap-up",
+      "content": "<section id='wrap-up'><h2 id='wrap-up-heading'>Step 4: Wrap Up</h2><p id='success-summary'>We successfully designed a system, supporting the nearby friends features.</p><h3 id='core-components-heading'>Core Components:</h3><ul id='core-components'><li id='core-1'>WebSocket servers - real-time communications between client and server.</li><li id='core-2'>Redis - fast read and write of location data + pub/sub channels.</li></ul><p id='exploration-summary'>We also explored how to scale RESTful API servers, WebSocket servers, data layer, Redis pub/sub servers and we also explored an alternative to using Redis Pub/Sub. We also explored a \"random nearby person\" feature.</p></section>"
+    }
+  ],
+  "createdAt": "2025-08-19T10:30:00.000Z",
+  "updatedAt": "2025-08-19T10:30:00.000Z",
+  "__v": 0
+}
